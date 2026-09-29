@@ -23,56 +23,111 @@ a:hover{color:#ff3b3f}
 ::selection{background:#e3262c;color:#fff}
 @keyframes wl-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @keyframes wl-pulse{0%,100%{opacity:1}50%{opacity:.25}}
+@supports not (overflow:clip){body{overflow-x:hidden}}
+img{max-width:100%}
+a,button{-webkit-tap-highlight-color:transparent}
+
+/* ===== Tablet e celular ===== */
+@media (max-width:900px){
+  .wl-sticky{position:static!important}
+}
+
+/* ===== Celular ===== */
+@media (max-width:640px){
+  .wl-nav{padding:10px 16px!important;gap:10px!important}
+  .wl-nav-sec{display:none!important}
+  .wl-brand{font-size:12px!important}
+  .wl-nav-cta{padding:8px 14px!important;font-size:13px!important}
+
+  .wl-hero{padding-top:32px!important}
+  .wl-eyebrow{font-size:10px!important;letter-spacing:.06em!important}
+  .wl-h1{font-size:12.2vw!important;margin-top:16px!important}
+  .wl-h1-outline{-webkit-text-stroke-width:1.5px!important;padding-left:6vw!important}
+  .wl-hero-grid{gap:24px!important}
+  .wl-hero-ctas{width:100%}
+  .wl-hero-ctas>a{flex:1 1 0;justify-content:center;padding:15px 16px!important;white-space:nowrap}
+  .wl-hero-img{height:auto!important;aspect-ratio:4/5;border-radius:18px!important}
+  .wl-hero-stats{padding:56px 14px 16px!important;gap:6px!important}
+  .wl-stat-num{font-size:clamp(22px,7.4vw,30px)!important}
+  .wl-stat-lbl{font-size:9px!important;letter-spacing:.03em!important;line-height:1.3}
+
+  .wl-marquee{padding:12px 0!important}
+
+  .wl-about-photo{min-height:0!important;aspect-ratio:4/5}
+  .wl-facts>div{padding:16px!important}
+  .wl-facts span:last-child{font-size:16px!important}
+
+  .wl-spec{min-height:0!important;padding:22px!important}
+
+  .wl-prod{gap:12px!important;padding:18px 4px!important}
+  .wl-prod-store{display:none!important}
+
+  .wl-box{border-radius:20px!important}
+  .wl-email{font-size:5.6vw!important;word-break:normal!important;overflow-wrap:anywhere}
+  .wl-contact-btns>*{flex:1 1 100%;justify-content:center}
+
+  .wl-faq-a{padding-right:0!important;font-size:16px!important}
+
+  .wl-footer-links{gap:14px 20px!important}
+}
+
+/* ===== Celulares pequenos (iPhone SE etc.) ===== */
+@media (max-width:380px){
+  .wl-nav>a:first-child{gap:8px!important;min-width:0}
+  .wl-nav>a:first-child>img{width:26px!important;height:26px!important}
+  .wl-brand{font-size:10.5px!important;letter-spacing:0!important}
+  .wl-nav-cta{padding:7px 12px!important;font-size:12px!important}
+}
 </style>
 </helmet>
 
 <div style="min-height:100vh;background:#0b0b0c;overflow-x:clip">
 
   <!-- NAV -->
-  <nav style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px clamp(16px,4vw,48px);background:rgba(11,11,12,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.07)">
+  <nav class="wl-nav" style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px clamp(16px,4vw,48px);background:rgba(11,11,12,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.07)">
     <a href="#topo" style="display:flex;align-items:center;gap:10px">
       <img src="assets/perfil.jpg" alt="" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1.5px solid #e3262c">
-      <span style="font-weight:800;font-stretch:125%;font-size:14px;letter-spacing:.02em">WHITELINE<span style="color:#e3262c">.</span>FLUENCE</span>
+      <span class="wl-brand" style="font-weight:800;font-stretch:125%;font-size:14px;letter-spacing:.02em">WHITELINE<span style="color:#e3262c">.</span>FLUENCE</span>
     </a>
     <div style="display:flex;align-items:center;gap:clamp(12px,2.4vw,28px);font-size:13px;font-weight:500">
-      <a href="#ficha" style="color:rgba(244,243,241,.7)">Ficha</a>
-      <a href="#produtos" style="color:rgba(244,243,241,.7)">Produtos</a>
-      <a href="#parcerias" style="display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:#e3262c;color:#fff;font-weight:700" style-hover="background:#f4f3f1;color:#0b0b0c">Parcerias</a>
+      <a class="wl-nav-sec" href="#ficha" style="color:rgba(244,243,241,.7)">Ficha</a>
+      <a class="wl-nav-sec" href="#produtos" style="color:rgba(244,243,241,.7)">Produtos</a>
+      <a class="wl-nav-cta" href="#parcerias" style="display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:#e3262c;color:#fff;font-weight:700" style-hover="background:#f4f3f1;color:#0b0b0c">Parcerias</a>
     </div>
   </nav>
 
   <!-- HERO -->
-  <header id="topo" style="position:relative;padding:clamp(40px,8vw,96px) clamp(16px,4vw,48px) 0;max-width:1440px;margin:0 auto">
-    <div data-reveal="" style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,243,241,.6)">
+  <header class="wl-hero" id="topo" style="position:relative;padding:clamp(40px,8vw,96px) clamp(16px,4vw,48px) 0;max-width:1440px;margin:0 auto">
+    <div class="wl-eyebrow" data-reveal="" style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,243,241,.6)">
       <span style="width:8px;height:8px;border-radius:50%;background:#e3262c;animation:wl-pulse 1.6s ease-in-out infinite"></span>
       <span>Renault Fluence GT Line 2016 · canal automotivo</span>
     </div>
-    <h1 style="margin:22px 0 0;font-weight:900;font-stretch:125%;line-height:.9;letter-spacing:-.03em;font-size:clamp(38px,10vw,170px)">
+    <h1 class="wl-h1" style="margin:22px 0 0;font-weight:900;font-stretch:125%;line-height:.9;letter-spacing:-.03em;font-size:clamp(38px,10vw,170px)">
       <span data-parallax="-0.12" data-split="" style="display:block;white-space:nowrap;will-change:transform">WHITELINE</span>
-      <span data-parallax="0.12" data-split="" style="display:block;white-space:nowrap;will-change:transform;color:#0b0b0c;-webkit-text-stroke:3px #f4f3f1;paint-order:stroke fill;padding-left:clamp(0px,5vw,100px)">FLUENCE<span style="color:#e3262c;-webkit-text-stroke:0">.</span></span>
+      <span class="wl-h1-outline" data-parallax="0.12" data-split="" style="display:block;white-space:nowrap;will-change:transform;color:#0b0b0c;-webkit-text-stroke:3px #f4f3f1;paint-order:stroke fill;padding-left:clamp(0px,5vw,100px)">FLUENCE<span style="color:#e3262c;-webkit-text-stroke:0">.</span></span>
     </h1>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:32px;align-items:end;margin-top:clamp(28px,4vw,48px)">
+    <div class="wl-hero-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:32px;align-items:end;margin-top:clamp(28px,4vw,48px)">
       <p data-reveal="" style="margin:0;max-width:520px;font-size:clamp(18px,1.8vw,22px);line-height:1.45;color:rgba(244,243,241,.78);text-wrap:pretty">Curiosidades, ficha técnica, dia a dia e comparativos de quem anda de Fluence GT Line todo dia. Se tem dúvida sobre o carro, provavelmente já virou vídeo.</p>
-      <div data-reveal="" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:flex-start">
+      <div class="wl-hero-ctas" data-reveal="" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:flex-start">
         <a href="https://www.tiktok.com/@whitelinefluence" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;padding:16px 24px;border-radius:999px;background:#f4f3f1;color:#0b0b0c;font-weight:700;font-size:15px;transition:transform .3s" style-hover="background:#e3262c;color:#fff">Ver no TikTok <span style="font-family:'JetBrains Mono',monospace">↗</span></a>
         <a href="https://www.instagram.com/whitelinefluence" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;padding:16px 24px;border-radius:999px;border:1px solid rgba(244,243,241,.3);color:#f4f3f1;font-weight:700;font-size:15px" style-hover="border-color:#e3262c;color:#ff3b3f">Instagram <span style="font-family:'JetBrains Mono',monospace">↗</span></a>
       </div>
     </div>
 
-    <div data-reveal="" style="position:relative;margin-top:clamp(36px,5vw,64px);height:clamp(320px,52vw,720px);border-radius:24px;overflow:hidden;background:#141416">
+    <div class="wl-hero-img" data-reveal="" style="position:relative;margin-top:clamp(36px,5vw,64px);height:clamp(320px,52vw,720px);border-radius:24px;overflow:hidden;background:#141416">
       <img src="assets/hero.jpg" alt="Fluence GT Line branco à noite" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 72%">
-      <div style="position:absolute;left:0;right:0;bottom:0;padding:clamp(16px,3vw,32px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;background:linear-gradient(to top,rgba(11,11,12,.92),rgba(11,11,12,0));pointer-events:none">
+      <div class="wl-hero-stats" style="position:absolute;left:0;right:0;bottom:0;padding:clamp(16px,3vw,32px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;background:linear-gradient(to top,rgba(11,11,12,.92),rgba(11,11,12,0));pointer-events:none">
         <div style="display:flex;flex-direction:column;gap:4px">
-          <span data-stat="tt-likes" data-count="92" data-suffix="K" style="font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,64px);line-height:1">92K</span>
-          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,243,241,.65)">Curtidas TikTok</span>
+          <span class="wl-stat-num" data-stat="tt-likes" data-count="92" data-suffix="K" style="font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,64px);line-height:1">92K</span>
+          <span class="wl-stat-lbl" style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,243,241,.65)">Curtidas TikTok</span>
         </div>
         <div style="display:flex;flex-direction:column;gap:4px">
-          <span data-stat="tt-followers" data-count="4.5" data-suffix="K" data-dec="1" style="font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,64px);line-height:1">4.5K</span>
-          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,243,241,.65)">Seguidores TikTok</span>
+          <span class="wl-stat-num" data-stat="tt-followers" data-count="4.5" data-suffix="K" data-dec="1" style="font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,64px);line-height:1">4.5K</span>
+          <span class="wl-stat-lbl" style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,243,241,.65)">Seguidores TikTok</span>
         </div>
         <div style="display:flex;flex-direction:column;gap:4px">
-          <span data-stat="ig-followers" data-count="749" style="font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,64px);line-height:1;color:#ff3b3f">749</span>
-          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,243,241,.65)">Seguidores Instagram</span>
+          <span class="wl-stat-num" data-stat="ig-followers" data-count="749" style="font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,64px);line-height:1;color:#ff3b3f">749</span>
+          <span class="wl-stat-lbl" style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,243,241,.65)">Seguidores Instagram</span>
         </div>
       </div>
     </div>
@@ -80,7 +135,7 @@ a:hover{color:#ff3b3f}
 
   <!-- MARQUEE -->
   <sc-if value="{{ showMarquee }}" hint-placeholder-val="{{ true }}">
-    <div style="margin-top:clamp(48px,7vw,96px);background:#e3262c;color:#fff;overflow:hidden;transform:rotate(-1.5deg) scale(1.03);padding:18px 0">
+    <div class="wl-marquee" style="margin-top:clamp(48px,7vw,96px);background:#e3262c;color:#fff;overflow:hidden;transform:rotate(-1.5deg) scale(1.03);padding:18px 0">
       <div style="display:flex;width:max-content;animation:wl-marquee 28s linear infinite;font-weight:900;font-stretch:125%;font-size:clamp(22px,3vw,40px);letter-spacing:-.01em;white-space:nowrap">
         <div style="display:flex;gap:40px;padding-right:40px"><span>CURIOSIDADES</span><span>✕</span><span>FICHA TÉCNICA</span><span>✕</span><span>DIA A DIA</span><span>✕</span><span>DÚVIDAS</span><span>✕</span><span>COMPARATIVOS</span><span>✕</span></div>
         <div style="display:flex;gap:40px;padding-right:40px"><span>CURIOSIDADES</span><span>✕</span><span>FICHA TÉCNICA</span><span>✕</span><span>DIA A DIA</span><span>✕</span><span>DÚVIDAS</span><span>✕</span><span>COMPARATIVOS</span><span>✕</span></div>
@@ -116,14 +171,14 @@ a:hover{color:#ff3b3f}
       </div>
     </div>
     <div style="margin-top:clamp(56px,7vw,96px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:clamp(24px,4vw,56px);align-items:stretch">
-      <div data-reveal="" style="position:relative;min-height:clamp(380px,40vw,560px);border-radius:24px;overflow:hidden;background:#141416">
+      <div class="wl-about-photo" data-reveal="" style="position:relative;min-height:clamp(380px,40vw,560px);border-radius:24px;overflow:hidden;background:#141416">
         <img src="assets/eu.jpg" alt="Luiz sentado no capô do Fluence" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 8%">
         <span style="position:absolute;top:16px;left:16px;padding:6px 12px;border-radius:999px;background:#e3262c;color:#fff;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;pointer-events:none;white-space:nowrap">Quem grava</span>
       </div>
       <div style="display:flex;flex-direction:column;gap:28px;justify-content:center">
         <h3 data-reveal="" style="margin:0;font-weight:800;font-stretch:112%;font-size:clamp(30px,3.6vw,52px);line-height:1;letter-spacing:-.03em;text-wrap:balance">Prazer, meu nome é Luiz e eu sou o dono do <span style="color:#e3262c">Whiteline Fluence</span>.</h3>
         <p data-reveal="" style="margin:0;font-size:18px;line-height:1.6;color:rgba(244,243,241,.75);text-wrap:pretty">Tenho 19 anos e o Fluence é o meu primeiro carro. Gosto de gravar vídeos espontâneos sobre ele, do jeito que as coisas acontecem no dia a dia. Fora do volante, trabalho e estudo inteligência artificial.</p>
-        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:rgba(244,243,241,.12);border:1px solid rgba(244,243,241,.12);border-radius:18px;overflow:hidden">
+        <div class="wl-facts" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:rgba(244,243,241,.12);border:1px solid rgba(244,243,241,.12);border-radius:18px;overflow:hidden">
           <div data-reveal="" style="background:#0b0b0c;padding:20px;display:flex;flex-direction:column;gap:8px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,243,241,.5)">Idade</span><span data-count="19" style="font-weight:900;font-stretch:125%;font-size:36px;line-height:1">19</span></div>
           <div data-reveal="" style="background:#0b0b0c;padding:20px;display:flex;flex-direction:column;gap:8px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,243,241,.5)">Primeiro carro</span><span style="font-weight:800;font-size:18px;line-height:1.2">Fluence GT Line 2016</span></div>
           <div data-reveal="" style="background:#0b0b0c;padding:20px;display:flex;flex-direction:column;gap:8px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,243,241,.5)">Estilo</span><span style="font-weight:800;font-size:18px;line-height:1.2">Vídeos espontâneos</span></div>
@@ -144,42 +199,42 @@ a:hover{color:#ff3b3f}
     </div>
 
     <div style="margin-top:40px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));gap:12px">
-      <div data-reveal="" style="background:#0b0b0c;border:1px solid rgba(244,243,241,.12);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:14px;min-height:190px" style-hover="background:#141416">
+      <div class="wl-spec" data-reveal="" style="background:#0b0b0c;border:1px solid rgba(244,243,241,.12);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:14px;min-height:190px" style-hover="background:#141416">
         <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,243,241,.5)">Potência</span>
         <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;margin-top:auto;min-width:0"><span data-count="143" style="font-weight:900;font-stretch:125%;font-size:clamp(40px,3.6vw,56px);line-height:.95;white-space:nowrap;color:#e3262c">143</span><span style="font-weight:700;font-size:18px">cv</span></div>
         <span style="font-size:14px;color:rgba(244,243,241,.6)">E · 140 cv G</span>
       </div>
-      <div data-reveal="" style="background:#0b0b0c;border:1px solid rgba(244,243,241,.12);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:14px;min-height:190px" style-hover="background:#141416">
+      <div class="wl-spec" data-reveal="" style="background:#0b0b0c;border:1px solid rgba(244,243,241,.12);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:14px;min-height:190px" style-hover="background:#141416">
         <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,243,241,.5)">Torque</span>
         <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;margin-top:auto;min-width:0"><span data-count="20.3" data-dec="1" data-comma="1" style="font-weight:900;font-stretch:125%;font-size:clamp(40px,3.6vw,56px);line-height:.95;white-space:nowrap">20,3</span><span style="font-weight:700;font-size:18px">kgfm</span></div>
         <span style="font-size:14px;color:rgba(244,243,241,.6)">E · 19,9 kgfm G</span>
       </div>
-      <div data-reveal="" style="background:#0b0b0c;border:1px solid rgba(244,243,241,.12);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:14px;min-height:190px" style-hover="background:#141416">
+      <div class="wl-spec" data-reveal="" style="background:#0b0b0c;border:1px solid rgba(244,243,241,.12);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:14px;min-height:190px" style-hover="background:#141416">
         <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,243,241,.5)">Motor</span>
         <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;margin-top:auto;min-width:0"><span data-count="2.0" data-dec="1" data-comma="1" style="font-weight:900;font-stretch:125%;font-size:clamp(40px,3.6vw,56px);line-height:.95;white-space:nowrap">2,0</span><span style="font-weight:700;font-size:18px">16V</span></div>
         <span style="font-size:14px;color:rgba(244,243,241,.6)">Flex, aspirado</span>
       </div>
-      <div data-reveal="" style="background:#0b0b0c;border:1px solid rgba(244,243,241,.12);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:14px;min-height:190px" style-hover="background:#141416">
+      <div class="wl-spec" data-reveal="" style="background:#0b0b0c;border:1px solid rgba(244,243,241,.12);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:14px;min-height:190px" style-hover="background:#141416">
         <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,243,241,.5)">Câmbio</span>
         <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;margin-top:auto;min-width:0"><span style="font-weight:900;font-stretch:125%;font-size:clamp(40px,3.6vw,56px);line-height:.95;white-space:nowrap">CVT</span></div>
         <span style="font-size:14px;color:rgba(244,243,241,.6)">X-Tronic, 6 marchas simuladas</span>
       </div>
-      <div data-reveal="" style="background:#0b0b0c;border:1px solid rgba(244,243,241,.12);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:14px;min-height:190px" style-hover="background:#141416">
+      <div class="wl-spec" data-reveal="" style="background:#0b0b0c;border:1px solid rgba(244,243,241,.12);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:14px;min-height:190px" style-hover="background:#141416">
         <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,243,241,.5)">Porta-malas</span>
         <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;margin-top:auto;min-width:0"><span data-count="530" style="font-weight:900;font-stretch:125%;font-size:clamp(40px,3.6vw,56px);line-height:.95;white-space:nowrap">530</span><span style="font-weight:700;font-size:18px">L</span></div>
         <span style="font-size:14px;color:rgba(244,243,241,.6)">Tanque de 60 L</span>
       </div>
-      <div data-reveal="" style="background:#0b0b0c;border:1px solid rgba(244,243,241,.12);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:14px;min-height:190px" style-hover="background:#141416">
+      <div class="wl-spec" data-reveal="" style="background:#0b0b0c;border:1px solid rgba(244,243,241,.12);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:14px;min-height:190px" style-hover="background:#141416">
         <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,243,241,.5)">Rodas</span>
         <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;margin-top:auto;min-width:0"><span data-count="17" style="font-weight:900;font-stretch:125%;font-size:clamp(40px,3.6vw,56px);line-height:.95;white-space:nowrap">17</span><span style="font-weight:700;font-size:18px">pol.</span></div>
         <span style="font-size:14px;color:rgba(244,243,241,.6)">Liga leve escurecida, exclusiva GT Line</span>
       </div>
-      <div data-reveal="" style="background:#0b0b0c;border:1px solid rgba(244,243,241,.12);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:14px;min-height:190px" style-hover="background:#141416">
+      <div class="wl-spec" data-reveal="" style="background:#0b0b0c;border:1px solid rgba(244,243,241,.12);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:14px;min-height:190px" style-hover="background:#141416">
         <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,243,241,.5)">Comprimento</span>
         <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;margin-top:auto;min-width:0"><span style="font-weight:900;font-stretch:125%;font-size:clamp(40px,3.6vw,56px);line-height:.95;white-space:nowrap">4.620</span><span style="font-weight:700;font-size:18px">mm</span></div>
         <span style="font-size:14px;color:rgba(244,243,241,.6)">Entre-eixos 2.702 mm</span>
       </div>
-      <div data-reveal="" style="background:#e3262c;border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:14px;min-height:190px;color:#fff">
+      <div class="wl-spec" data-reveal="" style="background:#e3262c;border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:14px;min-height:190px;color:#fff">
         <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase">Tem dúvida técnica?</span>
         <span style="margin-top:auto;font-weight:800;font-stretch:112%;font-size:26px;line-height:1.1">Comenta num vídeo que eu respondo.</span>
         <a href="https://www.tiktok.com/@whitelinefluence" target="_blank" rel="noopener" style="color:#fff;font-weight:700;font-size:14px;text-decoration:underline;text-underline-offset:4px" style-hover="color:#0b0b0c">Ir pro TikTok ↗</a>
@@ -231,24 +286,24 @@ a:hover{color:#ff3b3f}
   <!-- PRODUTOS -->
   <section id="produtos" style="max-width:1440px;margin:0 auto;padding:clamp(80px,10vw,140px) clamp(16px,4vw,48px) 0">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:clamp(32px,5vw,72px);align-items:start">
-      <div style="display:flex;flex-direction:column;gap:20px;position:sticky;top:96px">
+      <div class="wl-sticky" style="display:flex;flex-direction:column;gap:20px;position:sticky;top:96px">
         <div data-reveal="" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ff3b3f">04 — Produtos</div>
         <h2 data-reveal="" style="margin:0;font-weight:800;font-stretch:112%;font-size:clamp(34px,4.6vw,68px);line-height:1;letter-spacing:-.03em;text-wrap:balance">Tudo que uso no Fluence</h2>
         <p data-reveal="" style="margin:0;font-size:17px;line-height:1.55;color:rgba(244,243,241,.7);max-width:440px;text-wrap:pretty">Links diretos para os produtos que aparecem nos vídeos. Comprando por aqui você não paga nada a mais e ainda ajuda o canal.</p>
         <a data-reveal="" href="https://linktr.ee/whitelinefluence" target="_blank" rel="noopener" style="align-self:flex-start;font-weight:700;font-size:14px;border-bottom:1px solid currentColor;padding-bottom:4px;color:rgba(244,243,241,.8)">Abrir no Linktree ↗</a>
       </div>
       <div style="display:flex;flex-direction:column;border-top:1px solid rgba(244,243,241,.12)">
-        <a data-reveal="" href="https://meli.la/291E52H" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:16px;padding:20px 8px;border-bottom:1px solid rgba(244,243,241,.12);color:#f4f3f1;transition:padding .3s,background .3s" style-hover="background:#e3262c;color:#fff;padding-left:20px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.5;width:24px">01</span><span style="flex:1;font-weight:700;font-size:clamp(16px,1.6vw,20px)">Câmera interna frontal</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">MERCADO LIVRE</span><span style="font-size:18px">↗</span></a>
-        <a data-reveal="" href="https://mercadolivre.com/sec/2MW4W7o" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:16px;padding:20px 8px;border-bottom:1px solid rgba(244,243,241,.12);color:#f4f3f1;transition:padding .3s,background .3s" style-hover="background:#e3262c;color:#fff;padding-left:20px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.5;width:24px">02</span><span style="flex:1;font-weight:700;font-size:clamp(16px,1.6vw,20px)">LEDs interna</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">MERCADO LIVRE</span><span style="font-size:18px">↗</span></a>
-        <a data-reveal="" href="https://mercadolivre.com/sec/1KDJPTH" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:16px;padding:20px 8px;border-bottom:1px solid rgba(244,243,241,.12);color:#f4f3f1;transition:padding .3s,background .3s" style-hover="background:#e3262c;color:#fff;padding-left:20px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.5;width:24px">03</span><span style="flex:1;font-weight:700;font-size:clamp(16px,1.6vw,20px)">Trava anti-furto</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">MERCADO LIVRE</span><span style="font-size:18px">↗</span></a>
-        <a data-reveal="" href="https://mercadolivre.com/sec/1xrU9TJ" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:16px;padding:20px 8px;border-bottom:1px solid rgba(244,243,241,.12);color:#f4f3f1;transition:padding .3s,background .3s" style-hover="background:#e3262c;color:#fff;padding-left:20px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.5;width:24px">04</span><span style="flex:1;font-weight:700;font-size:clamp(16px,1.6vw,20px)">Capinha chave cartão</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">MERCADO LIVRE</span><span style="font-size:18px">↗</span></a>
-        <a data-reveal="" href="https://mercadolivre.com/sec/1Pu78YY" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:16px;padding:20px 8px;border-bottom:1px solid rgba(244,243,241,.12);color:#f4f3f1;transition:padding .3s,background .3s" style-hover="background:#e3262c;color:#fff;padding-left:20px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.5;width:24px">05</span><span style="flex:1;font-weight:700;font-size:clamp(16px,1.6vw,20px)">Chaveiro chave cartão</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">MERCADO LIVRE</span><span style="font-size:18px">↗</span></a>
-        <a data-reveal="" href="https://meli.la/2AQ2BM2" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:16px;padding:20px 8px;border-bottom:1px solid rgba(244,243,241,.12);color:#f4f3f1;transition:padding .3s,background .3s" style-hover="background:#e3262c;color:#fff;padding-left:20px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.5;width:24px">06</span><span style="flex:1;font-weight:700;font-size:clamp(16px,1.6vw,20px)">Kit de revisão</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">MERCADO LIVRE</span><span style="font-size:18px">↗</span></a>
-        <a data-reveal="" href="https://meli.la/136AF9V" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:16px;padding:20px 8px;border-bottom:1px solid rgba(244,243,241,.12);color:#f4f3f1;transition:padding .3s,background .3s" style-hover="background:#e3262c;color:#fff;padding-left:20px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.5;width:24px">07</span><span style="flex:1;font-weight:700;font-size:clamp(16px,1.6vw,20px)">Suporte magnético celular</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">MERCADO LIVRE</span><span style="font-size:18px">↗</span></a>
-        <a data-reveal="" href="https://meli.la/2buVKr3" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:16px;padding:20px 8px;border-bottom:1px solid rgba(244,243,241,.12);color:#f4f3f1;transition:padding .3s,background .3s" style-hover="background:#e3262c;color:#fff;padding-left:20px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.5;width:24px">08</span><span style="flex:1;font-weight:700;font-size:clamp(16px,1.6vw,20px)">Pneu pretinho</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">MERCADO LIVRE</span><span style="font-size:18px">↗</span></a>
-        <a data-reveal="" href="https://mercadolivre.com/sec/2XWiTfj" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:16px;padding:20px 8px;border-bottom:1px solid rgba(244,243,241,.12);color:#f4f3f1;transition:padding .3s,background .3s" style-hover="background:#e3262c;color:#fff;padding-left:20px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.5;width:24px">09</span><span style="flex:1;font-weight:700;font-size:clamp(16px,1.6vw,20px)">Kit de lavagem Vonixx</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">MERCADO LIVRE</span><span style="font-size:18px">↗</span></a>
-        <a data-reveal="" href="https://meli.la/1zmwFcd" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:16px;padding:20px 8px;border-bottom:1px solid rgba(244,243,241,.12);color:#f4f3f1;transition:padding .3s,background .3s" style-hover="background:#e3262c;color:#fff;padding-left:20px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.5;width:24px">10</span><span style="flex:1;font-weight:700;font-size:clamp(16px,1.6vw,20px)">Cheirinho interior</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">MERCADO LIVRE</span><span style="font-size:18px">↗</span></a>
-        <a data-reveal="" href="https://meli.la/2XbYDf2" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:16px;padding:20px 8px;border-bottom:1px solid rgba(244,243,241,.12);color:#f4f3f1;transition:padding .3s,background .3s" style-hover="background:#e3262c;color:#fff;padding-left:20px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.5;width:24px">11</span><span style="flex:1;font-weight:700;font-size:clamp(16px,1.6vw,20px)">Aspirador portátil</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">MERCADO LIVRE</span><span style="font-size:18px">↗</span></a>
+        <a data-reveal="" href="https://meli.la/291E52H" target="_blank" rel="noopener" class="wl-prod" style="display:flex;align-items:center;gap:16px;padding:20px 8px;border-bottom:1px solid rgba(244,243,241,.12);color:#f4f3f1;transition:padding .3s,background .3s" style-hover="background:#e3262c;color:#fff;padding-left:20px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.5;width:24px">01</span><span style="flex:1;font-weight:700;font-size:clamp(16px,1.6vw,20px)">Câmera interna frontal</span><span class="wl-prod-store" style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">MERCADO LIVRE</span><span style="font-size:18px">↗</span></a>
+        <a data-reveal="" href="https://mercadolivre.com/sec/2MW4W7o" target="_blank" rel="noopener" class="wl-prod" style="display:flex;align-items:center;gap:16px;padding:20px 8px;border-bottom:1px solid rgba(244,243,241,.12);color:#f4f3f1;transition:padding .3s,background .3s" style-hover="background:#e3262c;color:#fff;padding-left:20px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.5;width:24px">02</span><span style="flex:1;font-weight:700;font-size:clamp(16px,1.6vw,20px)">LEDs interna</span><span class="wl-prod-store" style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">MERCADO LIVRE</span><span style="font-size:18px">↗</span></a>
+        <a data-reveal="" href="https://mercadolivre.com/sec/1KDJPTH" target="_blank" rel="noopener" class="wl-prod" style="display:flex;align-items:center;gap:16px;padding:20px 8px;border-bottom:1px solid rgba(244,243,241,.12);color:#f4f3f1;transition:padding .3s,background .3s" style-hover="background:#e3262c;color:#fff;padding-left:20px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.5;width:24px">03</span><span style="flex:1;font-weight:700;font-size:clamp(16px,1.6vw,20px)">Trava anti-furto</span><span class="wl-prod-store" style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">MERCADO LIVRE</span><span style="font-size:18px">↗</span></a>
+        <a data-reveal="" href="https://mercadolivre.com/sec/1xrU9TJ" target="_blank" rel="noopener" class="wl-prod" style="display:flex;align-items:center;gap:16px;padding:20px 8px;border-bottom:1px solid rgba(244,243,241,.12);color:#f4f3f1;transition:padding .3s,background .3s" style-hover="background:#e3262c;color:#fff;padding-left:20px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.5;width:24px">04</span><span style="flex:1;font-weight:700;font-size:clamp(16px,1.6vw,20px)">Capinha chave cartão</span><span class="wl-prod-store" style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">MERCADO LIVRE</span><span style="font-size:18px">↗</span></a>
+        <a data-reveal="" href="https://mercadolivre.com/sec/1Pu78YY" target="_blank" rel="noopener" class="wl-prod" style="display:flex;align-items:center;gap:16px;padding:20px 8px;border-bottom:1px solid rgba(244,243,241,.12);color:#f4f3f1;transition:padding .3s,background .3s" style-hover="background:#e3262c;color:#fff;padding-left:20px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.5;width:24px">05</span><span style="flex:1;font-weight:700;font-size:clamp(16px,1.6vw,20px)">Chaveiro chave cartão</span><span class="wl-prod-store" style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">MERCADO LIVRE</span><span style="font-size:18px">↗</span></a>
+        <a data-reveal="" href="https://meli.la/2AQ2BM2" target="_blank" rel="noopener" class="wl-prod" style="display:flex;align-items:center;gap:16px;padding:20px 8px;border-bottom:1px solid rgba(244,243,241,.12);color:#f4f3f1;transition:padding .3s,background .3s" style-hover="background:#e3262c;color:#fff;padding-left:20px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.5;width:24px">06</span><span style="flex:1;font-weight:700;font-size:clamp(16px,1.6vw,20px)">Kit de revisão</span><span class="wl-prod-store" style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">MERCADO LIVRE</span><span style="font-size:18px">↗</span></a>
+        <a data-reveal="" href="https://meli.la/136AF9V" target="_blank" rel="noopener" class="wl-prod" style="display:flex;align-items:center;gap:16px;padding:20px 8px;border-bottom:1px solid rgba(244,243,241,.12);color:#f4f3f1;transition:padding .3s,background .3s" style-hover="background:#e3262c;color:#fff;padding-left:20px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.5;width:24px">07</span><span style="flex:1;font-weight:700;font-size:clamp(16px,1.6vw,20px)">Suporte magnético celular</span><span class="wl-prod-store" style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">MERCADO LIVRE</span><span style="font-size:18px">↗</span></a>
+        <a data-reveal="" href="https://meli.la/2buVKr3" target="_blank" rel="noopener" class="wl-prod" style="display:flex;align-items:center;gap:16px;padding:20px 8px;border-bottom:1px solid rgba(244,243,241,.12);color:#f4f3f1;transition:padding .3s,background .3s" style-hover="background:#e3262c;color:#fff;padding-left:20px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.5;width:24px">08</span><span style="flex:1;font-weight:700;font-size:clamp(16px,1.6vw,20px)">Pneu pretinho</span><span class="wl-prod-store" style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">MERCADO LIVRE</span><span style="font-size:18px">↗</span></a>
+        <a data-reveal="" href="https://mercadolivre.com/sec/2XWiTfj" target="_blank" rel="noopener" class="wl-prod" style="display:flex;align-items:center;gap:16px;padding:20px 8px;border-bottom:1px solid rgba(244,243,241,.12);color:#f4f3f1;transition:padding .3s,background .3s" style-hover="background:#e3262c;color:#fff;padding-left:20px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.5;width:24px">09</span><span style="flex:1;font-weight:700;font-size:clamp(16px,1.6vw,20px)">Kit de lavagem Vonixx</span><span class="wl-prod-store" style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">MERCADO LIVRE</span><span style="font-size:18px">↗</span></a>
+        <a data-reveal="" href="https://meli.la/1zmwFcd" target="_blank" rel="noopener" class="wl-prod" style="display:flex;align-items:center;gap:16px;padding:20px 8px;border-bottom:1px solid rgba(244,243,241,.12);color:#f4f3f1;transition:padding .3s,background .3s" style-hover="background:#e3262c;color:#fff;padding-left:20px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.5;width:24px">10</span><span style="flex:1;font-weight:700;font-size:clamp(16px,1.6vw,20px)">Cheirinho interior</span><span class="wl-prod-store" style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">MERCADO LIVRE</span><span style="font-size:18px">↗</span></a>
+        <a data-reveal="" href="https://meli.la/2XbYDf2" target="_blank" rel="noopener" class="wl-prod" style="display:flex;align-items:center;gap:16px;padding:20px 8px;border-bottom:1px solid rgba(244,243,241,.12);color:#f4f3f1;transition:padding .3s,background .3s" style-hover="background:#e3262c;color:#fff;padding-left:20px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.5;width:24px">11</span><span style="flex:1;font-weight:700;font-size:clamp(16px,1.6vw,20px)">Aspirador portátil</span><span class="wl-prod-store" style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">MERCADO LIVRE</span><span style="font-size:18px">↗</span></a>
       </div>
     </div>
   </section>
@@ -267,7 +322,7 @@ a:hover{color:#ff3b3f}
         <div data-reveal="" style="background:#f4f3f1;border:1px solid rgba(11,11,12,.14);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:12px" style-hover="background:#fff"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#c81e24">D</span><span style="font-weight:800;font-size:22px;font-stretch:112%">Afiliação</span><span style="font-size:15px;line-height:1.5;color:rgba(11,11,12,.65)">Produto fixo na lista “Tudo que uso no Fluence”.</span></div>
       </div>
 
-      <div data-reveal="" style="margin-top:56px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:24px;align-items:center;padding:clamp(24px,3vw,36px);border:1.5px dashed rgba(11,11,12,.28);border-radius:20px">
+      <div class="wl-box" data-reveal="" style="margin-top:56px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:24px;align-items:center;padding:clamp(24px,3vw,36px);border:1.5px dashed rgba(11,11,12,.28);border-radius:20px">
         <div style="display:flex;flex-direction:column;gap:10px">
           <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#c81e24">Marcas parceiras · 0 de 1</span>
           <span style="font-weight:800;font-stretch:112%;font-size:clamp(24px,2.6vw,36px);line-height:1.05;letter-spacing:-.02em">Este espaço está reservado para a primeira marca parceira do canal.</span>
@@ -280,8 +335,8 @@ a:hover{color:#ff3b3f}
       <div data-reveal="" style="margin-top:72px;background:#0b0b0c;color:#f4f3f1;border-radius:28px;padding:clamp(28px,5vw,64px);display:flex;flex-direction:column;gap:28px;position:relative;overflow:hidden">
         <div style="position:absolute;right:-8%;top:-40%;width:60%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(227,38,44,.45),rgba(227,38,44,0) 65%);pointer-events:none"></div>
         <span style="position:relative;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ff3b3f">Contato comercial</span>
-        <a href="{{ mailtoParceria }}" style="position:relative;font-weight:900;font-stretch:112%;font-size:clamp(26px,5.6vw,80px);line-height:1;letter-spacing:-.03em;word-break:break-all;color:#f4f3f1" style-hover="color:#ff3b3f">{{ email }}</a>
-        <div style="position:relative;display:flex;flex-wrap:wrap;gap:12px">
+        <a class="wl-email" href="{{ mailtoParceria }}" style="position:relative;font-weight:900;font-stretch:112%;font-size:clamp(26px,5.6vw,80px);line-height:1;letter-spacing:-.03em;word-break:break-all;color:#f4f3f1" style-hover="color:#ff3b3f">{{ email }}</a>
+        <div class="wl-contact-btns" style="position:relative;display:flex;flex-wrap:wrap;gap:12px">
           <a href="{{ mailtoParceria }}" style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:999px;background:#e3262c;color:#fff;font-weight:700;font-size:15px" style-hover="background:#f4f3f1;color:#0b0b0c">Enviar proposta ↗</a>
           <button onClick="{{ copyEmail }}" style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:999px;border:1px solid rgba(244,243,241,.3);background:transparent;color:#f4f3f1;font:700 15px 'Archivo',sans-serif;cursor:pointer" style-hover="border-color:#f4f3f1">{{ copyLabel }}</button>
         </div>
@@ -301,7 +356,7 @@ a:hover{color:#ff3b3f}
             <span style="flex:none;width:36px;height:36px;border-radius:50%;border:1px solid rgba(244,243,241,.25);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:400;transition:transform .35s,background .35s;transform:{{ f.iconRot }};background:{{ f.iconBg }}">+</span>
           </button>
           <div style="display:grid;grid-template-rows:{{ f.rows }};transition:grid-template-rows .45s cubic-bezier(.2,.7,.2,1)">
-            <div style="overflow:hidden"><p style="margin:0;padding:0 56px 26px 0;font-size:17px;line-height:1.6;color:rgba(244,243,241,.7);text-wrap:pretty">{{ f.a }}</p></div>
+            <div style="overflow:hidden"><p class="wl-faq-a" style="margin:0;padding:0 56px 26px 0;font-size:17px;line-height:1.6;color:rgba(244,243,241,.7);text-wrap:pretty">{{ f.a }}</p></div>
           </div>
         </div>
       </sc-for>
@@ -311,7 +366,7 @@ a:hover{color:#ff3b3f}
   <!-- FOOTER -->
   <footer style="margin-top:clamp(80px,10vw,140px);border-top:1px solid rgba(244,243,241,.08);padding:48px clamp(16px,4vw,48px) 32px;max-width:1440px;margin-left:auto;margin-right:auto">
     <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:center">
-      <div style="display:flex;flex-wrap:wrap;gap:20px;font-weight:600;font-size:15px">
+      <div class="wl-footer-links" style="display:flex;flex-wrap:wrap;gap:20px;font-weight:600;font-size:15px">
         <a href="https://www.tiktok.com/@whitelinefluence" target="_blank" rel="noopener">TikTok ↗</a>
         <a href="https://www.instagram.com/whitelinefluence" target="_blank" rel="noopener">Instagram ↗</a>
         <a href="https://linktr.ee/whitelinefluence" target="_blank" rel="noopener">Linktree ↗</a>
@@ -396,6 +451,8 @@ class Component extends DCLogic {
     this.startStats();
     if (!this.animOn) return;
     const ease = 'cubic-bezier(.2,.7,.2,1)';
+    const canHover = window.matchMedia('(hover: hover)').matches;
+    const narrow = window.matchMedia('(max-width: 900px)');
     let ci = 0;
     document.querySelectorAll('[data-split]').forEach(line => {
       if (line.__split) return; line.__split = true;
@@ -406,8 +463,10 @@ class Component extends DCLogic {
           const s = document.createElement('span');
           s.textContent = ch;
           s.style.cssText = `display:inline-block;opacity:0;transform:translateY(0.45em) rotate(6deg) scale(.9);filter:blur(10px);transition:opacity .8s ${ease},transform 1s ${ease},filter .8s ${ease},color .25s,-webkit-text-stroke-color .25s;transition-delay:${120 + ci * 55}ms`;
-          s.addEventListener('mouseenter', () => { s.style.transitionDelay = '0ms'; s.style.transform = 'translateY(-0.08em) rotate(-4deg)'; s.style.color = '#e3262c'; s.style.webkitTextStrokeColor = '#e3262c'; });
-          s.addEventListener('mouseleave', () => { s.style.transform = 'none'; s.style.color = ''; s.style.webkitTextStrokeColor = ''; });
+          if (canHover) {
+            s.addEventListener('mouseenter', () => { s.style.transitionDelay = '0ms'; s.style.transform = 'translateY(-0.08em) rotate(-4deg)'; s.style.color = '#e3262c'; s.style.webkitTextStrokeColor = '#e3262c'; });
+            s.addEventListener('mouseleave', () => { s.style.transform = 'none'; s.style.color = ''; s.style.webkitTextStrokeColor = ''; });
+          }
           frag.appendChild(s); ci++;
         }
         line.replaceChild(frag, node);
@@ -452,6 +511,9 @@ class Component extends DCLogic {
     const onScroll = () => {
       if (ticking) return; ticking = true;
       requestAnimationFrame(() => {
+        ticking = false;
+        // Em telas estreitas o deslocamento horizontal empurra os títulos para fora da tela
+        if (narrow.matches) { par.forEach(el => { el.style.transform = ''; }); return; }
         const y = window.scrollY;
         par.forEach(el => {
           const k = parseFloat(el.dataset.parallax);
@@ -459,11 +521,11 @@ class Component extends DCLogic {
           const off = (r.top + r.height / 2 - window.innerHeight / 2);
           el.style.transform = `translateX(${(k > 0.08 || k < -0.08 ? y : -off) * k}px)`;
         });
-        ticking = false;
       });
     };
     this.onScroll = onScroll;
     window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
     onScroll();
   }
 
@@ -471,7 +533,7 @@ class Component extends DCLogic {
     if (this.io) this.io.disconnect();
     clearInterval(this.statsTimer);
     if (this.onVis) document.removeEventListener('visibilitychange', this.onVis);
-    if (this.onScroll) window.removeEventListener('scroll', this.onScroll);
+    if (this.onScroll) { window.removeEventListener('scroll', this.onScroll); window.removeEventListener('resize', this.onScroll); }
   }
 
   renderVals() {
