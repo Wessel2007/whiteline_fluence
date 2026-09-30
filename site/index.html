@@ -23,6 +23,15 @@ a:hover{color:#ff3b3f}
 ::selection{background:#e3262c;color:#fff}
 @keyframes wl-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @keyframes wl-pulse{0%,100%{opacity:1}50%{opacity:.25}}
+/* Faixa de atalhos do menu: só no celular */
+.wl-nav-strip{display:none}
+.wl-nav-strip::-webkit-scrollbar{display:none}
+.wl-nav-strip>a{flex:none;padding:6px 13px;border-radius:999px;border:1px solid rgba(244,243,241,.16);font-size:13px;font-weight:500;color:rgba(244,243,241,.75);white-space:nowrap}
+.wl-nav-strip>a{transition:background .25s,border-color .25s,color .25s}
+.wl-nav-strip>a.is-active{background:#e3262c;border-color:#e3262c;color:#fff}
+.wl-nav-sec{transition:color .25s}
+.wl-nav-sec.is-active{color:#f4f3f1!important;text-decoration:underline;text-decoration-color:#e3262c;text-decoration-thickness:2px;text-underline-offset:6px}
+.wl-nav-strip>a:active{background:#e3262c;border-color:#e3262c;color:#fff}
 @supports not (overflow:clip){body{overflow-x:hidden}}
 img{max-width:100%}
 a,button{-webkit-tap-highlight-color:transparent}
@@ -32,10 +41,18 @@ a,button{-webkit-tap-highlight-color:transparent}
   .wl-sticky{position:static!important}
 }
 
+/* ===== Tablet estreito: menu não cabe inteiro ===== */
+@media (max-width:820px){
+  .wl-nav-extra{display:none!important}
+}
+
 /* ===== Celular ===== */
 @media (max-width:640px){
   .wl-nav{padding:10px 16px!important;gap:10px!important}
   .wl-nav-sec{display:none!important}
+  html{scroll-padding-top:96px}
+  .wl-nav{flex-wrap:wrap!important;row-gap:10px!important}
+  .wl-nav-strip{display:flex;gap:8px;flex:1 1 100%;margin:0 -16px;padding:0 16px 2px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;-webkit-mask-image:linear-gradient(to right,#000 85%,transparent);mask-image:linear-gradient(to right,#000 85%,transparent)}
   .wl-brand{font-size:12px!important}
   .wl-nav-cta{padding:8px 14px!important;font-size:13px!important}
 
@@ -90,9 +107,19 @@ a,button{-webkit-tap-highlight-color:transparent}
       <span class="wl-brand" style="font-weight:800;font-stretch:125%;font-size:14px;letter-spacing:.02em">WHITELINE<span style="color:#e3262c">.</span>FLUENCE</span>
     </a>
     <div style="display:flex;align-items:center;gap:clamp(12px,2.4vw,28px);font-size:13px;font-weight:500">
+      <a class="wl-nav-sec wl-nav-extra" href="#sobre" style="color:rgba(244,243,241,.7)">Sobre</a>
+      <a class="wl-nav-sec" href="#videos" style="color:rgba(244,243,241,.7)">Vídeos</a>
       <a class="wl-nav-sec" href="#ficha" style="color:rgba(244,243,241,.7)">Ficha</a>
       <a class="wl-nav-sec" href="#produtos" style="color:rgba(244,243,241,.7)">Produtos</a>
+      <a class="wl-nav-sec wl-nav-extra" href="#faq" style="color:rgba(244,243,241,.7)">FAQ</a>
       <a class="wl-nav-cta" href="#parcerias" style="display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:#e3262c;color:#fff;font-weight:700" style-hover="background:#f4f3f1;color:#0b0b0c">Parcerias</a>
+    </div>
+    <div class="wl-nav-strip">
+      <a href="#sobre">Sobre</a>
+      <a href="#videos">Vídeos</a>
+      <a href="#ficha">Ficha</a>
+      <a href="#produtos">Produtos</a>
+      <a href="#faq">FAQ</a>
     </div>
   </nav>
 
@@ -467,10 +494,34 @@ class Component extends DCLogic {
     document.addEventListener('visibilitychange', this.onVis);
   }
 
+  // Destaca no menu a seção que está no meio da tela
+  startSpy(reduce) {
+    const links = Array.from(document.querySelectorAll('.wl-nav-sec, .wl-nav-strip > a'));
+    const strip = document.querySelector('.wl-nav-strip');
+    const ids = ['topo', 'alcance', 'sobre', 'ficha', 'videos', 'produtos', 'parcerias', 'faq'];
+    const setActive = id => {
+      if (id === this.spyId) return; this.spyId = id;
+      links.forEach(a => {
+        const on = a.getAttribute('href') === '#' + id;
+        a.classList.toggle('is-active', on);
+        if (on) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current');
+        // Rola só a faixa (nunca a página) para o atalho ativo ficar à vista
+        if (on && strip && strip.contains(a) && strip.scrollWidth > strip.clientWidth) {
+          strip.scrollTo({ left: a.offsetLeft - strip.offsetLeft - 16, behavior: reduce ? 'auto' : 'smooth' });
+        }
+      });
+    };
+    this.spy = new IntersectionObserver(entries => {
+      entries.forEach(en => { if (en.isIntersecting) setActive(en.target.id); });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    ids.forEach(id => { const el = document.getElementById(id); if (el) this.spy.observe(el); });
+  }
+
   componentDidMount() {
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.animOn = this.props.animations !== false && !reduce;
     this.startStats();
+    this.startSpy(reduce);
     if (!this.animOn) return;
     const ease = 'cubic-bezier(.2,.7,.2,1)';
     const canHover = window.matchMedia('(hover: hover)').matches;
@@ -553,6 +604,7 @@ class Component extends DCLogic {
 
   componentWillUnmount() {
     if (this.io) this.io.disconnect();
+    if (this.spy) this.spy.disconnect();
     clearInterval(this.statsTimer);
     if (this.onVis) document.removeEventListener('visibilitychange', this.onVis);
     if (this.onScroll) { window.removeEventListener('scroll', this.onScroll); window.removeEventListener('resize', this.onScroll); }
