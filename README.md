@@ -19,6 +19,7 @@ Ter uma página única que funcione como "cartão de visita" do canal:
 |---|-------|--------|-----------|
 | — | Hero | `#topo` | Título animado, botões para TikTok/Instagram, foto principal e contadores ao vivo |
 | — | Faixa + galeria | — | Marquee vermelho com os temas do canal e carrossel infinito de fotos |
+| — | Alcance | `#alcance` | Destaque com o total de views (+1,5 mi, sendo 1,2 mi no TikTok) — números fixos, atualizar à mão |
 | 01 | Sobre o canal | `#sobre` | Apresentação do canal e do Luiz (idade, primeiro carro, estilo dos vídeos) |
 | 02 | Ficha técnica | `#ficha` | Potência, torque, motor, câmbio CVT, porta-malas, rodas e dimensões |
 | 03 | Em destaque | `#videos` | Cards dos vídeos mais vistos |
@@ -113,6 +114,7 @@ Hospedado na **Vercel** com a pasta `site/` como *Root Directory*. Não há etap
 |--------|------------|
 | Adicionar/remover produto | Seção `<!-- PRODUTOS -->` no `index.html` (copiar uma linha `<a class="wl-prod">` e renumerar) |
 | Trocar fotos | Substituir o arquivo em `site/assets/` mantendo o nome, ou mudar o `src` |
+| Atualizar total de views | Seção `<!-- ALCANCE -->`: `data-count` + texto de cada número e a `width` (%) das barras |
 | Atualizar ficha técnica | Seção `<!-- FICHA TÉCNICA -->` (o número animado fica em `data-count`) |
 | Editar o FAQ | Array `faqData` no script do final do `index.html` |
 | Trocar o e-mail comercial | Constante `EMAIL` no script do final do `index.html` |
