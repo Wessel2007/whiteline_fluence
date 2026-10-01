@@ -100,6 +100,7 @@ a,button{-webkit-tap-highlight-color:transparent}
   .wl-box{border-radius:20px!important}
   .wl-email{font-size:5.6vw!important;word-break:normal!important;overflow-wrap:anywhere}
   .wl-contact-btns>*{flex:1 1 100%;justify-content:center}
+  .wl-ev-soon a{flex:1 1 100%;justify-content:center}
 
   .wl-faq-a{padding-right:0!important;font-size:16px!important}
 
@@ -126,16 +127,18 @@ a,button{-webkit-tap-highlight-color:transparent}
     </a>
     <div style="display:flex;align-items:center;gap:clamp(12px,2.4vw,28px);font-size:13px;font-weight:500">
       <a class="wl-nav-sec wl-nav-extra" href="#sobre" style="color:rgba(244,243,241,.7)">Sobre</a>
-      <a class="wl-nav-sec" href="#videos" style="color:rgba(244,243,241,.7)">Vídeos</a>
       <a class="wl-nav-sec" href="#ficha" style="color:rgba(244,243,241,.7)">Ficha</a>
+      <a class="wl-nav-sec" href="#videos" style="color:rgba(244,243,241,.7)">Vídeos</a>
+      <a class="wl-nav-sec" href="#eventos" style="color:rgba(244,243,241,.7)">Eventos</a>
       <a class="wl-nav-sec" href="#produtos" style="color:rgba(244,243,241,.7)">Produtos</a>
       <a class="wl-nav-sec wl-nav-extra" href="#faq" style="color:rgba(244,243,241,.7)">FAQ</a>
       <a class="wl-nav-cta" href="#parcerias" style="display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:#e3262c;color:#fff;font-weight:700" style-hover="background:#f4f3f1;color:#0b0b0c">Parcerias</a>
     </div>
     <div class="wl-nav-strip">
       <a href="#sobre">Sobre</a>
-      <a href="#videos">Vídeos</a>
       <a href="#ficha">Ficha</a>
+      <a href="#videos">Vídeos</a>
+      <a href="#eventos">Eventos</a>
       <a href="#produtos">Produtos</a>
       <a href="#faq">FAQ</a>
     </div>
@@ -227,7 +230,7 @@ a,button{-webkit-tap-highlight-color:transparent}
             <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:rgba(244,243,241,.55)">TikTok · Instagram</span>
           </div>
         </div>
-        <p style="margin:0;font-size:18px;line-height:1.6;color:rgba(244,243,241,.75);text-wrap:pretty">Gravo vídeos sobre o meu Fluence GT Line 2016: detalhes que pouca gente conhece, especificações técnicas explicadas sem enrolação, a rotina real com o carro e comparações com outros sedãs. Boa parte do conteúdo nasce das dúvidas que chegam nos comentários.</p>
+        <p style="margin:0;font-size:18px;line-height:1.6;color:rgba(244,243,241,.75);text-wrap:pretty">Gravo vídeos sobre o meu Fluence GT Line 2016: detalhes que pouca gente conhece, especificações técnicas explicadas sem enrolação, a rotina real com o carro e comparações com outros sedãs. Boa parte do conteúdo nasce das dúvidas que chegam nos comentários. Hoje o foco é o Fluence, mas o canal acompanha quem está ao volante: outros carros também aparecem de vez em quando.</p>
         <div style="display:flex;flex-wrap:wrap;gap:8px">
           <span style="padding:8px 14px;border-radius:999px;border:1px solid rgba(244,243,241,.18);font-size:13px">Curiosidades</span>
           <span style="padding:8px 14px;border-radius:999px;border:1px solid rgba(244,243,241,.18);font-size:13px">Especificações</span>
@@ -350,11 +353,47 @@ a,button{-webkit-tap-highlight-color:transparent}
     </div>
   </section>
 
+  <!-- EVENTOS (os cards vêm do array eventosData no script do final) -->
+  <section id="eventos" style="max-width:1440px;margin:0 auto;padding:clamp(80px,10vw,140px) clamp(16px,4vw,48px) 0">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:20px">
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div data-reveal="" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ff3b3f">04 — Eventos</div>
+        <h2 data-reveal="" style="margin:0;font-weight:800;font-stretch:112%;font-size:clamp(34px,4.6vw,68px);line-height:1;letter-spacing:-.03em;text-wrap:balance">Encontros, exposições e rolês</h2>
+      </div>
+      <p data-reveal="" style="margin:0;max-width:420px;font-size:17px;line-height:1.55;color:rgba(244,243,241,.7);text-wrap:pretty">Eventos automotivos, exposições e encontros de carros por onde o canal já passou.</p>
+    </div>
+    <!-- Linha flexível: os eventos têm largura limitada e o card "Em breve" ocupa o espaço que sobrar -->
+    <div style="margin-top:40px;display:flex;flex-wrap:wrap;gap:clamp(12px,1.5vw,20px)">
+      <sc-for list="{{ eventos }}" as="e" hint-placeholder-count="3">
+        <a data-reveal="" href="{{ e.href }}" target="_blank" rel="noopener" style="flex:1 1 280px;max-width:360px;display:flex;flex-direction:column;gap:12px;color:#f4f3f1" style-hover="color:#ff3b3f">
+          <div style="position:relative;aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#141416">
+            <img src="{{ e.foto }}" alt="{{ e.alt }}" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+            <span style="position:absolute;top:12px;left:12px;padding:6px 10px;border-radius:999px;background:#e3262c;color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;pointer-events:none">{{ e.tipo }}</span>
+          </div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,243,241,.55)">{{ e.quando }} · {{ e.local }}</span>
+          <span style="font-weight:700;font-size:18px;line-height:1.3">{{ e.titulo }}</span>
+          <span style="margin-top:-4px;font-size:15px;line-height:1.5;color:rgba(244,243,241,.65);text-wrap:pretty">{{ e.descricao }}</span>
+        </a>
+      </sc-for>
+      <div class="wl-ev-soon" data-reveal="" style="flex:999 1 300px;min-height:320px;position:relative;overflow:hidden;border-radius:18px;padding:clamp(24px,4vw,56px);display:flex;flex-direction:column;justify-content:center;gap:20px">
+        <svg class="wl-box-border" aria-hidden="true"><rect width="100%" height="100%" rx="18" ry="18"></rect></svg>
+        <div style="position:absolute;right:-15%;bottom:-35%;width:70%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(227,38,44,.22),rgba(227,38,44,0) 65%);pointer-events:none"></div>
+        <span style="position:relative;display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ff3b3f"><span style="width:8px;height:8px;border-radius:50%;background:#e3262c;animation:wl-pulse 1.6s ease-in-out infinite"></span>Próximas paradas</span>
+        <span style="position:relative;max-width:560px;font-weight:800;font-stretch:112%;font-size:clamp(28px,3.4vw,48px);line-height:1.02;letter-spacing:-.03em;text-wrap:balance">Mais eventos <span style="color:#e3262c">em breve</span>.</span>
+        <p style="position:relative;margin:0;max-width:480px;font-size:17px;line-height:1.55;color:rgba(244,243,241,.7);text-wrap:pretty">Tem encontro, exposição e rolê novo chegando na agenda, e tudo vira conteúdo no canal. Segue lá pra ver em primeira mão.</p>
+        <div style="position:relative;display:flex;flex-wrap:wrap;gap:12px;margin-top:4px">
+          <a href="https://www.instagram.com/whitelinefluence" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;background:#f4f3f1;color:#0b0b0c;font-weight:700;font-size:15px" style-hover="background:#e3262c;color:#fff">Acompanhar no Instagram ↗</a>
+          <a href="{{ mailtoEvento }}" style="display:flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;border:1px solid rgba(244,243,241,.3);color:#f4f3f1;font-weight:700;font-size:15px" style-hover="border-color:#e3262c;color:#ff3b3f">Organiza um evento? Me chama ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- PRODUTOS -->
   <section id="produtos" style="max-width:1440px;margin:0 auto;padding:clamp(80px,10vw,140px) clamp(16px,4vw,48px) 0">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:clamp(32px,5vw,72px);align-items:start">
       <div class="wl-sticky" style="display:flex;flex-direction:column;gap:20px;position:sticky;top:96px">
-        <div data-reveal="" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ff3b3f">04 — Produtos</div>
+        <div data-reveal="" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ff3b3f">05 — Produtos</div>
         <h2 data-reveal="" style="margin:0;font-weight:800;font-stretch:112%;font-size:clamp(34px,4.6vw,68px);line-height:1;letter-spacing:-.03em;text-wrap:balance">Tudo que uso no Fluence</h2>
         <p data-reveal="" style="margin:0;font-size:17px;line-height:1.55;color:rgba(244,243,241,.7);max-width:440px;text-wrap:pretty">Links diretos para os produtos que aparecem nos vídeos. Comprando por aqui você não paga nada a mais e ainda ajuda o canal.</p>
         <a data-reveal="" href="https://linktr.ee/whitelinefluence" target="_blank" rel="noopener" style="align-self:flex-start;font-weight:700;font-size:14px;border-bottom:1px solid currentColor;padding-bottom:4px;color:rgba(244,243,241,.8)">Abrir no Linktree ↗</a>
@@ -378,7 +417,7 @@ a,button{-webkit-tap-highlight-color:transparent}
   <!-- PARCERIAS -->
   <section id="parcerias" style="margin-top:clamp(80px,10vw,140px);background:#f4f3f1;color:#0b0b0c">
     <div style="max-width:1440px;margin:0 auto;padding:clamp(72px,9vw,128px) clamp(16px,4vw,48px)">
-      <div data-reveal="" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#c81e24">05 — Parcerias e patrocínios</div>
+      <div data-reveal="" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#c81e24">06 — Parcerias e patrocínios</div>
       <h2 data-reveal="" style="margin:24px 0 0;max-width:1100px;font-weight:800;font-stretch:112%;font-size:clamp(34px,5.4vw,84px);line-height:.98;letter-spacing:-.035em;text-wrap:balance">Sua marca na rotina de um carro de verdade.</h2>
       <p data-reveal="" style="margin:28px 0 0;max-width:640px;font-size:18px;line-height:1.6;color:rgba(11,11,12,.72);text-wrap:pretty">Trabalho com marcas do universo automotivo em formatos que se encaixam no conteúdo do canal: o produto aparece sendo usado no Fluence, com opinião sincera e linguagem de quem acompanha o perfil.</p>
 
@@ -414,7 +453,7 @@ a,button{-webkit-tap-highlight-color:transparent}
 
   <!-- FAQ -->
   <section id="faq" style="max-width:1100px;margin:0 auto;padding:clamp(80px,10vw,140px) clamp(16px,4vw,48px) 0">
-    <div data-reveal="" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ff3b3f">06 — Perguntas frequentes</div>
+    <div data-reveal="" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ff3b3f">07 — Perguntas frequentes</div>
     <h2 data-reveal="" style="margin:20px 0 40px;font-weight:800;font-stretch:112%;font-size:clamp(34px,4.6vw,68px);line-height:1;letter-spacing:-.03em">Dúvidas rápidas</h2>
     <div style="display:flex;flex-direction:column;border-top:1px solid rgba(244,243,241,.12)">
       <sc-for list="{{ faqs }}" as="f" hint-placeholder-count="5">
@@ -452,14 +491,29 @@ a,button{-webkit-tap-highlight-color:transparent}
 const EMAIL = ['heyxist3r', 'gmail.com'].join('@');
 
 class Component extends DCLogic {
-  state = { open: 0, copied: false };
+  state = { open: -1, copied: false };
   faqData = [
     { q: 'Qual motor e câmbio o Fluence GT Line 2016 usa?', a: 'Motor 2.0 16V flex de até 143 cv com etanol, ligado a um câmbio CVT X-Tronic com 6 marchas simuladas. Tem vídeo explicando como ele se comporta no dia a dia.' },
     { q: 'Posso mandar minha dúvida sobre o carro?', a: 'Pode. Comenta em qualquer vídeo no TikTok ou manda DM no Instagram. As perguntas que mais aparecem viram vídeo.' },
     { q: 'Os links de produtos são afiliados?', a: 'Sim. Você paga o mesmo preço e uma pequena comissão vai para o canal. Só coloco na lista o que eu uso no carro.' },
     { q: 'Como fechar uma parceria ou patrocínio?', a: 'Envie um e-mail para ' + EMAIL + ' com a marca, o produto e o formato que tem em mente. Retorno com proposta e prazos.' },
-    { q: 'Você faz comparativos com outros carros?', a: 'Faço. Os comparativos colocam o Fluence lado a lado com outros sedãs em ficha técnica, espaço, custo de manutenção e rodagem.' }
+    { q: 'Você faz comparativos com outros carros?', a: 'Faço. Os comparativos colocam o Fluence lado a lado com outros sedãs em ficha técnica, espaço, custo de manutenção e rodagem.' },
+    { q: 'O canal é só sobre o Fluence?', a: 'Hoje o foco é o Fluence, que é o meu carro. Mas o canal acompanha quem está ao volante: outros carros aparecem de vez em quando, e se um dia eu trocar de carro, o próximo vira conteúdo também.' }
   ];
+
+  // Eventos: a ordem não importa, os cards saem do mais recente para o mais antigo.
+  // data: 'AAAA-MM-DD' · foto: arquivo em assets/eventos/, de preferência vertical 9:16 (print de story/vídeo)
+  // link: vídeo/post do evento (opcional, sem ele abre o TikTok)
+  eventosData = [
+    // { titulo: 'Nome do evento', data: '2026-09-14', local: 'Cidade, UF', tipo: 'Encontro', descricao: 'Uma frase sobre o evento.', foto: 'assets/eventos/arquivo.jpg', alt: 'Descrição da foto', link: 'https://www.tiktok.com/@whitelinefluence/video/...' },
+    { titulo: '3º Import Day Toledo', data: '2026-09-27', local: 'Toledo, PR', tipo: 'Exposição', descricao: 'Exposição de importados com Lamborghini, Porsche, Ferrari, Corvette, BMW, Mercedes e muito mais.', foto: 'assets/eventos/import-day-toledo-2026.jpg', alt: 'Corvette azul, Porsche 911 laranja e Lamborghini Aventador verde no 3º Import Day Toledo' },
+  ];
+
+  fmtData(iso) {
+    const [a, m, d] = iso.split('-');
+    const meses = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+    return (d ? d + ' ' : '') + meses[+m - 1] + ' ' + a;
+  }
 
   // Contadores ao vivo: /api/stats (Vercel) a cada 60 s
   fmtStat(n) {
@@ -517,7 +571,7 @@ class Component extends DCLogic {
   startSpy(reduce) {
     const links = Array.from(document.querySelectorAll('.wl-nav-sec, .wl-nav-strip > a'));
     const strip = document.querySelector('.wl-nav-strip');
-    const ids = ['topo', 'alcance', 'sobre', 'ficha', 'videos', 'produtos', 'parcerias', 'faq'];
+    const ids = ['topo', 'alcance', 'sobre', 'ficha', 'videos', 'eventos', 'produtos', 'parcerias', 'faq'];
     const setActive = id => {
       if (id === this.spyId) return; this.spyId = id;
       links.forEach(a => {
@@ -636,11 +690,17 @@ class Component extends DCLogic {
       email: EMAIL,
       mailto: 'mailto:' + EMAIL,
       mailtoParceria: 'mailto:' + EMAIL + '?subject=Parceria%20Whiteline%20Fluence',
+      mailtoEvento: 'mailto:' + EMAIL + '?subject=Convite%20para%20evento%20-%20Whiteline%20Fluence',
       copyLabel: this.state.copied ? 'E-mail copiado ✓' : 'Copiar e-mail',
       copyEmail: () => {
         const done = () => { this.setState({ copied: true }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ copied: false }), 2000); };
         if (navigator.clipboard) navigator.clipboard.writeText(EMAIL).then(done, done); else done();
       },
+      eventos: [...this.eventosData].sort((x, y) => y.data.localeCompare(x.data)).map(e => ({
+        ...e,
+        quando: this.fmtData(e.data),
+        href: e.link || 'https://www.tiktok.com/@whitelinefluence'
+      })),
       faqs: this.faqData.map((f, i) => ({
         ...f,
         rows: open === i ? '1fr' : '0fr',

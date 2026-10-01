@@ -23,9 +23,10 @@ Ter uma página única que funcione como "cartão de visita" do canal:
 | 01 | Sobre o canal | `#sobre` | Apresentação do canal e do Luiz (idade, primeiro carro, estilo dos vídeos) |
 | 02 | Ficha técnica | `#ficha` | Potência, torque, motor, câmbio CVT, porta-malas, rodas e dimensões |
 | 03 | Em destaque | `#videos` | Cards dos vídeos mais vistos |
-| 04 | Produtos | `#produtos` | 11 links de afiliado + link para o Linktree |
-| 05 | Parcerias | `#parcerias` | Formatos (vídeo dedicado, inserção, stories, afiliação), vaga para a 1ª marca e contato |
-| 06 | FAQ | `#faq` | Perguntas frequentes em acordeão |
+| 04 | Eventos | `#eventos` | Encontros, exposições e eventos automotivos (cards gerados do array `eventosData`) |
+| 05 | Produtos | `#produtos` | 11 links de afiliado + link para o Linktree |
+| 06 | Parcerias | `#parcerias` | Formatos (vídeo dedicado, inserção, stories, afiliação), vaga para a 1ª marca e contato |
+| 07 | FAQ | `#faq` | Perguntas frequentes em acordeão |
 | — | Rodapé | — | Links das redes e aviso de links de afiliado |
 
 ## Estrutura do projeto
@@ -38,7 +39,7 @@ whiteline_fluence/
     ├── image-slot.js      ← ferramenta do editor de design (não vai para produção)
     ├── api/
     │   └── stats.js       ← função serverless GET /api/stats
-    ├── assets/            ← fotos (hero, perfil, galeria g*, vídeos v*)
+    ├── assets/            ← fotos (hero, perfil, galeria g*, vídeos v*, eventos/)
     ├── vercel.json        ← headers de segurança e cache
     └── .vercelignore      ← exclui image-slot.js do deploy
 ```
@@ -56,6 +57,7 @@ A lógica do componente cuida de:
 - **Animações**: letras do título entrando uma a uma, elementos com `data-reveal` aparecendo no scroll, contadores (`data-count`) e parallax (`data-parallax`, desligado em telas ≤ 900px).
 - **Acessibilidade de movimento**: se o sistema pedir `prefers-reduced-motion` (ou a prop `animations` for `false`), as animações são desligadas.
 - **FAQ**: acordeão controlado pelo estado `open`.
+- **Eventos**: cards montados a partir do array `eventosData`, ordenados do mais recente para o mais antigo; a data `AAAA-MM-DD` vira "14 set 2026".
 - **E-mail**: montado em tempo de execução (`['usuario', 'dominio'].join('@')`) para não ficar em texto puro no HTML e fugir de robôs coletores. Botão "Copiar e-mail" usa a Clipboard API.
 
 Props editáveis (em `data-props`): `animations` e `showMarquee`.
@@ -116,6 +118,7 @@ Hospedado na **Vercel** com a pasta `site/` como *Root Directory*. Não há etap
 | Trocar fotos | Substituir o arquivo em `site/assets/` mantendo o nome, ou mudar o `src` |
 | Atualizar total de views | Seção `<!-- ALCANCE -->`: `data-count` + texto de cada número e a `width` (%) das barras |
 | Atualizar ficha técnica | Seção `<!-- FICHA TÉCNICA -->` (o número animado fica em `data-count`) |
+| Adicionar evento | Array `eventosData` no script do final do `index.html` (foto em `site/assets/eventos/`) |
 | Editar o FAQ | Array `faqData` no script do final do `index.html` |
 | Trocar o e-mail comercial | Constante `EMAIL` no script do final do `index.html` |
 | Mudar o @ das redes | `USER` em `api/stats.js` e os links no `index.html` |
