@@ -7,12 +7,13 @@ const UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/6
 
 let cache = null; // { at, data }
 
-async function get(url, headers = {}) {
+async function get(url, headers = {}, opts = {}) {
   const res = await fetch(url, {
     headers: { 'User-Agent': UA, 'Accept-Language': 'en-US,en;q=0.9', ...headers },
-    signal: AbortSignal.timeout(6000),
+    signal: AbortSignal.timeout(opts.timeout || 6000),
+    redirect: opts.redirect || 'follow',
   });
-  if (!res.ok) throw new Error(`${url} -> ${res.status}`);
+  if (!res.ok) throw new Error(`${url} -> ${res.status}${res.headers.get('location') ? ' ' + res.headers.get('location') : ''}`);
   return res;
 }
 
@@ -38,12 +39,33 @@ function parseAbbrev(s) {
 }
 
 // A API interna (web_profile_info) exige login; o og:description da página traz "742 Followers, ..."
-async function instagram() {
-  const html = await (await get(`https://www.instagram.com/${USER}/`)).text();
+// Para IPs de datacenter (Vercel) o Instagram costuma mandar para o login, mas robôs de pré-visualização
+// de link (WhatsApp, Facebook, Twitter...) recebem as meta tags. Tenta um UA de cada vez até um dar certo.
+const IG_UAS = [
+  UA,
+  'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
+  'WhatsApp/2.23.20.0',
+  'Twitterbot/1.0',
+];
+
+async function instagramWith(ua) {
+  // redirect manual: um 302 para /accounts/login vira erro com o destino no log
+  const html = await (await get(`https://www.instagram.com/${USER}/`, { 'User-Agent': ua }, { timeout: 4000, redirect: 'manual' })).text();
   const m = html.match(/<meta[^>]+(?:property|name)="og:description"[^>]+content="([^"]+)"/i);
   const f = m && m[1].match(/([\d.,]+\s*[KMB]?)\s+Followers/i);
-  if (!f) throw new Error('instagram: seguidores não encontrados');
+  if (!f) throw new Error(`seguidores não encontrados (${m ? 'og sem Followers' : /accounts\/login/.test(html) ? 'página de login' : 'sem og:description'})`);
   return { followers: parseAbbrev(f[1]) };
+}
+
+async function instagram() {
+  const erros = [];
+  const fim = Date.now() + 8000; // não estoura o tempo da função mesmo se todos falharem
+  for (const ua of IG_UAS) {
+    if (Date.now() > fim) break;
+    try { return await instagramWith(ua); }
+    catch (e) { erros.push(`[${ua.split(/[\s/]/)[0]}] ${e.message}`); }
+  }
+  throw new Error(erros.join(' | '));
 }
 
 let inflight = null;
