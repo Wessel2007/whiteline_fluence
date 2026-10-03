@@ -67,9 +67,9 @@ Props editáveis (em `data-props`): `animations` e `showMarquee`.
 
 Função serverless da Vercel em `GET /api/stats`:
 
-1. Baixa o perfil público do TikTok e lê `followerCount` e `heartCount` do JSON `__UNIVERSAL_DATA_FOR_REHYDRATION__` (com regex de reserva).
+1. Busca seguidores e curtidas do TikTok na API do [tokcounter.com](https://tiktok-api.tokcounter.com/user/data/whitelinefluence) (`stats.followers` e `stats.likes`). Da Vercel, a página do TikTok chega com números atrasados; a leitura direta do perfil (`followerCount`/`heartCount` do JSON `__UNIVERSAL_DATA_FOR_REHYDRATION__`) ficou como reserva.
 2. Busca os seguidores do Instagram no JSON público do [instastatistics.com](https://instastatistics.com/api/user/whitelinefluence) (`followers`). O Instagram bloqueia os IPs da Vercel (redireciona para o login com `is_from_rle`, com qualquer User-Agent), então a leitura direta do perfil (`og:description`, ex.: `"742 Followers, ..."`) ficou só como reserva — funciona no `vercel dev` local.
-3. Usa User-Agent de iPhone, porque com UA de desktop o TikTok devolve desafio anti-bot.
+3. Nas leituras diretas (reserva), usa User-Agent de iPhone, porque com UA de desktop o TikTok devolve desafio anti-bot.
 4. Guarda o resultado em memória por **2 minutos**; requisições simultâneas compartilham a mesma busca. Se uma rede falhar, mantém o último valor bom dela.
 5. Responde com `Cache-Control: s-maxage=120, stale-while-revalidate=600`.
 
@@ -133,6 +133,6 @@ Hospedado na **Vercel** com a pasta `site/` como *Root Directory*. Não há etap
 
 ## Observações
 
-- O Instagram depende de um serviço de terceiros (instastatistics.com, endpoint não oficial); se ele sair do ar ou passar a bloquear, a alternativa definitiva é a API oficial do Instagram (conta profissional + token da Meta).
-- A leitura do TikTok é feita por *scraping* da página pública; se as redes mudarem o HTML, a API para de achar os números (o site continua de pé com os valores fixos). Os erros aparecem nos logs da função na Vercel.
+- Os contadores dependem de serviços de terceiros com endpoints não oficiais (tokcounter.com para o TikTok e instastatistics.com para o Instagram). Se um deles sair do ar, a API tenta a leitura direta do perfil e, se ela também falhar, o site mostra os números fixos do HTML. Para o Instagram, a alternativa definitiva é a API oficial (conta profissional + token da Meta).
+- A leitura direta (reserva) é feita por *scraping* das páginas públicas; se as redes mudarem o HTML, a API para de achar os números (o site continua de pé com os valores fixos). Os erros aparecem nos logs da função na Vercel.
 - O site contém links de afiliado, e isso está avisado no rodapé e no FAQ.

@@ -17,13 +17,18 @@ async function get(url, headers = {}, opts = {}) {
   return res;
 }
 
-// Da Vercel o TikTok chegou a devolver um número atrasado (4597 x 4612 real): o parâmetro único
-// e os headers no-cache evitam reaproveitar uma resposta guardada no caminho
-async function tiktok() {
-  const res = await get(`https://www.tiktok.com/@${USER}?_r=${Date.now()}`, { 'Cache-Control': 'no-cache', Pragma: 'no-cache' });
-  // Diagnóstico: mostra nos logs se a resposta veio de cache da CDN do TikTok
-  console.log('tiktok cdn:', res.headers.get('x-tt-trace-tag') || '-', '|', res.headers.get('x-cache') || '-');
-  const html = await res.text();
+// Da Vercel o TikTok devolve um número atrasado (4597 x 4612 real).
+// Fonte principal: a API do tokcounter.com, que faz a leitura do lado deles.
+async function tiktokCounter() {
+  const data = await (await get(`https://tiktok-api.tokcounter.com/user/data/${USER}`, { Accept: 'application/json' }, { timeout: 5000 })).json();
+  const s = data && data.success && data.id === USER && data.stats;
+  if (!s || typeof s.followers !== 'number') throw new Error('tokcounter: resposta sem seguidores');
+  return { followers: s.followers, likes: typeof s.likes === 'number' ? s.likes : null };
+}
+
+// Reserva: leitura direta do perfil (o parâmetro único e os headers no-cache evitam respostas guardadas no caminho)
+async function tiktokDireto() {
+  const html = await (await get(`https://www.tiktok.com/@${USER}?_r=${Date.now()}`, { 'Cache-Control': 'no-cache', Pragma: 'no-cache' })).text();
   const m = html.match(/<script id="__UNIVERSAL_DATA_FOR_REHYDRATION__"[^>]*>([\s\S]*?)<\/script>/);
   if (m) {
     try {
@@ -34,6 +39,20 @@ async function tiktok() {
   const f = html.match(/"followerCount":(\d+)/), h = html.match(/"heartCount":(\d+)/);
   if (!f) throw new Error('tiktok: stats não encontrados');
   return { followers: +f[1], likes: h ? +h[1] : null };
+}
+
+async function tiktok() {
+  return primeiraQueFuncionar([tiktokCounter, tiktokDireto]);
+}
+
+// Tenta as fontes em ordem; se todas falharem, junta os motivos num erro só (vai para o log)
+async function primeiraQueFuncionar(fontes) {
+  const erros = [];
+  for (const fonte of fontes) {
+    try { return await fonte(); }
+    catch (e) { erros.push(e.message); }
+  }
+  throw new Error(erros.join(' | '));
 }
 
 function parseAbbrev(s) {
@@ -63,12 +82,7 @@ async function instagramDireto() {
 }
 
 async function instagram() {
-  const erros = [];
-  for (const fonte of [instagramStatistics, instagramDireto]) {
-    try { return await fonte(); }
-    catch (e) { erros.push(e.message); }
-  }
-  throw new Error(erros.join(' | '));
+  return primeiraQueFuncionar([instagramStatistics, instagramDireto]);
 }
 
 let inflight = null;
