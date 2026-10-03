@@ -85,6 +85,46 @@ async function instagram() {
   return primeiraQueFuncionar([instagramStatistics, instagramDireto]);
 }
 
+// Checagem de número plausível: as fontes são serviços de terceiros, então um bug ou ataque do lado
+// deles não pode virar "0" ou "9 milhões" no site.
+const MAX = 1e9;
+const QUEDA_MAX = 0.2;    // aceita cair até 20% de uma vez
+const SALTO_MAX = 0.5;    // aceita subir até 50% de uma vez
+const INSISTENCIA = 3;    // mudança brusca vista 3 vezes seguidas é aceita (cresceu de verdade ou o valor guardado é que estava errado)
+const suspeitas = {};     // { 'tiktok.followers': { valor, vezes } } — mudança brusca à espera de confirmação
+
+function plausivel(chave, novo, antigo) {
+  if (!Number.isInteger(novo) || novo <= 0 || novo > MAX) {
+    console.error(`${chave}: valor inválido descartado (${novo})`);
+    return false;
+  }
+  if (typeof antigo !== 'number' || antigo <= 0) return true; // sem histórico (instância nova): só a checagem absoluta
+  const variacao = (novo - antigo) / antigo;
+  if (variacao >= -QUEDA_MAX && variacao <= SALTO_MAX) { delete suspeitas[chave]; return true; }
+  // Só conta como confirmação se o valor suspeito se repetir (margem de 5%); um valor diferente recomeça a contagem
+  const s = suspeitas[chave];
+  suspeitas[chave] = s && Math.abs(novo - s.valor) <= s.valor * 0.05 ? { valor: novo, vezes: s.vezes + 1 } : { valor: novo, vezes: 1 };
+  if (suspeitas[chave].vezes >= INSISTENCIA) {
+    console.warn(`${chave}: mudança brusca confirmada ${INSISTENCIA}x seguidas, aceitando (${antigo} -> ${novo})`);
+    delete suspeitas[chave];
+    return true;
+  }
+  console.warn(`${chave}: mudança brusca ignorada (${antigo} -> ${novo}), mantendo o anterior`);
+  return false;
+}
+
+// Monta o resultado de uma rede campo a campo: cada número suspeito mantém o último valor bom
+function validar(rede, novo, anterior) {
+  if (!novo) return anterior;
+  const out = {};
+  for (const [campo, n] of Object.entries(novo)) {
+    const antigo = anterior ? anterior[campo] : null;
+    if (n == null) out[campo] = antigo ?? null;
+    else out[campo] = plausivel(`${rede}.${campo}`, n, antigo) ? n : antigo ?? null;
+  }
+  return out.followers == null ? anterior : out;
+}
+
 let inflight = null;
 
 async function refresh() {
@@ -96,8 +136,8 @@ async function refresh() {
   cache = {
     at: Date.now(),
     data: {
-      tiktok: tt.status === 'fulfilled' ? tt.value : prev.tiktok,
-      instagram: ig.status === 'fulfilled' ? ig.value : prev.instagram,
+      tiktok: validar('tiktok', tt.status === 'fulfilled' ? tt.value : null, prev.tiktok),
+      instagram: validar('instagram', ig.status === 'fulfilled' ? ig.value : null, prev.instagram),
       updatedAt: new Date().toISOString(),
     },
   };

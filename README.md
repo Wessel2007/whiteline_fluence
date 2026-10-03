@@ -70,8 +70,9 @@ Função serverless da Vercel em `GET /api/stats`:
 1. Busca seguidores e curtidas do TikTok na API do [tokcounter.com](https://tiktok-api.tokcounter.com/user/data/whitelinefluence) (`stats.followers` e `stats.likes`). Da Vercel, a página do TikTok chega com números atrasados; a leitura direta do perfil (`followerCount`/`heartCount` do JSON `__UNIVERSAL_DATA_FOR_REHYDRATION__`) ficou como reserva.
 2. Busca os seguidores do Instagram no JSON público do [instastatistics.com](https://instastatistics.com/api/user/whitelinefluence) (`followers`). O Instagram bloqueia os IPs da Vercel (redireciona para o login com `is_from_rle`, com qualquer User-Agent), então a leitura direta do perfil (`og:description`, ex.: `"742 Followers, ..."`) ficou só como reserva — funciona no `vercel dev` local.
 3. Nas leituras diretas (reserva), usa User-Agent de iPhone, porque com UA de desktop o TikTok devolve desafio anti-bot.
-4. Guarda o resultado em memória por **2 minutos**; requisições simultâneas compartilham a mesma busca. Se uma rede falhar, mantém o último valor bom dela.
-5. Responde com `Cache-Control: s-maxage=120, stale-while-revalidate=600`.
+4. Confere se cada número é plausível antes de usar: descarta valores que não sejam inteiros positivos e ignora mudanças bruscas (queda de mais de 20% ou salto de mais de 50% em relação ao último valor bom). Uma mudança brusca só é aceita se o mesmo valor (±5%) se repetir 3 vezes seguidas. Os descartes aparecem nos logs.
+5. Guarda o resultado em memória por **2 minutos**; requisições simultâneas compartilham a mesma busca. Se uma rede falhar, mantém o último valor bom dela.
+6. Responde com `Cache-Control: s-maxage=120, stale-while-revalidate=600`.
 
 Resposta:
 
