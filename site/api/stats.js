@@ -17,8 +17,13 @@ async function get(url, headers = {}, opts = {}) {
   return res;
 }
 
+// Da Vercel o TikTok chegou a devolver um número atrasado (4597 x 4612 real): o parâmetro único
+// e os headers no-cache evitam reaproveitar uma resposta guardada no caminho
 async function tiktok() {
-  const html = await (await get(`https://www.tiktok.com/@${USER}`)).text();
+  const res = await get(`https://www.tiktok.com/@${USER}?_r=${Date.now()}`, { 'Cache-Control': 'no-cache', Pragma: 'no-cache' });
+  // Diagnóstico: mostra nos logs se a resposta veio de cache da CDN do TikTok
+  console.log('tiktok cdn:', res.headers.get('x-tt-trace-tag') || '-', '|', res.headers.get('x-cache') || '-');
+  const html = await res.text();
   const m = html.match(/<script id="__UNIVERSAL_DATA_FOR_REHYDRATION__"[^>]*>([\s\S]*?)<\/script>/);
   if (m) {
     try {
@@ -38,32 +43,30 @@ function parseAbbrev(s) {
   return Math.round(parseFloat(m[1]) * mult);
 }
 
-// A API interna (web_profile_info) exige login; o og:description da página traz "742 Followers, ..."
-// Para IPs de datacenter (Vercel) o Instagram costuma mandar para o login, mas robôs de pré-visualização
-// de link (WhatsApp, Facebook, Twitter...) recebem as meta tags. Tenta um UA de cada vez até um dar certo.
-const IG_UAS = [
-  UA,
-  'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
-  'WhatsApp/2.23.20.0',
-  'Twitterbot/1.0',
-];
+// O Instagram bloqueia os IPs da Vercel (302 para /accounts/login?...&is_from_rle, qualquer User-Agent).
+// Fonte principal: o JSON público do instastatistics.com, que faz a leitura do lado deles.
+async function instagramStatistics() {
+  const data = await (await get(`https://instastatistics.com/api/user/${USER}`, { Accept: 'application/json' }, { timeout: 5000 })).json();
+  if (!data || data.username !== USER || typeof data.followers !== 'number') throw new Error('instastatistics: resposta sem seguidores');
+  return { followers: data.followers };
+}
 
-async function instagramWith(ua) {
+// Reserva: leitura direta do perfil. Só funciona fora de datacenter (ex.: vercel dev local).
+// A API interna (web_profile_info) exige login; o og:description da página traz "742 Followers, ..."
+async function instagramDireto() {
   // redirect manual: um 302 para /accounts/login vira erro com o destino no log
-  const html = await (await get(`https://www.instagram.com/${USER}/`, { 'User-Agent': ua }, { timeout: 4000, redirect: 'manual' })).text();
+  const html = await (await get(`https://www.instagram.com/${USER}/`, {}, { timeout: 4000, redirect: 'manual' })).text();
   const m = html.match(/<meta[^>]+(?:property|name)="og:description"[^>]+content="([^"]+)"/i);
   const f = m && m[1].match(/([\d.,]+\s*[KMB]?)\s+Followers/i);
-  if (!f) throw new Error(`seguidores não encontrados (${m ? 'og sem Followers' : /accounts\/login/.test(html) ? 'página de login' : 'sem og:description'})`);
+  if (!f) throw new Error('instagram: seguidores não encontrados');
   return { followers: parseAbbrev(f[1]) };
 }
 
 async function instagram() {
   const erros = [];
-  const fim = Date.now() + 8000; // não estoura o tempo da função mesmo se todos falharem
-  for (const ua of IG_UAS) {
-    if (Date.now() > fim) break;
-    try { return await instagramWith(ua); }
-    catch (e) { erros.push(`[${ua.split(/[\s/]/)[0]}] ${e.message}`); }
+  for (const fonte of [instagramStatistics, instagramDireto]) {
+    try { return await fonte(); }
+    catch (e) { erros.push(e.message); }
   }
   throw new Error(erros.join(' | '));
 }
