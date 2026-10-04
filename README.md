@@ -121,7 +121,7 @@ Hospedado na **Vercel** com a pasta `site/` como *Root Directory*. Não há etap
 | Atualizar total de views | Seção `<!-- ALCANCE -->`: `data-count` + texto de cada número e a `width` (%) das barras |
 | Atualizar ficha técnica | Seção `<!-- FICHA TÉCNICA -->` (o número animado fica em `data-count`) |
 | Adicionar/mudar metas de seguidores | Array `metasData` no script do final do `index.html` (lista `marcos` de cada rede). O fallback sem API fica em `state.seg` |
-| Adicionar evento | Array `eventosData` no script do final do `index.html` (foto em `site/assets/eventos/`) |
+| Adicionar evento | Array `eventosData` no script do final do `index.html` (fotos em `site/assets/eventos/`; com mais de uma o card alterna estilo story) |
 | Editar o FAQ | Array `faqData` no script do final do `index.html` |
 | Trocar o e-mail comercial | Constante `EMAIL` no script do final do `index.html` |
 | Mudar o @ das redes | `USER` em `api/stats.js` e os links no `index.html` |

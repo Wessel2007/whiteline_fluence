@@ -23,6 +23,15 @@ a:hover{color:#ff3b3f}
 ::selection{background:#e3262c;color:#fff}
 @keyframes wl-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @keyframes wl-pulse{0%,100%{opacity:1}50%{opacity:.25}}
+/* Card de evento estilo story: --q anda de 0 a 1 no ciclo, --p = foto atual (0 a n) com fração.
+   Cada foto (--i) aparece quando p chega nela e some cruzando com a próxima; a 1ª volta por cima da última no fim do ciclo. */
+@property --q{syntax:'<number>';inherits:true;initial-value:0}
+@keyframes wl-story{from{--q:0}to{--q:1}}
+.wl-story{--p:calc(var(--q) * var(--n))}
+.wl-story:hover{animation-play-state:paused!important}
+.wl-story img{opacity:max(0,min(1,(var(--p) - var(--i) + .175) / .175,(var(--i) + 1 - var(--p)) / .175),min(1,(var(--p) - var(--n) - var(--i) + .175) / .175))}
+.wl-story-bar>i{display:block;height:100%;border-radius:inherit;background:#fff;transform-origin:left;transform:scaleX(clamp(0,var(--p) - var(--i),1))}
+@media (prefers-reduced-motion:reduce){.wl-story{animation:none!important}.wl-story-bars{display:none!important}}
 /* Faixa de atalhos do menu: só no celular */
 .wl-nav-strip{display:none}
 .wl-nav-strip::-webkit-scrollbar{display:none}
@@ -398,9 +407,18 @@ a,button{-webkit-tap-highlight-color:transparent}
     <div style="margin-top:40px;display:flex;flex-wrap:wrap;gap:clamp(12px,1.5vw,20px)">
       <sc-for list="{{ eventos }}" as="e" hint-placeholder-count="3">
         <a data-reveal="" href="{{ e.href }}" target="_blank" rel="noopener" style="flex:1 1 280px;max-width:360px;display:flex;flex-direction:column;gap:12px;color:#f4f3f1" style-hover="color:#ff3b3f">
-          <div style="position:relative;aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#141416">
-            <img src="{{ e.foto }}" alt="{{ e.alt }}" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
-            <span style="position:absolute;top:12px;left:12px;padding:6px 10px;border-radius:999px;background:#e3262c;color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;pointer-events:none">{{ e.tipo }}</span>
+          <div class="wl-story" style="position:relative;aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#141416;--n:{{ e.n }};animation:{{ e.anim }}">
+            <sc-for list="{{ e.slides }}" as="f">
+              <img src="{{ f.src }}" alt="{{ f.alt }}" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;--i:{{ f.i }}">
+            </sc-for>
+            <sc-if value="{{ e.multi }}">
+              <div class="wl-story-bars" aria-hidden="true" style="position:absolute;inset:0 0 auto;display:flex;gap:4px;padding:10px 12px 24px;background:linear-gradient(rgba(0,0,0,.35),rgba(0,0,0,0));pointer-events:none">
+                <sc-for list="{{ e.slides }}" as="f">
+                  <span class="wl-story-bar" style="flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.35);--i:{{ f.i }}"><i></i></span>
+                </sc-for>
+              </div>
+            </sc-if>
+            <span style="position:absolute;top:{{ e.tagTop }};left:12px;padding:6px 10px;border-radius:999px;background:#e3262c;color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;pointer-events:none">{{ e.tipo }}</span>
           </div>
           <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,243,241,.55)">{{ e.quando }} · {{ e.local }}</span>
           <span style="font-weight:700;font-size:18px;line-height:1.3">{{ e.titulo }}</span>
@@ -542,11 +560,16 @@ class Component extends DCLogic {
   ];
 
   // Eventos: a ordem não importa, os cards saem do mais recente para o mais antigo.
-  // data: 'AAAA-MM-DD' · foto: arquivo em assets/eventos/, de preferência vertical 9:16 (print de story/vídeo)
+  // data: 'AAAA-MM-DD' · fotos: arquivos em assets/eventos/, de preferência vertical 9:16 (print de story/vídeo)
+  // com mais de uma foto o card vira story: troca a cada 4 s com barrinhas de progresso no topo
   // link: vídeo/post do evento (opcional, sem ele abre o TikTok)
   eventosData = [
-    // { titulo: 'Nome do evento', data: '2026-09-14', local: 'Cidade, UF', tipo: 'Encontro', descricao: 'Uma frase sobre o evento.', foto: 'assets/eventos/arquivo.jpg', alt: 'Descrição da foto', link: 'https://www.tiktok.com/@whitelinefluence/video/...' },
-    { titulo: '3º Import Day Toledo', data: '2026-09-27', local: 'Toledo, PR', tipo: 'Exposição', descricao: 'Exposição de importados com Lamborghini, Porsche, Ferrari, Corvette, BMW, Mercedes e muito mais.', foto: 'assets/eventos/import-day-toledo-2026.jpg', alt: 'Corvette azul, Porsche 911 laranja e Lamborghini Aventador verde no 3º Import Day Toledo' },
+    // { titulo: 'Nome do evento', data: '2026-09-14', local: 'Cidade, UF', tipo: 'Encontro', descricao: 'Uma frase sobre o evento.', fotos: [{ src: 'assets/eventos/arquivo.jpg', alt: 'Descrição da foto' }], link: 'https://www.tiktok.com/@whitelinefluence/video/...' },
+    { titulo: '3º Import Day Toledo', data: '2026-09-27', local: 'Toledo, PR', tipo: 'Exposição', descricao: 'Exposição de importados com Lamborghini, Porsche, Ferrari, Corvette, BMW, Mercedes e muito mais.', fotos: [{ src: 'assets/eventos/import-day-toledo-2026.jpg', alt: 'Corvette azul, Porsche 911 laranja e Lamborghini Aventador verde no 3º Import Day Toledo' }] },
+    { titulo: 'Ryokai Meet · 1ª edição', data: '2026-10-03', local: 'Toledo, PR', tipo: 'Encontro', descricao: 'Muito drift, batalha de ronco e exposição de carros, com o Fluence presente na exposição.', fotos: [
+      { src: 'assets/eventos/ryokai-meet-toledo-2026.jpg', alt: 'Fluence GT Line branco ao lado de um Astra preto na exposição do Ryokai Meet, com o banner do evento ao fundo' },
+      { src: 'assets/eventos/ryokai-meet-toledo-2026-drift.jpg', alt: 'Fila de carros de drift no Ryokai Meet: Corvette cinza da Lucatti, Corvette verde da TurboPy e Supra azul' }
+    ] },
   ];
 
   fmtData(iso) {
@@ -779,6 +802,12 @@ class Component extends DCLogic {
       metas: this.metasData.map(m => this.metaCard(m, this.state.seg[m.id])),
       eventos: [...this.eventosData].sort((x, y) => y.data.localeCompare(x.data)).map(e => ({
         ...e,
+        n: e.fotos.length,
+        multi: e.fotos.length > 1,
+        slides: e.fotos.map((f, i) => ({ ...f, i })),
+        // 4 s por foto; com 1 foto ou animações desligadas fica parado na primeira
+        anim: e.fotos.length > 1 && this.props.animations !== false ? 'wl-story ' + e.fotos.length * 4 + 's linear infinite' : 'none',
+        tagTop: e.fotos.length > 1 ? '26px' : '12px',
         quando: this.fmtData(e.data),
         href: e.link || 'https://www.tiktok.com/@whitelinefluence'
       })),
