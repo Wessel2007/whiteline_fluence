@@ -9,7 +9,7 @@ Site pessoal do canal **@whitelinefluence** (TikTok e Instagram), dedicado ao me
 Ter uma página única que funcione como "cartão de visita" do canal:
 
 - **Apresentar o canal e o carro**: quem grava, que tipo de conteúdo sai (curiosidades, ficha técnica, dia a dia, tira-dúvidas e comparativos).
-- **Mostrar números reais**: curtidas e seguidores do TikTok e seguidores do Instagram, atualizados automaticamente.
+- **Mostrar números reais**: curtidas e seguidores do TikTok atualizados automaticamente; seguidores do Instagram atualizados à mão.
 - **Centralizar os links de afiliado**: a lista "Tudo que uso no Fluence", com os produtos que aparecem nos vídeos (Mercado Livre).
 - **Atrair parcerias**: seção comercial com formatos de publicidade e contato direto por e-mail.
 
@@ -17,9 +17,9 @@ Ter uma página única que funcione como "cartão de visita" do canal:
 
 | # | Seção | Âncora | O que tem |
 |---|-------|--------|-----------|
-| — | Hero | `#topo` | Título animado, botões para TikTok/Instagram, foto principal e contadores ao vivo |
+| — | Hero | `#topo` | Título animado, botões para TikTok/Instagram, foto principal e contadores (TikTok ao vivo, Instagram à mão) |
 | — | Faixa + galeria | — | Marquee vermelho com os temas do canal e carrossel infinito de fotos |
-| — | Alcance | `#alcance` | Destaque com o total de views (+1,5 mi, sendo 1,2 mi no TikTok) — números fixos, atualizar à mão. Abaixo, os cards de **metas** (próximo marco de seguidores no Instagram e no TikTok, com barra de progresso ao vivo) |
+| — | Alcance | `#alcance` | Destaque com o total de views (+1,5 mi, sendo 1,2 mi no TikTok) — números fixos, atualizar à mão. Abaixo, os cards de **metas** (próximo marco de seguidores no Instagram e no TikTok, com barra de progresso; só a do TikTok é ao vivo) |
 | 01 | Sobre o canal | `#sobre` | Apresentação do canal e do Luiz (idade, primeiro carro, estilo dos vídeos) |
 | 02 | Ficha técnica | `#ficha` | Potência, torque, motor, câmbio CVT, porta-malas, rodas e dimensões |
 | 03 | Em destaque | `#videos` | Cards dos vídeos mais vistos |
@@ -60,7 +60,7 @@ A lógica do componente cuida de:
 - **FAQ**: acordeão controlado pelo estado `open`.
 - **Metas**: cards montados a partir do array `metasData` (marcos de seguidores por rede). A próxima meta é o primeiro marco acima do número atual; passou de todos, ela vira o dobro do último. O progresso usa os seguidores do `/api/stats` e a barra enche quando o card aparece na tela.
 - **Eventos**: cards montados a partir do array `eventosData`, ordenados do mais recente para o mais antigo; a data `AAAA-MM-DD` vira "14 set 2026".
-- **Garagem dos seguidores**: abre sozinha quando os seguidores do Instagram (ao vivo) chegam em `garagemConfig.meta` (1.000), ou na marra com `garagemConfig.aberta: true`. Os cards saem do array `garagemData`; um carro **só aparece se tiver a data de `autorizado`** preenchida. Fluence (detectado pelo nome do carro) ganha tag vermelha e vai primeiro, os outros entram como "Convidado". O botão "Copiar mensagem" copia o texto de `garagemMsg`, já com a frase de autorização.
+- **Garagem dos seguidores**: abre sozinha quando `IG_SEGUIDORES` chega em `garagemConfig.meta` (1.000), ou na marra com `garagemConfig.aberta: true`. Os cards saem do array `garagemData`; um carro **só aparece se tiver a data de `autorizado`** preenchida. Fluence (detectado pelo nome do carro) ganha tag vermelha e vai primeiro, os outros entram como "Convidado". O botão "Copiar mensagem" copia o texto de `garagemMsg`, já com a frase de autorização.
 - **E-mail**: montado em tempo de execução (`['usuario', 'dominio'].join('@')`) para não ficar em texto puro no HTML e fugir de robôs coletores. Botão "Copiar e-mail" usa a Clipboard API.
 
 Props editáveis (em `data-props`): `animations` e `showMarquee`.
@@ -70,7 +70,7 @@ Props editáveis (em `data-props`): `animations` e `showMarquee`.
 Função serverless da Vercel em `GET /api/stats`:
 
 1. Busca seguidores e curtidas do TikTok **em duas fontes ao mesmo tempo** e fica com o maior número de cada uma: a API do [tokcounter.com](https://tiktok-api.tokcounter.com/user/data/whitelinefluence) (`stats.followers` e `stats.likes`) e a leitura direta do perfil (`followerCount`/`heartCount` do JSON `__UNIVERSAL_DATA_FOR_REHYDRATION__`). As duas atrasam de jeitos diferentes (o tokcounter responde de cache; a página lida pela Vercel às vezes vem velha), e o valor atrasado quase sempre é o menor.
-2. Busca os seguidores do Instagram no JSON público do [instastatistics.com](https://instastatistics.com/api/user/whitelinefluence) (`followers`). O Instagram bloqueia os IPs da Vercel (redireciona para o login com `is_from_rle`, com qualquer User-Agent), então a leitura direta do perfil (`og:description`, ex.: `"742 Followers, ..."`) ficou só como reserva — funciona no `vercel dev` local.
+2. **Não busca o Instagram.** Ele bloqueia os IPs da Vercel (redireciona para o login com `is_from_rle`) e o instastatistics.com, que era a fonte, fechou o acesso em out/2026 (403/401). O número fica na constante `IG_SEGUIDORES` no `index.html` e é atualizado à mão.
 3. Nas leituras diretas (reserva), usa User-Agent de iPhone, porque com UA de desktop o TikTok devolve desafio anti-bot.
 4. Confere se cada número é plausível antes de usar: descarta valores que não sejam inteiros positivos e ignora mudanças bruscas (queda de mais de 20% ou salto de mais de 50% em relação ao último valor bom). Uma mudança brusca só é aceita se o mesmo valor (±5%) se repetir 3 vezes seguidas. Os descartes aparecem nos logs.
 5. Guarda o resultado em memória por **2 minutos**; requisições simultâneas compartilham a mesma busca. Se uma rede falhar, mantém o último valor bom dela.
@@ -81,7 +81,6 @@ Resposta:
 ```json
 {
   "tiktok":    { "followers": 4500, "likes": 92000 },
-  "instagram": { "followers": 800 },
   "updatedAt": "2026-09-30T12:00:00.000Z"
 }
 ```
@@ -122,11 +121,12 @@ Hospedado na **Vercel** com a pasta `site/` como *Root Directory*. Não há etap
 | Trocar fotos | Substituir o arquivo em `site/assets/` mantendo o nome, ou mudar o `src` |
 | Atualizar total de views | Seção `<!-- ALCANCE -->`: `data-count` + texto de cada número e a `width` (%) das barras |
 | Atualizar ficha técnica | Seção `<!-- FICHA TÉCNICA -->` (o número animado fica em `data-count`) |
-| Adicionar/mudar metas de seguidores | Array `metasData` no script do final do `index.html` (lista `marcos` de cada rede). O fallback sem API fica em `state.seg` |
+| Adicionar/mudar metas de seguidores | Array `metasData` no script do final do `index.html` (lista `marcos` de cada rede). O fallback sem API do TikTok fica em `state.seg` |
 | Adicionar evento | Array `eventosData` no script do final do `index.html` (fotos em `site/assets/eventos/`; com mais de uma o card alterna estilo story) |
 | Adicionar carro na Garagem | Array `garagemData` no script do final do `index.html` (foto em `site/assets/garagem/`, de preferência 4:5). Preencher `autorizado` com a data em que a pessoa autorizou no direct; guardar o print da conversa |
 | Tirar carro da Garagem | Apagar a linha do `garagemData` e o arquivo da foto (fazer assim que a pessoa pedir) |
-| Abrir a Garagem de vez | Depois de bater 1k, `aberta: true` em `garagemConfig` e atualizar `state.seg.ig`, para ela não fechar se a API cair |
+| Atualizar seguidores do Instagram | Constante `IG_SEGUIDORES` no script do final do `index.html` **e** o número do topo (`data-count` e texto do card "Seguidores Instagram"). Metas e garagem usam a constante |
+| Abrir a Garagem de vez | Abre sozinha quando `IG_SEGUIDORES` passar de 1.000; `aberta: true` em `garagemConfig` força a abertura |
 | Editar o FAQ | Array `faqData` no script do final do `index.html` |
 | Trocar o e-mail comercial | Constante `EMAIL` no script do final do `index.html` |
 | Mudar o @ das redes | `USER` em `api/stats.js` e os links no `index.html` |
@@ -139,6 +139,7 @@ Hospedado na **Vercel** com a pasta `site/` como *Root Directory*. Não há etap
 
 ## Observações
 
-- Os contadores dependem de serviços de terceiros com endpoints não oficiais (tokcounter.com para o TikTok e instastatistics.com para o Instagram). Se um deles sair do ar, a API tenta a leitura direta do perfil e, se ela também falhar, o site mostra os números fixos do HTML. Para o Instagram, a alternativa definitiva é a API oficial (conta profissional + token da Meta).
+- O contador do TikTok depende do tokcounter.com (endpoint não oficial) e da leitura direta do perfil. Se as duas falharem, o site mostra os números fixos do HTML.
+- O Instagram é manual. Para automatizar, a alternativa estável é a API oficial (conta Criador/Comercial + token da Meta, que vence a cada 60 dias).
 - A leitura direta (reserva) é feita por *scraping* das páginas públicas; se as redes mudarem o HTML, a API para de achar os números (o site continua de pé com os valores fixos). Os erros aparecem nos logs da função na Vercel.
 - O site contém links de afiliado, e isso está avisado no rodapé e no FAQ.

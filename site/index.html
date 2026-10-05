@@ -187,7 +187,7 @@ a,button{-webkit-tap-highlight-color:transparent}
           <span class="wl-stat-lbl" style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,243,241,.65)">Seguidores TikTok</span>
         </div>
         <div style="display:flex;flex-direction:column;gap:4px">
-          <span class="wl-stat-num" data-stat="ig-followers" data-count="800" style="font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,64px);line-height:1;color:#ff3b3f">800</span>
+          <span class="wl-stat-num" data-count="994" style="font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,64px);line-height:1;color:#ff3b3f">994</span>
           <span class="wl-stat-lbl" style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,243,241,.65)">Seguidores Instagram</span>
         </div>
       </div>
@@ -235,7 +235,9 @@ a,button{-webkit-tap-highlight-color:transparent}
         <div class="wl-meta" data-reveal="" style="position:relative;overflow:hidden;border:1px solid rgba(244,243,241,.12);border-radius:24px;padding:clamp(22px,3vw,40px);display:flex;flex-direction:column;gap:18px">
           <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
             <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ff3b3f">Próxima meta · {{ m.rede }}</span>
-            <span style="display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,243,241,.55)"><span style="width:7px;height:7px;border-radius:50%;background:#e3262c;animation:wl-pulse 1.6s ease-in-out infinite"></span>Ao vivo</span>
+            <sc-if value="{{ m.aoVivo }}">
+              <span style="display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,243,241,.55)"><span style="width:7px;height:7px;border-radius:50%;background:#e3262c;animation:wl-pulse 1.6s ease-in-out infinite"></span>Ao vivo</span>
+            </sc-if>
           </div>
           <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px">
             <span style="font-weight:900;font-stretch:125%;font-size:clamp(40px,5vw,72px);line-height:.9;letter-spacing:-.03em">{{ m.atual }}</span>
@@ -604,10 +606,13 @@ a,button{-webkit-tap-highlight-color:transparent}
 <script type="text/x-dc" data-dc-script data-props="{&quot;animations&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Movimento&quot;},&quot;showMarquee&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Movimento&quot;}}">
 // E-mail montado em tempo de execução para não ficar em texto puro no HTML (robôs coletores de e-mail)
 const EMAIL = ['heyxist3r', 'gmail.com'].join('@');
+// Seguidores do Instagram, atualizados à mão (as fontes automáticas pararam de funcionar na Vercel).
+// Ao mudar, atualizar também o número do topo (data-count e texto do card "Seguidores Instagram").
+const IG_SEGUIDORES = 994;
 
 class Component extends DCLogic {
-  // seg: seguidores usados nos cards de metas; começa igual aos números fixos do topo e segue o /api/stats
-  state = { open: -1, copied: false, copiedMsg: false, seg: { ig: 800, tt: 4500 }, metasVistas: false };
+  // seg: seguidores usados nos cards de metas e na garagem; o TikTok segue o /api/stats, o Instagram vem de IG_SEGUIDORES
+  state = { open: -1, copied: false, copiedMsg: false, seg: { ig: IG_SEGUIDORES, tt: 4500 }, metasVistas: false };
 
   // Garagem dos seguidores: abre sozinha quando o Instagram ao vivo chegar na meta.
   // Depois de bater a meta, mude aberta para true (assim ela não fecha se a API cair e voltar ao número fixo).
@@ -628,8 +633,8 @@ class Component extends DCLogic {
   // Metas: marcos em ordem crescente. A "próxima meta" é o primeiro marco acima do número atual;
   // os chips "Já batemos" mostram os 3 últimos marcos alcançados. Para uma meta nova, é só somar à lista.
   metasData = [
-    { id: 'ig', rede: 'Instagram', link: 'https://www.instagram.com/whitelinefluence', marcos: [100, 250, 500, 750, 800, 1000, 1500, 2000, 3000, 5000, 10000] },
-    { id: 'tt', rede: 'TikTok', link: 'https://www.tiktok.com/@whitelinefluence', marcos: [1000, 2000, 3000, 4000, 4500, 5000, 7500, 10000, 25000, 50000, 100000] },
+    { id: 'ig', rede: 'Instagram', aoVivo: false, link: 'https://www.instagram.com/whitelinefluence', marcos: [100, 250, 500, 750, 800, 1000, 1500, 2000, 3000, 5000, 10000] },
+    { id: 'tt', rede: 'TikTok', aoVivo: true, link: 'https://www.tiktok.com/@whitelinefluence', marcos: [1000, 2000, 3000, 4000, 4500, 5000, 7500, 10000, 25000, 50000, 100000] },
   ];
   faqData = [
     { q: 'Qual motor e câmbio o Fluence GT Line 2016 usa?', a: 'Motor 2.0 16V flex de até 143 cv com etanol, ligado a um câmbio CVT X-Tronic com 6 marchas simuladas. Tem vídeo explicando como ele se comporta no dia a dia.' },
@@ -691,8 +696,7 @@ class Component extends DCLogic {
     } catch (e) { return; }
     const vals = {
       'tt-likes': data.tiktok && data.tiktok.likes,
-      'tt-followers': data.tiktok && data.tiktok.followers,
-      'ig-followers': data.instagram && data.instagram.followers
+      'tt-followers': data.tiktok && data.tiktok.followers
     };
     document.querySelectorAll('[data-stat]').forEach(el => {
       const n = vals[el.dataset.stat];
@@ -704,9 +708,8 @@ class Component extends DCLogic {
       else el.textContent = v.toFixed(dec) + suf; // ainda não animou: o runCount lê os data-* novos ao aparecer
     });
     const seg = { ...this.state.seg };
-    if (typeof vals['ig-followers'] === 'number') seg.ig = vals['ig-followers'];
     if (typeof vals['tt-followers'] === 'number') seg.tt = vals['tt-followers'];
-    if (seg.ig !== this.state.seg.ig || seg.tt !== this.state.seg.tt) this.setState({ seg });
+    if (seg.tt !== this.state.seg.tt) this.setState({ seg });
   }
 
   // Monta o card de uma meta a partir do número atual de seguidores
@@ -719,6 +722,7 @@ class Component extends DCLogic {
     const pct = Math.min(100, Math.floor(n / alvo * 100));
     return {
       rede: meta.rede,
+      aoVivo: meta.aoVivo,
       link: meta.link,
       atual: fmt(n),
       alvo: fmt(alvo),

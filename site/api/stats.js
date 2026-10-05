@@ -1,5 +1,5 @@
 // Vercel Serverless Function: GET /api/stats
-// Lê os perfis públicos do TikTok e do Instagram e devolve os contadores.
+// Lê o perfil público do TikTok e devolve os contadores (o Instagram é atualizado à mão no index.html).
 const USER = 'whitelinefluence';
 const TTL = 120 * 1000;
 // UA de iPhone: com UA de desktop o TikTok responde um desafio anti-bot e o Instagram omite os seguidores
@@ -52,45 +52,8 @@ async function tiktok() {
   return { followers: maior('followers'), likes: maior('likes') };
 }
 
-// Tenta as fontes em ordem; se todas falharem, junta os motivos num erro só (vai para o log)
-async function primeiraQueFuncionar(fontes) {
-  const erros = [];
-  for (const fonte of fontes) {
-    try { return await fonte(); }
-    catch (e) { erros.push(e.message); }
-  }
-  throw new Error(erros.join(' | '));
-}
-
-function parseAbbrev(s) {
-  const m = s.replace(/,/g, '').match(/([\d.]+)\s*([KMB])?/i);
-  if (!m) return null;
-  const mult = { K: 1e3, M: 1e6, B: 1e9 }[(m[2] || '').toUpperCase()] || 1;
-  return Math.round(parseFloat(m[1]) * mult);
-}
-
-// O Instagram bloqueia os IPs da Vercel (302 para /accounts/login?...&is_from_rle, qualquer User-Agent).
-// Fonte principal: o JSON público do instastatistics.com, que faz a leitura do lado deles.
-async function instagramStatistics() {
-  const data = await (await get(`https://instastatistics.com/api/user/${USER}`, { Accept: 'application/json' }, { timeout: 5000 })).json();
-  if (!data || data.username !== USER || typeof data.followers !== 'number') throw new Error('instastatistics: resposta sem seguidores');
-  return { followers: data.followers };
-}
-
-// Reserva: leitura direta do perfil. Só funciona fora de datacenter (ex.: vercel dev local).
-// A API interna (web_profile_info) exige login; o og:description da página traz "742 Followers, ..."
-async function instagramDireto() {
-  // redirect manual: um 302 para /accounts/login vira erro com o destino no log
-  const html = await (await get(`https://www.instagram.com/${USER}/`, {}, { timeout: 4000, redirect: 'manual' })).text();
-  const m = html.match(/<meta[^>]+(?:property|name)="og:description"[^>]+content="([^"]+)"/i);
-  const f = m && m[1].match(/([\d.,]+\s*[KMB]?)\s+Followers/i);
-  if (!f) throw new Error('instagram: seguidores não encontrados');
-  return { followers: parseAbbrev(f[1]) };
-}
-
-async function instagram() {
-  return primeiraQueFuncionar([instagramStatistics, instagramDireto]);
-}
+// Instagram fica de fora: ele bloqueia os IPs da Vercel e o instastatistics.com fechou o acesso (403/401).
+// O número é atualizado à mão no index.html (IG_SEGUIDORES).
 
 // Checagem de número plausível: as fontes são serviços de terceiros, então um bug ou ataque do lado
 // deles não pode virar "0" ou "9 milhões" no site.
@@ -135,16 +98,14 @@ function validar(rede, novo, anterior) {
 let inflight = null;
 
 async function refresh() {
-  const [tt, ig] = await Promise.allSettled([tiktok(), instagram()]);
+  const [tt] = await Promise.allSettled([tiktok()]);
   // Loga só a mensagem, sem stack nem HTML das redes
   if (tt.status === 'rejected') console.error('tiktok:', tt.reason && tt.reason.message);
-  if (ig.status === 'rejected') console.error('instagram:', ig.reason && ig.reason.message);
-  const prev = cache ? cache.data : { tiktok: null, instagram: null };
+  const prev = cache ? cache.data : { tiktok: null };
   cache = {
     at: Date.now(),
     data: {
       tiktok: validar('tiktok', tt.status === 'fulfilled' ? tt.value : null, prev.tiktok),
-      instagram: validar('instagram', ig.status === 'fulfilled' ? ig.value : null, prev.instagram),
       updatedAt: new Date().toISOString(),
     },
   };
