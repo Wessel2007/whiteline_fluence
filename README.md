@@ -24,9 +24,10 @@ Ter uma página única que funcione como "cartão de visita" do canal:
 | 02 | Ficha técnica | `#ficha` | Potência, torque, motor, câmbio CVT, porta-malas, rodas e dimensões |
 | 03 | Em destaque | `#videos` | Cards dos vídeos mais vistos |
 | 04 | Eventos | `#eventos` | Encontros, exposições e eventos automotivos (cards gerados do array `eventosData`) |
-| 05 | Produtos | `#produtos` | 11 links de afiliado + link para o Linktree |
-| 06 | Parcerias | `#parcerias` | Formatos (vídeo dedicado, inserção, stories, afiliação), vaga para a 1ª marca e contato |
-| 07 | FAQ | `#faq` | Perguntas frequentes em acordeão |
+| 05 | Garagem dos seguidores | `#garagem` | Fotos dos carros de quem segue o canal (array `garagemData`). Fica "trancada" com barra de progresso até 1.000 seguidores no Instagram; o card "Como participar" (copiar mensagem pronta + abrir o direct) aparece sempre |
+| 06 | Produtos | `#produtos` | 11 links de afiliado + link para o Linktree |
+| 07 | Parcerias | `#parcerias` | Formatos (vídeo dedicado, inserção, stories, afiliação), vaga para a 1ª marca e contato |
+| 08 | FAQ | `#faq` | Perguntas frequentes em acordeão |
 | — | Rodapé | — | Links das redes e aviso de links de afiliado |
 
 ## Estrutura do projeto
@@ -39,7 +40,7 @@ whiteline_fluence/
     ├── image-slot.js      ← ferramenta do editor de design (não vai para produção)
     ├── api/
     │   └── stats.js       ← função serverless GET /api/stats
-    ├── assets/            ← fotos (hero, perfil, galeria g*, vídeos v*, eventos/)
+    ├── assets/            ← fotos (hero, perfil, galeria g*, vídeos v*, eventos/, garagem/)
     ├── vercel.json        ← headers de segurança e cache
     └── .vercelignore      ← exclui image-slot.js do deploy
 ```
@@ -59,6 +60,7 @@ A lógica do componente cuida de:
 - **FAQ**: acordeão controlado pelo estado `open`.
 - **Metas**: cards montados a partir do array `metasData` (marcos de seguidores por rede). A próxima meta é o primeiro marco acima do número atual; passou de todos, ela vira o dobro do último. O progresso usa os seguidores do `/api/stats` e a barra enche quando o card aparece na tela.
 - **Eventos**: cards montados a partir do array `eventosData`, ordenados do mais recente para o mais antigo; a data `AAAA-MM-DD` vira "14 set 2026".
+- **Garagem dos seguidores**: abre sozinha quando os seguidores do Instagram (ao vivo) chegam em `garagemConfig.meta` (1.000), ou na marra com `garagemConfig.aberta: true`. Os cards saem do array `garagemData`; um carro **só aparece se tiver a data de `autorizado`** preenchida. Fluence (detectado pelo nome do carro) ganha tag vermelha e vai primeiro, os outros entram como "Convidado". O botão "Copiar mensagem" copia o texto de `garagemMsg`, já com a frase de autorização.
 - **E-mail**: montado em tempo de execução (`['usuario', 'dominio'].join('@')`) para não ficar em texto puro no HTML e fugir de robôs coletores. Botão "Copiar e-mail" usa a Clipboard API.
 
 Props editáveis (em `data-props`): `animations` e `showMarquee`.
@@ -122,6 +124,9 @@ Hospedado na **Vercel** com a pasta `site/` como *Root Directory*. Não há etap
 | Atualizar ficha técnica | Seção `<!-- FICHA TÉCNICA -->` (o número animado fica em `data-count`) |
 | Adicionar/mudar metas de seguidores | Array `metasData` no script do final do `index.html` (lista `marcos` de cada rede). O fallback sem API fica em `state.seg` |
 | Adicionar evento | Array `eventosData` no script do final do `index.html` (fotos em `site/assets/eventos/`; com mais de uma o card alterna estilo story) |
+| Adicionar carro na Garagem | Array `garagemData` no script do final do `index.html` (foto em `site/assets/garagem/`, de preferência 4:5). Preencher `autorizado` com a data em que a pessoa autorizou no direct; guardar o print da conversa |
+| Tirar carro da Garagem | Apagar a linha do `garagemData` e o arquivo da foto (fazer assim que a pessoa pedir) |
+| Abrir a Garagem de vez | Depois de bater 1k, `aberta: true` em `garagemConfig` e atualizar `state.seg.ig`, para ela não fechar se a API cair |
 | Editar o FAQ | Array `faqData` no script do final do `index.html` |
 | Trocar o e-mail comercial | Constante `EMAIL` no script do final do `index.html` |
 | Mudar o @ das redes | `USER` em `api/stats.js` e os links no `index.html` |

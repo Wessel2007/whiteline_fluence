@@ -110,6 +110,8 @@ a,button{-webkit-tap-highlight-color:transparent}
   .wl-email{font-size:5.6vw!important;word-break:normal!important;overflow-wrap:anywhere}
   .wl-contact-btns>*{flex:1 1 100%;justify-content:center}
   .wl-ev-soon a{flex:1 1 100%;justify-content:center}
+  .wl-gar-cta>*{flex:1 1 100%;justify-content:center}
+  .wl-car{flex-basis:140px!important}
 
   .wl-faq-a{padding-right:0!important;font-size:16px!important}
 
@@ -139,6 +141,7 @@ a,button{-webkit-tap-highlight-color:transparent}
       <a class="wl-nav-sec" href="#ficha" style="color:rgba(244,243,241,.7)">Ficha</a>
       <a class="wl-nav-sec" href="#videos" style="color:rgba(244,243,241,.7)">Vídeos</a>
       <a class="wl-nav-sec" href="#eventos" style="color:rgba(244,243,241,.7)">Eventos</a>
+      <a class="wl-nav-sec wl-nav-extra" href="#garagem" style="color:rgba(244,243,241,.7)">Garagem</a>
       <a class="wl-nav-sec" href="#produtos" style="color:rgba(244,243,241,.7)">Produtos</a>
       <a class="wl-nav-sec wl-nav-extra" href="#faq" style="color:rgba(244,243,241,.7)">FAQ</a>
       <a class="wl-nav-cta" href="#parcerias" style="display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:#e3262c;color:#fff;font-weight:700" style-hover="background:#f4f3f1;color:#0b0b0c">Parcerias</a>
@@ -148,6 +151,7 @@ a,button{-webkit-tap-highlight-color:transparent}
       <a href="#ficha">Ficha</a>
       <a href="#videos">Vídeos</a>
       <a href="#eventos">Eventos</a>
+      <a href="#garagem">Garagem</a>
       <a href="#produtos">Produtos</a>
       <a href="#faq">FAQ</a>
     </div>
@@ -439,11 +443,72 @@ a,button{-webkit-tap-highlight-color:transparent}
     </div>
   </section>
 
+  <!-- GARAGEM DOS SEGUIDORES (carros vêm do array garagemData; abre com 1k no Instagram, ver garagemConfig) -->
+  <section id="garagem" style="max-width:1440px;margin:0 auto;padding:clamp(80px,10vw,140px) clamp(16px,4vw,48px) 0">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:20px">
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div data-reveal="" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ff3b3f">05 — Garagem dos seguidores</div>
+        <h2 data-reveal="" style="margin:0;font-weight:800;font-stretch:112%;font-size:clamp(34px,4.6vw,68px);line-height:1;letter-spacing:-.03em;text-wrap:balance">A garagem é <span style="color:#e3262c">de quem acompanha</span></h2>
+      </div>
+      <p data-reveal="" style="margin:0;max-width:420px;font-size:17px;line-height:1.55;color:rgba(244,243,241,.7);text-wrap:pretty">Os carros de quem segue o canal. Fluence tem lugar garantido, mas todo carro é bem-vindo.</p>
+    </div>
+    <div style="margin-top:40px;display:flex;flex-wrap:wrap;gap:clamp(12px,1.5vw,20px)">
+      <!-- Fechada: portão com cadeado e progresso até a meta -->
+      <sc-if value="{{ garagemFechada }}">
+        <div data-reveal="" style="flex:1 1 min(100%,440px);min-height:380px;position:relative;overflow:hidden;border:1px solid rgba(244,243,241,.12);border-radius:18px;padding:clamp(24px,3vw,40px);display:flex;flex-direction:column;gap:18px;background:repeating-linear-gradient(180deg,rgba(244,243,241,.045) 0 30px,rgba(244,243,241,0) 30px 36px),#0f0f11">
+          <span style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ff3b3f"><span style="width:8px;height:8px;border-radius:50%;background:#e3262c;animation:wl-pulse 1.6s ease-in-out infinite"></span>Portão fechado</span>
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="#f4f3f1" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="margin-top:auto"><rect x="4" y="10.5" width="16" height="10.5" rx="2.5" fill="#e3262c" stroke="#e3262c"></rect><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"></path><path d="M12 14.5v2.5" stroke="#fff"></path></svg>
+          <span style="font-weight:800;font-stretch:112%;font-size:clamp(26px,2.6vw,36px);line-height:1.05;letter-spacing:-.02em;text-wrap:balance">Abre com {{ garagemMeta }} seguidores no Instagram.</span>
+          <div role="progressbar" aria-label="{{ garagemAria }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ garagemPctNum }}" style="height:10px;border-radius:999px;background:rgba(244,243,241,.1);overflow:hidden">
+            <div style="width:{{ garagemPct }};height:100%;border-radius:999px;background:linear-gradient(90deg,#c81e24,#ff3b3f);transition:width 1.4s cubic-bezier(.2,.7,.2,1)"></div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 16px">
+            <span style="font-size:16px;line-height:1.45;color:rgba(244,243,241,.75)">Faltam <strong style="color:#f4f3f1">{{ garagemFaltam }}</strong> seguidores</span>
+            <a href="https://www.instagram.com/whitelinefluence" target="_blank" rel="noopener" style="font-weight:700;font-size:14px;border-bottom:1px solid currentColor;padding-bottom:3px">Seguir e abrir o portão ↗</a>
+          </div>
+        </div>
+      </sc-if>
+      <!-- Aberta: um card por carro -->
+      <sc-if value="{{ garagemAberta }}">
+        <sc-for list="{{ carros }}" as="c" hint-placeholder-count="3">
+          <div class="wl-car" data-reveal="" style="flex:1 1 220px;max-width:320px;display:flex;flex-direction:column;gap:10px">
+            <div style="position:relative;aspect-ratio:4/5;border-radius:18px;overflow:hidden;background:#141416">
+              <img src="{{ c.foto }}" alt="{{ c.alt }}" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+              <span style="position:absolute;top:12px;left:12px;padding:6px 10px;border-radius:999px;background:{{ c.tagBg }};color:{{ c.tagCor }};font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;pointer-events:none">{{ c.tag }}</span>
+            </div>
+            <sc-if value="{{ c.temCidade }}">
+              <span style="margin-top:2px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,243,241,.55)">{{ c.cidade }}</span>
+            </sc-if>
+            <span style="font-weight:700;font-size:18px;line-height:1.3">{{ c.carro }}</span>
+            <a href="{{ c.perfil }}" target="_blank" rel="noopener" style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:13px;color:rgba(244,243,241,.7)" style-hover="color:#ff3b3f">@{{ c.dono }} ↗</a>
+          </div>
+        </sc-for>
+      </sc-if>
+      <!-- Como participar (aparece fechada ou aberta) -->
+      <div data-reveal="" style="flex:999 1 min(100%,340px);min-height:380px;position:relative;overflow:hidden;border-radius:18px;padding:clamp(24px,4vw,56px);display:flex;flex-direction:column;justify-content:center;gap:22px">
+        <svg class="wl-box-border" aria-hidden="true"><rect width="100%" height="100%" rx="18" ry="18"></rect></svg>
+        <div style="position:absolute;right:-15%;bottom:-35%;width:70%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(227,38,44,.22),rgba(227,38,44,0) 65%);pointer-events:none"></div>
+        <span style="position:relative;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ff3b3f">Como participar</span>
+        <span style="position:relative;max-width:560px;font-weight:800;font-stretch:112%;font-size:clamp(28px,3.4vw,48px);line-height:1.02;letter-spacing:-.03em;text-wrap:balance">{{ garagemCtaTitulo }}</span>
+        <ol style="position:relative;margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px;max-width:560px">
+          <li style="display:flex;gap:14px;font-size:16px;line-height:1.5;color:rgba(244,243,241,.75)"><span style="flex:none;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:#ff3b3f;padding-top:3px">01</span><span>Tira uma foto boa do seu carro. Se não quiser a placa aparecendo, é só esconder antes.</span></li>
+          <li style="display:flex;gap:14px;font-size:16px;line-height:1.5;color:rgba(244,243,241,.75)"><span style="flex:none;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:#ff3b3f;padding-top:3px">02</span><span>Manda no direct do <strong style="color:#f4f3f1">@whitelinefluence</strong> com o modelo e o ano, sua cidade e o seu @.</span></li>
+          <li style="display:flex;gap:14px;font-size:16px;line-height:1.5;color:rgba(244,243,241,.75)"><span style="flex:none;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:#ff3b3f;padding-top:3px">03</span><span>Escreve que <strong style="color:#f4f3f1">autoriza</strong> a foto no site. Sem autorização, nada é publicado.</span></li>
+        </ol>
+        <div class="wl-gar-cta" style="position:relative;display:flex;flex-wrap:wrap;gap:12px;margin-top:4px">
+          <button onClick="{{ copyMsg }}" style="display:flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;border:0;background:#f4f3f1;color:#0b0b0c;font:700 15px 'Archivo',sans-serif;cursor:pointer" style-hover="background:#e3262c;color:#fff">{{ copyMsgLabel }}</button>
+          <a href="https://ig.me/m/whitelinefluence" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;border:1px solid rgba(244,243,241,.3);color:#f4f3f1;font-weight:700;font-size:15px" style-hover="border-color:#e3262c;color:#ff3b3f">Abrir o direct ↗</a>
+        </div>
+        <span style="position:relative;font-size:14px;line-height:1.5;color:rgba(244,243,241,.5);text-wrap:pretty">Mudou de ideia? Manda outra DM e eu tiro a foto do site.</span>
+      </div>
+    </div>
+  </section>
+
   <!-- PRODUTOS -->
   <section id="produtos" style="max-width:1440px;margin:0 auto;padding:clamp(80px,10vw,140px) clamp(16px,4vw,48px) 0">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:clamp(32px,5vw,72px);align-items:start">
       <div class="wl-sticky" style="display:flex;flex-direction:column;gap:20px;position:sticky;top:96px">
-        <div data-reveal="" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ff3b3f">05 — Produtos</div>
+        <div data-reveal="" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ff3b3f">06 — Produtos</div>
         <h2 data-reveal="" style="margin:0;font-weight:800;font-stretch:112%;font-size:clamp(34px,4.6vw,68px);line-height:1;letter-spacing:-.03em;text-wrap:balance">Tudo que uso no Fluence</h2>
         <p data-reveal="" style="margin:0;font-size:17px;line-height:1.55;color:rgba(244,243,241,.7);max-width:440px;text-wrap:pretty">Links diretos para os produtos que aparecem nos vídeos. Comprando por aqui você não paga nada a mais e ainda ajuda o canal.</p>
         <a data-reveal="" href="https://linktr.ee/whitelinefluence" target="_blank" rel="noopener" style="align-self:flex-start;font-weight:700;font-size:14px;border-bottom:1px solid currentColor;padding-bottom:4px;color:rgba(244,243,241,.8)">Abrir no Linktree ↗</a>
@@ -467,7 +532,7 @@ a,button{-webkit-tap-highlight-color:transparent}
   <!-- PARCERIAS -->
   <section id="parcerias" style="margin-top:clamp(80px,10vw,140px);background:#f4f3f1;color:#0b0b0c">
     <div style="max-width:1440px;margin:0 auto;padding:clamp(72px,9vw,128px) clamp(16px,4vw,48px)">
-      <div data-reveal="" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#c81e24">06 — Parcerias e patrocínios</div>
+      <div data-reveal="" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#c81e24">07 — Parcerias e patrocínios</div>
       <h2 data-reveal="" style="margin:24px 0 0;max-width:1100px;font-weight:800;font-stretch:112%;font-size:clamp(34px,5.4vw,84px);line-height:.98;letter-spacing:-.035em;text-wrap:balance">Sua marca na rotina de um carro de verdade.</h2>
       <p data-reveal="" style="margin:28px 0 0;max-width:640px;font-size:18px;line-height:1.6;color:rgba(11,11,12,.72);text-wrap:pretty">Trabalho com marcas do universo automotivo em formatos que se encaixam no conteúdo do canal: o produto aparece sendo usado no Fluence, com opinião sincera e linguagem de quem acompanha o perfil.</p>
 
@@ -503,7 +568,7 @@ a,button{-webkit-tap-highlight-color:transparent}
 
   <!-- FAQ -->
   <section id="faq" style="max-width:1100px;margin:0 auto;padding:clamp(80px,10vw,140px) clamp(16px,4vw,48px) 0">
-    <div data-reveal="" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ff3b3f">07 — Perguntas frequentes</div>
+    <div data-reveal="" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ff3b3f">08 — Perguntas frequentes</div>
     <h2 data-reveal="" style="margin:20px 0 40px;font-weight:800;font-stretch:112%;font-size:clamp(34px,4.6vw,68px);line-height:1;letter-spacing:-.03em">Dúvidas rápidas</h2>
     <div style="display:flex;flex-direction:column;border-top:1px solid rgba(244,243,241,.12)">
       <sc-for list="{{ faqs }}" as="f" hint-placeholder-count="5">
@@ -542,7 +607,23 @@ const EMAIL = ['heyxist3r', 'gmail.com'].join('@');
 
 class Component extends DCLogic {
   // seg: seguidores usados nos cards de metas; começa igual aos números fixos do topo e segue o /api/stats
-  state = { open: -1, copied: false, seg: { ig: 800, tt: 4500 }, metasVistas: false };
+  state = { open: -1, copied: false, copiedMsg: false, seg: { ig: 800, tt: 4500 }, metasVistas: false };
+
+  // Garagem dos seguidores: abre sozinha quando o Instagram ao vivo chegar na meta.
+  // Depois de bater a meta, mude aberta para true (assim ela não fecha se a API cair e voltar ao número fixo).
+  garagemConfig = { meta: 1000, aberta: false };
+  // Carros: Fluence aparece primeiro com a tag vermelha; o resto sai do mais novo para o mais antigo.
+  // foto: arquivo em assets/garagem/, de preferência vertical 4:5 · dono: @ do Instagram sem o "@" · cidade é opcional
+  // autorizado: data (AAAA-MM-DD) em que a pessoa autorizou no direct. SEM ELA O CARRO NÃO APARECE.
+  garagemData = [
+    // { carro: 'Fluence Dynamique 2014', dono: 'usuario', cidade: 'Toledo, PR', foto: 'assets/garagem/usuario.jpg', alt: 'Fluence prata estacionado', autorizado: '2026-10-10' },
+  ];
+  // Mensagem que o botão "Copiar mensagem" coloca na área de transferência
+  garagemMsg = 'Oi! Quero meu carro na Garagem dos seguidores do site.\n'
+    + 'Carro (modelo e ano): \n'
+    + 'Cidade: \n'
+    + 'Meu @: \n'
+    + 'Autorizo o Whiteline Fluence a publicar a(s) foto(s) do meu carro no site.';
 
   // Metas: marcos em ordem crescente. A "próxima meta" é o primeiro marco acima do número atual;
   // os chips "Já batemos" mostram os 3 últimos marcos alcançados. Para uma meta nova, é só somar à lista.
@@ -555,6 +636,7 @@ class Component extends DCLogic {
     { q: 'Posso mandar minha dúvida sobre o carro?', a: 'Pode. Comenta em qualquer vídeo no TikTok ou manda DM no Instagram. As perguntas que mais aparecem viram vídeo.' },
     { q: 'Os links de produtos são afiliados?', a: 'Sim. Você paga o mesmo preço e uma pequena comissão vai para o canal. Só coloco na lista o que eu uso no carro.' },
     { q: 'Como fechar uma parceria ou patrocínio?', a: 'Envie um e-mail para ' + EMAIL + ' com a marca, o produto e o formato que tem em mente. Retorno com proposta e prazos.' },
+    { q: 'Como coloco meu carro na Garagem dos seguidores?', a: 'Manda a foto no direct do @whitelinefluence com o modelo e o ano, sua cidade, o seu @ e escreve que autoriza a publicação no site. Fluence tem prioridade, mas todo carro é bem-vindo. Se mudar de ideia, é só pedir por DM que eu tiro a foto.' },
     { q: 'Você faz comparativos com outros carros?', a: 'Faço. Os comparativos colocam o Fluence lado a lado com outros sedãs em ficha técnica, espaço, custo de manutenção e rodagem.' },
     { q: 'O canal é só sobre o Fluence?', a: 'Hoje o foco é o Fluence, que é o meu carro. Mas o canal acompanha quem está ao volante: outros carros aparecem de vez em quando, e se um dia eu trocar de carro, o próximo vira conteúdo também.' }
   ];
@@ -661,6 +743,40 @@ class Component extends DCLogic {
     this.metasIo.observe(box);
   }
 
+  // Garagem: fechada mostra o progresso até a meta; aberta mostra só os carros com autorização
+  garagemVals() {
+    const fmt = x => x.toLocaleString('pt-BR');
+    const { meta, aberta } = this.garagemConfig;
+    const n = this.state.seg.ig;
+    const abriu = aberta || n >= meta;
+    const pct = Math.min(100, Math.floor(n / meta * 100));
+    const carros = this.garagemData
+      .filter(c => c.autorizado && c.foto && c.carro && c.dono)
+      .map(c => ({ ...c, fluence: /fluence/i.test(c.carro) }))
+      .sort((x, y) => (y.fluence - x.fluence) || y.autorizado.localeCompare(x.autorizado))
+      .map(c => ({
+        ...c,
+        alt: c.alt || c.carro + ' de @' + c.dono,
+        tag: c.fluence ? 'Fluence' : 'Convidado',
+        tagBg: c.fluence ? '#e3262c' : '#f4f3f1',
+        tagCor: c.fluence ? '#fff' : '#0b0b0c',
+        temCidade: !!c.cidade,
+        perfil: 'https://www.instagram.com/' + encodeURIComponent(c.dono)
+      }));
+    return {
+      garagemFechada: !abriu,
+      garagemAberta: abriu,
+      carros,
+      garagemMeta: fmt(meta),
+      garagemFaltam: fmt(Math.max(0, meta - n)),
+      garagemPct: pct + '%',
+      garagemPctNum: pct,
+      garagemAria: `Instagram: ${fmt(n)} de ${fmt(meta)} seguidores para abrir a garagem`,
+      garagemCtaTitulo: !abriu ? 'Já pode mandar o seu: ele estreia a garagem.'
+        : carros.length ? 'Manda o seu carro também.' : 'A garagem abriu. Seja o primeiro.'
+    };
+  }
+
   startStats() {
     this.refreshStats();
     this.statsTimer = setInterval(() => { if (!document.hidden) this.refreshStats(); }, 60000);
@@ -672,7 +788,7 @@ class Component extends DCLogic {
   startSpy(reduce) {
     const links = Array.from(document.querySelectorAll('.wl-nav-sec, .wl-nav-strip > a'));
     const strip = document.querySelector('.wl-nav-strip');
-    const ids = ['topo', 'alcance', 'sobre', 'ficha', 'videos', 'eventos', 'produtos', 'parcerias', 'faq'];
+    const ids = ['topo', 'alcance', 'sobre', 'ficha', 'videos', 'eventos', 'garagem', 'produtos', 'parcerias', 'faq'];
     const setActive = id => {
       if (id === this.spyId) return; this.spyId = id;
       links.forEach(a => {
@@ -800,6 +916,12 @@ class Component extends DCLogic {
         if (navigator.clipboard) navigator.clipboard.writeText(EMAIL).then(done, done); else done();
       },
       metas: this.metasData.map(m => this.metaCard(m, this.state.seg[m.id])),
+      ...this.garagemVals(),
+      copyMsgLabel: this.state.copiedMsg ? 'Mensagem copiada ✓' : 'Copiar mensagem',
+      copyMsg: () => {
+        const done = () => { this.setState({ copiedMsg: true }); clearTimeout(this.tMsg); this.tMsg = setTimeout(() => this.setState({ copiedMsg: false }), 2000); };
+        if (navigator.clipboard) navigator.clipboard.writeText(this.garagemMsg).then(done, done); else done();
+      },
       eventos: [...this.eventosData].sort((x, y) => y.data.localeCompare(x.data)).map(e => ({
         ...e,
         n: e.fotos.length,
