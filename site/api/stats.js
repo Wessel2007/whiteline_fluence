@@ -17,8 +17,8 @@ async function get(url, headers = {}, opts = {}) {
   return res;
 }
 
-// Da Vercel o TikTok devolve um número atrasado (4597 x 4612 real).
-// Fonte principal: a API do tokcounter.com, que faz a leitura do lado deles.
+// Da Vercel o TikTok às vezes devolve um número atrasado (4597 x 4612 real).
+// Por isso também usa a API do tokcounter.com, que faz a leitura do lado deles.
 async function tiktokCounter() {
   const data = await (await get(`https://tiktok-api.tokcounter.com/user/data/${USER}`, { Accept: 'application/json' }, { timeout: 5000 })).json();
   const s = data && data.success && data.id === USER && data.stats;
@@ -41,8 +41,15 @@ async function tiktokDireto() {
   return { followers: +f[1], likes: h ? +h[1] : null };
 }
 
+// As duas fontes atrasam de jeitos diferentes: o tokcounter devolve cache ("cache":true, 4643 x 4691 real)
+// e a leitura direta da Vercel às vezes chega velha. Busca as duas juntas e fica com o maior número,
+// já que um valor atrasado quase sempre é menor (seguidores e curtidas crescem).
 async function tiktok() {
-  return primeiraQueFuncionar([tiktokCounter, tiktokDireto]);
+  const r = await Promise.allSettled([tiktokCounter(), tiktokDireto()]);
+  const ok = r.filter(x => x.status === 'fulfilled').map(x => x.value);
+  if (!ok.length) throw new Error(r.map(x => x.reason && x.reason.message).join(' | '));
+  const maior = campo => ok.reduce((m, v) => (typeof v[campo] === 'number' && (m == null || v[campo] > m) ? v[campo] : m), null);
+  return { followers: maior('followers'), likes: maior('likes') };
 }
 
 // Tenta as fontes em ordem; se todas falharem, junta os motivos num erro só (vai para o log)
