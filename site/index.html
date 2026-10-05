@@ -49,10 +49,10 @@ a:hover{color:#ff3b3f}
    translate (e não transform) para não brigar com o parallax, que usa transform.
    Direita = esquerda + .04em para compensar o letter-spacing negativo depois do último E. */
 .wl-foot-word{position:relative;left:50%;translate:-50% 0;width:max-content;padding:0 .14em 0 .1em}
-/* Farol passando no letreiro do rodapé: o feixe cruza em ~2,5 s e some até a próxima passada */
-@keyframes wl-beam{0%{background-position:-80% 0,0 0}35%,100%{background-position:180% 0,0 0}}
+/* Farol passando no letreiro do rodapé: o feixe cruza em ~2,5 s (61% de 4 s) e a próxima passada vem ~1,5 s depois */
+@keyframes wl-beam{0%{background-position:-80% 0,0 0}61%,100%{background-position:180% 0,0 0}}
 @supports ((-webkit-background-clip:text) or (background-clip:text)){
-  .wl-foot-word{background:linear-gradient(105deg,rgba(255,246,235,0) 15%,rgba(255,246,235,.9) 50%,rgba(255,246,235,0) 85%) no-repeat,#141416;background-size:40% 100%,auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:wl-beam 7s cubic-bezier(.45,0,.3,1) 1s infinite}
+  .wl-foot-word{background:linear-gradient(105deg,rgba(255,246,235,0) 15%,rgba(255,246,235,.9) 50%,rgba(255,246,235,0) 85%) no-repeat,#141416;background-size:40% 100%,auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:wl-beam 4s cubic-bezier(.45,0,.3,1) 1s infinite}
 }
 /* Borda tracejada andando na vaga reservada de Parcerias */
 @keyframes wl-ants{to{stroke-dashoffset:-14}}
