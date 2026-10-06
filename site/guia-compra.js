@@ -205,7 +205,15 @@
     if (h1) {
       var n = 0;
       Array.prototype.slice.call(h1.childNodes).forEach(function (node) {
-        if (node.nodeType === 1) { node.classList.add('wl-w'); node.style.setProperty('--i', n++); return; }
+        // Palavra que já veio num <span> (o "usado" vermelho): troca por uma cópia nova. O original já está
+        // desenhado visível; só ganhar a classe faria ele "transicionar" para invisível e voltar, sem animar.
+        if (node.nodeType === 1) {
+          var copia = node.cloneNode(true);
+          copia.classList.add('wl-w');
+          copia.style.setProperty('--i', n++);
+          h1.replaceChild(copia, node);
+          return;
+        }
         if (node.nodeType !== 3) return;
         var frag = document.createDocumentFragment();
         node.textContent.split(/(\s+)/).forEach(function (part) {
