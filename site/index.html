@@ -187,7 +187,7 @@ a,button{-webkit-tap-highlight-color:transparent}
           <span class="wl-stat-lbl" style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,243,241,.65)">Seguidores TikTok</span>
         </div>
         <div style="display:flex;flex-direction:column;gap:4px">
-          <span class="wl-stat-num" data-count="994" style="font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,64px);line-height:1;color:#ff3b3f">994</span>
+          <span class="wl-stat-num" data-count="1000" style="font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,64px);line-height:1;color:#ff3b3f">1000</span>
           <span class="wl-stat-lbl" style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,243,241,.65)">Seguidores Instagram</span>
         </div>
       </div>
@@ -608,7 +608,7 @@ a,button{-webkit-tap-highlight-color:transparent}
 const EMAIL = ['heyxist3r', 'gmail.com'].join('@');
 // Seguidores do Instagram, atualizados à mão (as fontes automáticas pararam de funcionar na Vercel).
 // Ao mudar, atualizar também o número do topo (data-count e texto do card "Seguidores Instagram").
-const IG_SEGUIDORES = 994;
+const IG_SEGUIDORES = 1000;
 
 class Component extends DCLogic {
   // seg: seguidores usados nos cards de metas e na garagem; o TikTok segue o /api/stats, o Instagram vem de IG_SEGUIDORES
@@ -616,7 +616,7 @@ class Component extends DCLogic {
 
   // Garagem dos seguidores: abre sozinha quando o Instagram ao vivo chegar na meta.
   // Depois de bater a meta, mude aberta para true (assim ela não fecha se a API cair e voltar ao número fixo).
-  garagemConfig = { meta: 1000, aberta: false };
+  garagemConfig = { meta: 1000, aberta: true };
   // Carros: Fluence aparece primeiro com a tag vermelha; o resto sai do mais novo para o mais antigo.
   // foto: arquivo em assets/garagem/, de preferência vertical 4:5 · dono: @ do Instagram sem o "@" · cidade é opcional
   // autorizado: data (AAAA-MM-DD) em que a pessoa autorizou no direct. SEM ELA O CARRO NÃO APARECE.
