@@ -22,6 +22,7 @@ Ter uma página única que funcione como "cartão de visita" do canal:
 | — | Alcance | `#alcance` | Destaque com o total de views (+1,5 mi, sendo 1,2 mi no TikTok) — números fixos, atualizar à mão. Abaixo, os cards de **metas** (próximo marco de seguidores no Instagram e no TikTok, com barra de progresso; só a do TikTok é ao vivo) |
 | 01 | Sobre o canal | `#sobre` | Apresentação do canal e do Luiz (história do carro e do canal, fatos rápidos, trabalho, estudo, carro dos sonhos e hobbies) |
 | 02 | Ficha técnica | `#ficha` | Potência, torque, motor, câmbio CVT, porta-malas, rodas e dimensões |
+| — | Guia de compra | `#guia` | Chamada para a página `guia-compra.html` |
 | 03 | Em destaque | `#videos` | Cards dos vídeos mais vistos |
 | 04 | Eventos | `#eventos` | Encontros, exposições e eventos automotivos (cards gerados do array `eventosData`) |
 | 05 | Garagem dos seguidores | `#garagem` | Fotos dos carros de quem segue o canal (array `garagemData`). Fica "trancada" com barra de progresso até 1.000 seguidores no Instagram; o card "Como participar" (copiar mensagem pronta + abrir o direct) aparece sempre |
@@ -36,6 +37,8 @@ Ter uma página única que funcione como "cartão de visita" do canal:
 whiteline_fluence/
 └── site/                  ← raiz do deploy na Vercel
     ├── index.html         ← a página inteira (HTML + CSS + lógica do componente)
+    ├── guia-compra.html   ← Guia de compra do Fluence usado (HTML + CSS, sem x-dc)
+    ├── guia-compra.js     ← checklist, cópia da mensagem e índice do guia
     ├── support.js         ← runtime "dc" gerado (carrega React/Babel da unpkg e renderiza o <x-dc>)
     ├── image-slot.js      ← ferramenta do editor de design (não vai para produção)
     ├── api/
@@ -64,6 +67,17 @@ A lógica do componente cuida de:
 - **E-mail**: montado em tempo de execução (`['usuario', 'dominio'].join('@')`) para não ficar em texto puro no HTML e fugir de robôs coletores. Botão "Copiar e-mail" usa a Clipboard API.
 
 Props editáveis (em `data-props`): `animations` e `showMarquee`.
+
+### Guia de compra (`guia-compra.html`)
+
+Página estática à parte (não usa o runtime x-dc). Tem link no menu da página inicial (computador e faixa do celular) e uma chamada logo depois da Ficha técnica.
+
+- **Índice**: fica na lateral no computador e acompanha a leitura; no celular aparece no topo e um botão flutuante "Índice" volta até ele.
+- **Checklist**: os itens saem da lista `[data-checklist]` do HTML. Cada um pode ser marcado como conferido ou "não se aplica". As marcações ficam no `localStorage` (`wl-guia-checklist-v1`), só no navegador do visitante. O botão "Limpar marcações" pede um segundo toque.
+- **Script**: fica em `guia-compra.js`, porque a CSP não permite script inline.
+- **Animações**: título entrando palavra por palavra, faixa vermelha com os temas, conteúdo surgindo ao rolar, barra de leitura embaixo do menu, brilho no cartão da regra e confete quando o checklist fica completo. Desligam com `prefers-reduced-motion`, e sem o script a página aparece inteira, sem animação.
+- **Links do menu para a página inicial** (`./#sobre` etc.): como a página inicial é montada pelo React, o `scrollToHash()` do componente rola até a seção depois de montar.
+- Para editar o texto, é só mexer no HTML. As referências `[1]`–`[5]` apontam para `#fonte-1`…`#fonte-5`.
 
 ### Contadores ao vivo (`api/stats.js`)
 
@@ -127,6 +141,7 @@ Hospedado na **Vercel** com a pasta `site/` como *Root Directory*. Não há etap
 | Tirar carro da Garagem | Apagar a linha do `garagemData` e o arquivo da foto (fazer assim que a pessoa pedir) |
 | Atualizar seguidores do Instagram | Constante `IG_SEGUIDORES` no script do final do `index.html` **e** o número do topo (`data-count` e texto do card "Seguidores Instagram"). Metas e garagem usam a constante |
 | Abrir a Garagem de vez | Abre sozinha quando `IG_SEGUIDORES` passar de 1.000; `aberta: true` em `garagemConfig` força a abertura |
+| Editar o guia de compra | Texto direto no `guia-compra.html`; itens do checklist na lista `[data-checklist]` (ao mudar a ordem, as marcações salvas dos visitantes mudam de item) |
 | Editar o FAQ | Array `faqData` no script do final do `index.html` |
 | Trocar o e-mail comercial | Constante `EMAIL` no script do final do `index.html` |
 | Mudar o @ das redes | `USER` em `api/stats.js` e os links no `index.html` |

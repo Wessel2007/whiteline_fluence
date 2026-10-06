@@ -38,7 +38,7 @@ a:hover{color:#ff3b3f}
 .wl-nav-strip>a{flex:none;padding:6px 13px;border-radius:999px;border:1px solid rgba(244,243,241,.16);font-size:13px;font-weight:500;color:rgba(244,243,241,.75);white-space:nowrap}
 .wl-nav-strip>a{transition:background .25s,border-color .25s,color .25s}
 .wl-nav-strip>a.is-active{background:#e3262c;border-color:#e3262c;color:#fff}
-.wl-nav-sec{transition:color .25s}
+.wl-nav-sec{transition:color .25s;white-space:nowrap}
 .wl-nav-sec.is-active{color:#f4f3f1!important;text-decoration:underline;text-decoration-color:#e3262c;text-decoration-thickness:2px;text-underline-offset:6px}
 .wl-nav-strip>a:active{background:#e3262c;border-color:#e3262c;color:#fff}
 /* Título do topo centralizado (align-items:center centraliza mesmo se a linha passar da tela);
@@ -103,6 +103,7 @@ a,button{-webkit-tap-highlight-color:transparent}
   .wl-facts span:last-child{font-size:16px!important}
 
   .wl-spec{min-height:0!important;padding:22px!important}
+  .wl-guia-btn{align-self:stretch;justify-content:center}
 
   .wl-prod{gap:12px!important;padding:18px 4px!important}
   .wl-prod-store{display:none!important}
@@ -143,6 +144,7 @@ a,button{-webkit-tap-highlight-color:transparent}
       <a class="wl-nav-sec" href="#videos" style="color:rgba(244,243,241,.7)">Vídeos</a>
       <a class="wl-nav-sec" href="#eventos" style="color:rgba(244,243,241,.7)">Eventos</a>
       <a class="wl-nav-sec wl-nav-extra" href="#garagem" style="color:rgba(244,243,241,.7)">Garagem</a>
+      <a class="wl-nav-sec" href="guia-compra.html" style="color:rgba(244,243,241,.7)">Guia de compra</a>
       <a class="wl-nav-sec" href="#produtos" style="color:rgba(244,243,241,.7)">Produtos</a>
       <a class="wl-nav-sec wl-nav-extra" href="#faq" style="color:rgba(244,243,241,.7)">FAQ</a>
       <a class="wl-nav-cta" href="#parcerias" style="display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:#e3262c;color:#fff;font-weight:700" style-hover="background:#f4f3f1;color:#0b0b0c">Parcerias</a>
@@ -153,6 +155,7 @@ a,button{-webkit-tap-highlight-color:transparent}
       <a href="#videos">Vídeos</a>
       <a href="#eventos">Eventos</a>
       <a href="#garagem">Garagem</a>
+      <a href="guia-compra.html">Guia de compra</a>
       <a href="#produtos">Produtos</a>
       <a href="#faq">FAQ</a>
     </div>
@@ -396,6 +399,28 @@ a,button{-webkit-tap-highlight-color:transparent}
         <a href="https://www.tiktok.com/@whitelinefluence" target="_blank" rel="noopener" style="color:#fff;font-weight:700;font-size:14px;text-decoration:underline;text-underline-offset:4px" style-hover="color:#0b0b0c">Ir pro TikTok ↗</a>
       </div>
     </div>
+  </section>
+
+  <!-- GUIA DE COMPRA (chamada para a página guia-compra.html) -->
+  <section id="guia" style="max-width:1440px;margin:0 auto;padding:clamp(56px,7vw,96px) clamp(16px,4vw,48px) 0">
+    <a class="wl-guia" data-reveal="" href="guia-compra.html" style="position:relative;overflow:hidden;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:clamp(24px,4vw,56px);align-items:end;padding:clamp(24px,4vw,56px);border:1px solid rgba(244,243,241,.12);border-radius:24px;background:#0f0f11;color:#f4f3f1" style-hover="border-color:#e3262c;color:#f4f3f1">
+      <div style="position:absolute;right:-10%;top:-60%;width:55%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(227,38,44,.3),rgba(227,38,44,0) 65%);pointer-events:none"></div>
+      <div style="position:relative;display:flex;flex-direction:column;gap:18px">
+        <span style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ff3b3f"><span style="width:8px;height:8px;border-radius:50%;background:#e3262c;animation:wl-pulse 1.6s ease-in-out infinite"></span>Novo · Guia de compra</span>
+        <span style="font-weight:800;font-stretch:112%;font-size:clamp(30px,4vw,56px);line-height:1;letter-spacing:-.03em;text-wrap:balance">Vai comprar um Fluence <span style="color:#e3262c">usado</span>? Confere isso antes.</span>
+        <span style="font-size:clamp(16px,1.5vw,18px);line-height:1.55;color:rgba(244,243,241,.72);max-width:560px;text-wrap:pretty">O guia ajuda você a filtrar anúncios, conversar com o vendedor e organizar a avaliação presencial, com checklist interativo para levar na visita.</span>
+      </div>
+      <div style="position:relative;display:flex;flex-direction:column;gap:20px;align-items:flex-start">
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span style="padding:8px 14px;border-radius:999px;border:1px solid rgba(244,243,241,.18);font-size:13px">Versões</span>
+          <span style="padding:8px 14px;border-radius:999px;border:1px solid rgba(244,243,241,.18);font-size:13px">Histórico e km</span>
+          <span style="padding:8px 14px;border-radius:999px;border:1px solid rgba(244,243,241,.18);font-size:13px">Câmbio CVT</span>
+          <span style="padding:8px 14px;border-radius:999px;border:1px solid rgba(244,243,241,.18);font-size:13px">Documentação e recall</span>
+          <span style="padding:8px 14px;border-radius:999px;border:1px solid rgba(244,243,241,.18);font-size:13px">Checklist</span>
+        </div>
+        <span class="wl-guia-btn" style="display:flex;align-items:center;gap:10px;padding:16px 24px;border-radius:999px;background:#e3262c;color:#fff;font-weight:700;font-size:15px">Ler o guia <span style="font-family:'JetBrains Mono',monospace">→</span></span>
+      </div>
+    </a>
   </section>
 
   <!-- VÍDEOS -->
@@ -831,7 +856,7 @@ class Component extends DCLogic {
   startSpy(reduce) {
     const links = Array.from(document.querySelectorAll('.wl-nav-sec, .wl-nav-strip > a'));
     const strip = document.querySelector('.wl-nav-strip');
-    const ids = ['topo', 'alcance', 'sobre', 'ficha', 'videos', 'eventos', 'garagem', 'produtos', 'parcerias', 'faq'];
+    const ids = ['topo', 'alcance', 'sobre', 'ficha', 'guia', 'videos', 'eventos', 'garagem', 'produtos', 'parcerias', 'faq'];
     const setActive = id => {
       if (id === this.spyId) return; this.spyId = id;
       links.forEach(a => {
@@ -850,9 +875,25 @@ class Component extends DCLogic {
     ids.forEach(id => { const el = document.getElementById(id); if (el) this.spy.observe(el); });
   }
 
+  // Chegou de outra página com #secao no endereço (ex.: menu do guia de compra): o navegador procura a seção
+  // antes do React montar a página e fica no topo. Rola até ela depois de montar e de novo quando fotos e
+  // fontes terminam de carregar (podem mudar a altura do que vem antes), a não ser que a pessoa já tenha rolado.
+  scrollToHash() {
+    const id = decodeURIComponent(location.hash.slice(1));
+    if (!id || !document.getElementById(id)) return;
+    let mexeu = false;
+    const parar = () => { mexeu = true; };
+    ['wheel', 'touchstart', 'keydown'].forEach(ev => window.addEventListener(ev, parar, { once: true, passive: true }));
+    const ir = () => { const el = document.getElementById(id); if (el && !mexeu) el.scrollIntoView({ block: 'start', behavior: 'instant' }); };
+    requestAnimationFrame(ir);
+    if (document.fonts) document.fonts.ready.then(ir);
+    if (document.readyState !== 'complete') window.addEventListener('load', ir, { once: true });
+  }
+
   componentDidMount() {
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.animOn = this.props.animations !== false && !reduce;
+    this.scrollToHash();
     this.startStats();
     this.startSpy(reduce);
     this.startMetas();
