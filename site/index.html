@@ -97,7 +97,8 @@ a,button{-webkit-tap-highlight-color:transparent}
 
   .wl-marquee{padding:12px 0!important}
 
-  .wl-about-photo{min-height:0!important;aspect-ratio:4/5}
+  .wl-about-photo{min-height:0!important;width:100%;height:auto;aspect-ratio:4/5;align-self:start}
+  @supports not (aspect-ratio:1){.wl-about-photo{padding-top:125%}}
   .wl-facts>div{padding:16px!important}
   .wl-facts span:last-child{font-size:16px!important}
 
