@@ -20,7 +20,7 @@ Ter uma página única que funcione como "cartão de visita" do canal:
 | — | Hero | `#topo` | Título animado, botões para TikTok/Instagram, foto principal e contadores (TikTok ao vivo, Instagram à mão) |
 | — | Faixa + galeria | — | Marquee vermelho com os temas do canal e carrossel infinito de fotos |
 | — | Alcance | `#alcance` | Destaque com o total de views (+1,5 mi, sendo 1,2 mi no TikTok) — números fixos, atualizar à mão. Abaixo, os cards de **metas** (próximo marco de seguidores no Instagram e no TikTok, com barra de progresso; só a do TikTok é ao vivo) |
-| 01 | Sobre o canal | `#sobre` | Apresentação do canal e do Luiz (idade, primeiro carro, estilo dos vídeos) |
+| 01 | Sobre o canal | `#sobre` | Apresentação do canal e do Luiz (história do carro e do canal, fatos rápidos, trabalho, estudo, carro dos sonhos e hobbies) |
 | 02 | Ficha técnica | `#ficha` | Potência, torque, motor, câmbio CVT, porta-malas, rodas e dimensões |
 | 03 | Em destaque | `#videos` | Cards dos vídeos mais vistos |
 | 04 | Eventos | `#eventos` | Encontros, exposições e eventos automotivos (cards gerados do array `eventosData`) |
