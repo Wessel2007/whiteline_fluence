@@ -341,4 +341,8 @@
   initChecklist();
   initCopy();
   initToc();
+
+  // Ano do rodapé sempre atual (o HTML já traz um valor para quando o script não roda)
+  var ano = document.querySelector('[data-ano]');
+  if (ano) ano.textContent = new Date().getFullYear();
 })();

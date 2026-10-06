@@ -6,6 +6,22 @@
 <title>Whiteline Fluence · Fluence GT Line 2016</title>
 <meta name="description" content="Curiosidades, ficha técnica, dia a dia e comparativos do Renault Fluence GT Line 2016.">
 <meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="theme-color" content="#0b0b0c">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<!-- Prévia ao compartilhar o link (WhatsApp, Instagram, X...) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://whitelinefluence-site.vercel.app/">
+<link rel="canonical" href="https://whitelinefluence-site.vercel.app/">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Whiteline Fluence">
+<meta property="og:title" content="Whiteline Fluence · Fluence GT Line 2016">
+<meta property="og:description" content="Curiosidades, ficha técnica, dia a dia e comparativos do Renault Fluence GT Line 2016.">
+<meta property="og:image" content="https://whitelinefluence-site.vercel.app/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Fluence GT Line branco à noite com o Luiz sentado ao lado">
+<meta name="twitter:card" content="summary_large_image">
 <script src="./support.js"></script>
 </head>
 <body>
@@ -41,6 +57,10 @@ a:hover{color:#ff3b3f}
 .wl-nav-sec{transition:color .25s;white-space:nowrap}
 .wl-nav-sec.is-active{color:#f4f3f1!important;text-decoration:underline;text-decoration-color:#e3262c;text-decoration-thickness:2px;text-underline-offset:6px}
 .wl-nav-strip>a:active{background:#e3262c;border-color:#e3262c;color:#fff}
+/* Guia de compra abre outra página do site: vira botão contornado ao lado de Parcerias, com a mesma → do botão "Ler o guia" */
+.wl-nav-guia{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;border:1px solid rgba(227,38,44,.55);color:#f4f3f1;font-weight:600;transition:background .25s,border-color .25s}
+.wl-nav-guia:hover{background:rgba(227,38,44,.14);border-color:#e3262c}
+.wl-nav-strip>a.wl-strip-guia{border-color:rgba(227,38,44,.6);color:#f4f3f1;font-weight:600}
 /* Título do topo centralizado (align-items:center centraliza mesmo se a linha passar da tela);
    padding-right compensa o letter-spacing negativo depois da última letra */
 .wl-h1{display:flex;flex-direction:column;align-items:center;text-align:center}
@@ -58,7 +78,7 @@ a:hover{color:#ff3b3f}
 @keyframes wl-ants{to{stroke-dashoffset:-14}}
 .wl-box-border{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;pointer-events:none}
 .wl-box-border rect{fill:none;stroke:rgba(200,30,36,.6);stroke-width:3;stroke-dasharray:8 6;animation:wl-ants .9s linear infinite}
-@media (prefers-reduced-motion:reduce){.wl-foot-word,.wl-box-border rect{animation:none!important}}
+@media (prefers-reduced-motion:reduce){.wl-foot-word,.wl-box-border rect,.wl-marquee>div,.wl-gallery>div{animation:none!important}}
 @supports not (overflow:clip){body{overflow-x:hidden}}
 img{max-width:100%}
 a,button{-webkit-tap-highlight-color:transparent}
@@ -144,18 +164,18 @@ a,button{-webkit-tap-highlight-color:transparent}
       <a class="wl-nav-sec" href="#videos" style="color:rgba(244,243,241,.7)">Vídeos</a>
       <a class="wl-nav-sec" href="#eventos" style="color:rgba(244,243,241,.7)">Eventos</a>
       <a class="wl-nav-sec wl-nav-extra" href="#garagem" style="color:rgba(244,243,241,.7)">Garagem</a>
-      <a class="wl-nav-sec" href="guia-compra.html" style="color:rgba(244,243,241,.7)">Guia de compra</a>
       <a class="wl-nav-sec" href="#produtos" style="color:rgba(244,243,241,.7)">Produtos</a>
       <a class="wl-nav-sec wl-nav-extra" href="#faq" style="color:rgba(244,243,241,.7)">FAQ</a>
+      <a class="wl-nav-sec wl-nav-guia" href="guia-compra.html">Guia de compra <span style="font-family:'JetBrains Mono',monospace" aria-hidden="true">→</span></a>
       <a class="wl-nav-cta" href="#parcerias" style="display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:#e3262c;color:#fff;font-weight:700" style-hover="background:#f4f3f1;color:#0b0b0c">Parcerias</a>
     </div>
     <div class="wl-nav-strip">
+      <a class="wl-strip-guia" href="guia-compra.html">Guia de compra →</a>
       <a href="#sobre">Sobre</a>
       <a href="#ficha">Ficha</a>
       <a href="#videos">Vídeos</a>
       <a href="#eventos">Eventos</a>
       <a href="#garagem">Garagem</a>
-      <a href="guia-compra.html">Guia de compra</a>
       <a href="#produtos">Produtos</a>
       <a href="#faq">FAQ</a>
     </div>
@@ -183,15 +203,15 @@ a,button{-webkit-tap-highlight-color:transparent}
       <img src="assets/hero.jpg" alt="Fluence GT Line branco à noite" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 72%">
       <div class="wl-hero-stats" style="position:absolute;left:0;right:0;bottom:0;padding:clamp(16px,3vw,32px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;background:linear-gradient(to top,rgba(11,11,12,.92),rgba(11,11,12,0));pointer-events:none">
         <div style="display:flex;flex-direction:column;gap:4px">
-          <span class="wl-stat-num" data-stat="tt-likes" data-count="92" data-suffix="K" style="font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,64px);line-height:1">92K</span>
+          <span class="wl-stat-num" data-stat="tt-likes" data-count="92" data-suffix="K" data-comma="1" style="font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,64px);line-height:1">92K</span>
           <span class="wl-stat-lbl" style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,243,241,.65)">Curtidas TikTok</span>
         </div>
         <div style="display:flex;flex-direction:column;gap:4px">
-          <span class="wl-stat-num" data-stat="tt-followers" data-count="4.5" data-suffix="K" data-dec="1" style="font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,64px);line-height:1">4.5K</span>
+          <span class="wl-stat-num" data-stat="tt-followers" data-count="4.5" data-suffix="K" data-dec="1" data-comma="1" style="font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,64px);line-height:1">4,5K</span>
           <span class="wl-stat-lbl" style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,243,241,.65)">Seguidores TikTok</span>
         </div>
         <div style="display:flex;flex-direction:column;gap:4px">
-          <span class="wl-stat-num" data-count="1000" style="font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,64px);line-height:1;color:#ff3b3f">1000</span>
+          <span class="wl-stat-num" data-stat="ig-followers" data-count="1" data-suffix="K" data-comma="1" style="font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,64px);line-height:1;color:#ff3b3f">1K</span>
           <span class="wl-stat-lbl" style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,243,241,.65)">Seguidores Instagram</span>
         </div>
       </div>
@@ -203,14 +223,14 @@ a,button{-webkit-tap-highlight-color:transparent}
     <div class="wl-marquee" style="margin-top:clamp(48px,7vw,96px);background:#e3262c;color:#fff;overflow:hidden;transform:rotate(-1.5deg) scale(1.03);padding:18px 0">
       <div style="display:flex;width:max-content;animation:wl-marquee 28s linear infinite;font-weight:900;font-stretch:125%;font-size:clamp(22px,3vw,40px);letter-spacing:-.01em;white-space:nowrap">
         <div style="display:flex;gap:40px;padding-right:40px"><span>CURIOSIDADES</span><span>✕</span><span>FICHA TÉCNICA</span><span>✕</span><span>DIA A DIA</span><span>✕</span><span>DÚVIDAS</span><span>✕</span><span>COMPARATIVOS</span><span>✕</span></div>
-        <div style="display:flex;gap:40px;padding-right:40px"><span>CURIOSIDADES</span><span>✕</span><span>FICHA TÉCNICA</span><span>✕</span><span>DIA A DIA</span><span>✕</span><span>DÚVIDAS</span><span>✕</span><span>COMPARATIVOS</span><span>✕</span></div>
+        <div aria-hidden="true" style="display:flex;gap:40px;padding-right:40px"><span>CURIOSIDADES</span><span>✕</span><span>FICHA TÉCNICA</span><span>✕</span><span>DIA A DIA</span><span>✕</span><span>DÚVIDAS</span><span>✕</span><span>COMPARATIVOS</span><span>✕</span></div>
       </div>
     </div>
   </sc-if>
 
 
   <!-- GALERIA -->
-  <div style="margin-top:clamp(56px,7vw,96px);overflow:hidden"><div style="display:flex;width:max-content;animation:wl-marquee 70s linear infinite"><div style="display:flex;gap:14px;padding-right:14px"><img src="assets/g1.jpg" alt="Faróis na estrada de terra" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"><img src="assets/v2.jpg" alt="Frente do Fluence na garagem" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"><img src="assets/g2.jpg" alt="LEDs internos vermelhos" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"><img src="assets/g3.jpg" alt="Porta-malas aberto" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"><img src="assets/v1.jpg" alt="Estrada à noite" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"><img src="assets/v4.jpg" alt="Mão no volante" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"></div><div style="display:flex;gap:14px;padding-right:14px"><img src="assets/g1.jpg" alt="Faróis na estrada de terra" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"><img src="assets/v2.jpg" alt="Frente do Fluence na garagem" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"><img src="assets/g2.jpg" alt="LEDs internos vermelhos" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"><img src="assets/g3.jpg" alt="Porta-malas aberto" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"><img src="assets/v1.jpg" alt="Estrada à noite" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"><img src="assets/v4.jpg" alt="Mão no volante" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"></div></div></div>
+  <div class="wl-gallery" style="margin-top:clamp(56px,7vw,96px);overflow:hidden"><div style="display:flex;width:max-content;animation:wl-marquee 70s linear infinite"><div style="display:flex;gap:14px;padding-right:14px"><img src="assets/g1.jpg" alt="Faróis na estrada de terra" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"><img src="assets/v2.jpg" alt="Frente do Fluence na garagem" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"><img src="assets/g2.jpg" alt="LEDs internos vermelhos" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"><img src="assets/g3.jpg" alt="Porta-malas aberto" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"><img src="assets/v1.jpg" alt="Estrada à noite" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"><img src="assets/v4.jpg" alt="Mão no volante" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"></div><div aria-hidden="true" style="display:flex;gap:14px;padding-right:14px"><img src="assets/g1.jpg" alt="Faróis na estrada de terra" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"><img src="assets/v2.jpg" alt="Frente do Fluence na garagem" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"><img src="assets/g2.jpg" alt="LEDs internos vermelhos" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"><img src="assets/g3.jpg" alt="Porta-malas aberto" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"><img src="assets/v1.jpg" alt="Estrada à noite" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"><img src="assets/v4.jpg" alt="Mão no volante" style="height:clamp(240px,34vw,420px);aspect-ratio:3/4;object-fit:cover;border-radius:18px;flex:none"></div></div></div>
 
   <!-- ALCANCE -->
   <section id="alcance" style="max-width:1440px;margin:0 auto;padding:clamp(80px,10vw,140px) clamp(16px,4vw,48px) 0">
@@ -655,12 +675,13 @@ a,button{-webkit-tap-highlight-color:transparent}
   <footer style="margin-top:clamp(80px,10vw,140px);border-top:1px solid rgba(244,243,241,.08);padding:48px clamp(16px,4vw,48px) 32px;max-width:1440px;margin-left:auto;margin-right:auto">
     <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:center">
       <div class="wl-footer-links" style="display:flex;flex-wrap:wrap;gap:20px;font-weight:600;font-size:15px">
+        <a href="guia-compra.html">Guia de compra →</a>
         <a href="https://www.tiktok.com/@whitelinefluence" target="_blank" rel="noopener">TikTok ↗</a>
         <a href="https://www.instagram.com/whitelinefluence" target="_blank" rel="noopener">Instagram ↗</a>
         <a href="https://linktr.ee/whitelinefluence" target="_blank" rel="noopener">Linktree ↗</a>
         <a href="{{ mailto }}">E-mail ↗</a>
       </div>
-      <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:rgba(244,243,241,.45)">Contém links de afiliado.</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:rgba(244,243,241,.45)">© {{ ano }} Whiteline Fluence · Contém links de afiliado.</span>
     </div>
     <div class="wl-foot-word" data-parallax="0.05" style="margin-top:40px;font-weight:900;font-stretch:125%;font-size:clamp(44px,12.5vw,210px);line-height:.85;letter-spacing:-.04em;color:#141416;-webkit-text-stroke:1px rgba(244,243,241,.12);white-space:nowrap;text-align:center">WHITELINE</div>
   </footer>
@@ -671,7 +692,7 @@ a,button{-webkit-tap-highlight-color:transparent}
 // E-mail montado em tempo de execução para não ficar em texto puro no HTML (robôs coletores de e-mail)
 const EMAIL = ['heyxist3r', 'gmail.com'].join('@');
 // Seguidores do Instagram, atualizados à mão (as fontes automáticas pararam de funcionar na Vercel).
-// Ao mudar, atualizar também o número do topo (data-count e texto do card "Seguidores Instagram").
+// O número do topo, os cards de metas e a garagem leem daqui.
 const IG_SEGUIDORES = 1000;
 
 class Component extends DCLogic {
@@ -730,11 +751,13 @@ class Component extends DCLogic {
   }
 
   // Contadores ao vivo: /api/stats (Vercel) a cada 60 s
+  // Uma casa decimal só quando não é redonda: 4,5K, mas 1K em vez de 1,0K
   fmtStat(n) {
     if (n < 1000) return { v: n, dec: 0, suf: '' };
-    if (n < 1e4) return { v: Math.floor(n / 100) / 10, dec: 1, suf: 'K' };
+    if (n < 1e4) { const v = Math.floor(n / 100) / 10; return { v, dec: v % 1 ? 1 : 0, suf: 'K' }; }
     if (n < 1e6) return { v: Math.floor(n / 1000), dec: 0, suf: 'K' };
-    return { v: Math.floor(n / 1e5) / 10, dec: 1, suf: 'M' };
+    const v = Math.floor(n / 1e5) / 10;
+    return { v, dec: v % 1 ? 1 : 0, suf: 'M' };
   }
 
   tweenCount(el, from, to, dec, suf, comma) {
@@ -751,6 +774,19 @@ class Component extends DCLogic {
     requestAnimationFrame(step);
   }
 
+  // Escreve os números do topo ({ 'tt-likes': 92000, ... }) no formato curto, com vírgula
+  applyStats(vals) {
+    document.querySelectorAll('[data-stat]').forEach(el => {
+      const n = vals[el.dataset.stat];
+      if (typeof n !== 'number') return;
+      const { v, dec, suf } = this.fmtStat(n);
+      const prev = el.__val != null ? el.__val : (parseFloat(el.textContent.replace(',', '.')) || 0);
+      el.dataset.count = v; el.dataset.dec = dec; el.dataset.suffix = suf;
+      if (this.animOn && el.__counted) { if (v !== prev) this.tweenCount(el, prev, v, dec, suf, true); }
+      else el.textContent = v.toFixed(dec).replace('.', ',') + suf; // ainda não animou: o runCount lê os data-* novos ao aparecer
+    });
+  }
+
   async refreshStats() {
     let data;
     try {
@@ -762,15 +798,7 @@ class Component extends DCLogic {
       'tt-likes': data.tiktok && data.tiktok.likes,
       'tt-followers': data.tiktok && data.tiktok.followers
     };
-    document.querySelectorAll('[data-stat]').forEach(el => {
-      const n = vals[el.dataset.stat];
-      if (typeof n !== 'number') return;
-      const { v, dec, suf } = this.fmtStat(n);
-      const prev = el.__val != null ? el.__val : (parseFloat(el.textContent) || 0);
-      el.dataset.count = v; el.dataset.dec = dec; el.dataset.suffix = suf;
-      if (this.animOn && el.__counted) { if (v !== prev) this.tweenCount(el, prev, v, dec, suf, false); }
-      else el.textContent = v.toFixed(dec) + suf; // ainda não animou: o runCount lê os data-* novos ao aparecer
-    });
+    this.applyStats(vals);
     const seg = { ...this.state.seg };
     if (typeof vals['tt-followers'] === 'number') seg.tt = vals['tt-followers'];
     if (seg.tt !== this.state.seg.tt) this.setState({ seg });
@@ -846,6 +874,7 @@ class Component extends DCLogic {
   }
 
   startStats() {
+    this.applyStats({ 'ig-followers': IG_SEGUIDORES });
     this.refreshStats();
     this.statsTimer = setInterval(() => { if (!document.hidden) this.refreshStats(); }, 60000);
     this.onVis = () => { if (!document.hidden) this.refreshStats(); };
@@ -991,6 +1020,7 @@ class Component extends DCLogic {
     return {
       showMarquee: this.props.showMarquee ?? true,
       email: EMAIL,
+      ano: new Date().getFullYear(),
       mailto: 'mailto:' + EMAIL,
       mailtoParceria: 'mailto:' + EMAIL + '?subject=Parceria%20Whiteline%20Fluence',
       mailtoEvento: 'mailto:' + EMAIL + '?subject=Convite%20para%20evento%20-%20Whiteline%20Fluence',
