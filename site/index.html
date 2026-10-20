@@ -80,7 +80,21 @@ a:hover{color:#ff3b3f}
 @keyframes wl-ants{to{stroke-dashoffset:-14}}
 .wl-box-border{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;pointer-events:none}
 .wl-box-border rect{fill:none;stroke:rgba(200,30,36,.6);stroke-width:3;stroke-dasharray:8 6;animation:wl-ants .9s linear infinite}
-@media (prefers-reduced-motion:reduce){.wl-foot-word,.wl-box-border rect,.wl-marquee>div,.wl-gallery>div{animation:none!important}}
+/* Apoie o canal: vapor subindo do café do título e farol passando no cartão do Pix (mesmo feixe do letreiro do rodapé) */
+.wl-cup{position:relative;display:inline-block}
+.wl-cup>i{position:absolute;bottom:72%;width:.08em;height:.42em;border-radius:999px;background:linear-gradient(rgba(244,243,241,0),rgba(244,243,241,.8));opacity:0;animation:wl-steam 2.8s ease-out infinite;pointer-events:none}
+.wl-cup>i:nth-child(1){left:32%}
+.wl-cup>i:nth-child(2){left:46%;animation-delay:.9s}
+.wl-cup>i:nth-child(3){left:60%;animation-delay:1.8s}
+@keyframes wl-steam{0%{opacity:0;transform:translateY(0) scaleY(.6)}30%{opacity:1}100%{opacity:0;transform:translate(.06em,-.5em) scaleY(1.2) rotate(8deg)}}
+/* O feixe passa por trás do conteúdo (::before + filhos com position:relative) para não cobrir o QR na hora de escanear */
+.wl-pix-card{overflow:hidden;animation:wl-pix-float 6s ease-in-out infinite}
+.wl-pix-card>*{position:relative}
+.wl-pix-card::before{content:"";position:absolute;inset:0;background:linear-gradient(105deg,rgba(227,38,44,0) 35%,rgba(227,38,44,.16) 50%,rgba(227,38,44,0) 65%) no-repeat;background-size:250% 100%;background-position:150% 0;animation:wl-pix-beam 5s ease-in-out infinite;pointer-events:none}
+@keyframes wl-pix-beam{0%,55%{background-position:150% 0}85%,100%{background-position:-50% 0}}
+@keyframes wl-pix-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.wl-pix-chip:active{transform:scale(.95)}
+@media (prefers-reduced-motion:reduce){.wl-foot-word,.wl-box-border rect,.wl-marquee>div,.wl-gallery>div,.wl-cup>i,.wl-pix-card,.wl-pix-card::before{animation:none!important}.wl-cup>i{display:none}}
 @supports not (overflow:clip){body{overflow-x:hidden}}
 img{max-width:100%}
 a,button{-webkit-tap-highlight-color:transparent}
@@ -90,8 +104,11 @@ a,button{-webkit-tap-highlight-color:transparent}
   .wl-sticky{position:static!important}
 }
 
-/* ===== Tablet estreito: menu não cabe inteiro ===== */
-@media (max-width:820px){
+/* ===== Menu não cabe inteiro: o Apoie sai primeiro, depois os outros extras (no celular a faixa de atalhos mostra todos) ===== */
+@media (max-width:1240px){
+  .wl-nav-apoie{display:none!important}
+}
+@media (max-width:1060px){
   .wl-nav-extra{display:none!important}
 }
 
@@ -170,6 +187,7 @@ a,button{-webkit-tap-highlight-color:transparent}
       <a class="wl-nav-sec wl-nav-extra" href="#garagem" style="color:rgba(244,243,241,.7)">Garagem</a>
       <a class="wl-nav-sec" href="#produtos" style="color:rgba(244,243,241,.7)">Produtos</a>
       <a class="wl-nav-sec wl-nav-extra" href="#faq" style="color:rgba(244,243,241,.7)">FAQ</a>
+      <sc-if value="{{ pixOn }}"><a class="wl-nav-sec wl-nav-apoie" href="#apoie" style="color:rgba(244,243,241,.7)">Apoie ☕</a></sc-if>
       <a class="wl-nav-sec wl-nav-guia" href="guia-compra.html">Guia de compra <span style="font-family:'JetBrains Mono',monospace" aria-hidden="true">→</span></a>
       <a class="wl-nav-cta" href="#parcerias" style="display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:#e3262c;color:#fff;font-weight:700" style-hover="background:#f4f3f1;color:#0b0b0c">Parcerias</a>
     </div>
@@ -182,6 +200,7 @@ a,button{-webkit-tap-highlight-color:transparent}
       <a href="#garagem">Garagem</a>
       <a href="#produtos">Produtos</a>
       <a href="#faq">FAQ</a>
+      <sc-if value="{{ pixOn }}"><a href="#apoie">Apoie ☕</a></sc-if>
     </div>
   </nav>
 
@@ -682,18 +701,18 @@ a,button{-webkit-tap-highlight-color:transparent}
       <div style="position:absolute;left:-12%;bottom:-60%;width:55%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(227,38,44,.28),rgba(227,38,44,0) 65%);pointer-events:none"></div>
       <div style="position:relative;display:flex;flex-direction:column;gap:20px">
         <span style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ff3b3f"><span style="width:8px;height:8px;border-radius:50%;background:#e3262c;animation:wl-pulse 1.6s ease-in-out infinite"></span>Apoie o canal · Pix</span>
-        <h2 style="margin:0;font-weight:800;font-stretch:112%;font-size:clamp(32px,4.2vw,60px);line-height:1;letter-spacing:-.03em;text-wrap:balance">Curtiu? Me paga <span style="color:#e3262c">um café</span> ☕</h2>
+        <h2 style="margin:0;font-weight:800;font-stretch:112%;font-size:clamp(32px,4.2vw,60px);line-height:1;letter-spacing:-.03em;text-wrap:balance">Curtiu? Me paga <span style="color:#e3262c">um café</span> <span class="wl-cup" aria-hidden="true">☕<i></i><i></i><i></i></span></h2>
         <p style="margin:0;max-width:560px;font-size:clamp(16px,1.5vw,18px);line-height:1.55;color:rgba(244,243,241,.72);text-wrap:pretty">O canal é feito no meu tempo livre, com o meu carro e do meu bolso. O apoio vai para a gasolina dos rolês e eventos, produtos para testar nos vídeos e a manutenção do Fluence. É opcional e qualquer valor ajuda.</p>
         <div style="display:flex;flex-direction:column;gap:12px">
           <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,243,241,.55)">Escolha um valor</span>
           <div role="group" aria-label="Valor do Pix" style="display:flex;flex-wrap:wrap;gap:8px">
             <sc-for list="{{ pixValores }}" as="v" hint-placeholder-count="5">
-              <button type="button" onClick="{{ v.escolher }}" aria-pressed="{{ v.ativo }}" style="padding:10px 18px;border-radius:999px;border:1px solid {{ v.borda }};background:{{ v.bg }};color:{{ v.cor }};font:700 15px 'Archivo',sans-serif;cursor:pointer;transition:background .25s,border-color .25s,color .25s">{{ v.label }}</button>
+              <button type="button" class="wl-pix-chip" onClick="{{ v.escolher }}" aria-pressed="{{ v.ativo }}" style="padding:10px 18px;border-radius:999px;border:1px solid {{ v.borda }};background:{{ v.bg }};color:{{ v.cor }};font:700 15px 'Archivo',sans-serif;cursor:pointer;transition:background .25s,border-color .25s,color .25s,transform .15s">{{ v.label }}</button>
             </sc-for>
           </div>
         </div>
       </div>
-      <div style="position:relative;justify-self:center;width:min(100%,380px);display:flex;flex-direction:column;align-items:center;gap:16px;padding:clamp(20px,3vw,28px);border-radius:20px;background:#f4f3f1;color:#0b0b0c">
+      <div class="wl-pix-card" style="position:relative;justify-self:center;width:min(100%,380px);display:flex;flex-direction:column;align-items:center;gap:16px;padding:clamp(20px,3vw,28px);border-radius:20px;background:#f4f3f1;color:#0b0b0c">
         <sc-if value="{{ pixTemQr }}">
           <img src="{{ pixQr }}" alt="{{ pixQrAlt }}" width="220" height="220" style="display:block;width:min(100%,220px);height:auto;aspect-ratio:1;image-rendering:pixelated">
         </sc-if>
@@ -1021,7 +1040,7 @@ class Component extends DCLogic {
   startSpy(reduce) {
     const links = Array.from(document.querySelectorAll('.wl-nav-sec, .wl-nav-strip > a'));
     const strip = document.querySelector('.wl-nav-strip');
-    const ids = ['topo', 'alcance', 'sobre', 'ficha', 'guia', 'videos', 'eventos', 'garagem', 'produtos', 'parcerias', 'faq'];
+    const ids = ['topo', 'alcance', 'sobre', 'ficha', 'guia', 'videos', 'eventos', 'garagem', 'produtos', 'parcerias', 'faq', 'apoie'];
     const setActive = id => {
       if (id === this.spyId) return; this.spyId = id;
       links.forEach(a => {

@@ -332,7 +332,11 @@ a,button,label{-webkit-tap-highlight-color:transparent}
   .wl-toc-progress{display:none}
   .wl-totoc{display:flex}
 }
-@media (max-width:820px){
+/* Menu não cabe inteiro: o Apoie sai primeiro, depois os outros extras (no celular a faixa de atalhos mostra todos) */
+@media (max-width:1240px){
+  .wl-nav-apoie{display:none!important}
+}
+@media (max-width:1060px){
   .wl-nav-extra{display:none!important}
 }
 
@@ -397,6 +401,7 @@ a,button,label{-webkit-tap-highlight-color:transparent}
       <a class="wl-nav-sec wl-nav-extra" href="./#garagem">Garagem</a>
       <a class="wl-nav-sec" href="./#produtos">Produtos</a>
       <a class="wl-nav-sec wl-nav-extra" href="./#faq">FAQ</a>
+      <a class="wl-nav-sec wl-nav-apoie" href="./#apoie">Apoie ☕</a>
       <a class="wl-nav-sec wl-nav-guia is-active" href="guia-compra.html" aria-current="page">Guia de compra</a>
       <a class="wl-nav-cta" href="./#parcerias">Parcerias</a>
     </div>
@@ -413,6 +418,7 @@ a,button,label{-webkit-tap-highlight-color:transparent}
       <a href="./#garagem">Garagem</a>
       <a href="./#produtos">Produtos</a>
       <a href="./#faq">FAQ</a>
+      <a href="./#apoie">Apoie ☕</a>
     </div>
   </nav>
 
