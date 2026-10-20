@@ -22,6 +22,8 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Fluence GT Line branco à noite com o Luiz sentado ao lado">
 <meta name="twitter:card" content="summary_large_image">
+<!-- Gera o QR Code do Pix na seção Apoie o canal (qrcode-generator 1.4.4, MIT) -->
+<script src="./vendor/qrcode.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -136,6 +138,8 @@ a,button{-webkit-tap-highlight-color:transparent}
   .wl-car{flex-basis:140px!important}
 
   .wl-faq-a{padding-right:0!important;font-size:16px!important}
+
+  .wl-pix-btns>*{flex:1 1 100%;justify-content:center}
 
   .wl-footer-links{gap:14px 20px!important}
 }
@@ -671,11 +675,56 @@ a,button{-webkit-tap-highlight-color:transparent}
     </div>
   </section>
 
+  <!-- APOIE O CANAL (Pix; some enquanto PIX.chave estiver vazia) -->
+  <sc-if value="{{ pixOn }}">
+  <section id="apoie" style="max-width:1440px;margin:0 auto;padding:clamp(80px,10vw,140px) clamp(16px,4vw,48px) 0">
+    <div data-reveal="" style="position:relative;overflow:hidden;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:clamp(28px,4vw,56px);align-items:center;padding:clamp(24px,4vw,56px);border:1px solid rgba(244,243,241,.12);border-radius:24px;background:#0f0f11">
+      <div style="position:absolute;left:-12%;bottom:-60%;width:55%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(227,38,44,.28),rgba(227,38,44,0) 65%);pointer-events:none"></div>
+      <div style="position:relative;display:flex;flex-direction:column;gap:20px">
+        <span style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ff3b3f"><span style="width:8px;height:8px;border-radius:50%;background:#e3262c;animation:wl-pulse 1.6s ease-in-out infinite"></span>Apoie o canal · Pix</span>
+        <h2 style="margin:0;font-weight:800;font-stretch:112%;font-size:clamp(32px,4.2vw,60px);line-height:1;letter-spacing:-.03em;text-wrap:balance">Curtiu? Me paga <span style="color:#e3262c">um café</span> ☕</h2>
+        <p style="margin:0;max-width:560px;font-size:clamp(16px,1.5vw,18px);line-height:1.55;color:rgba(244,243,241,.72);text-wrap:pretty">O canal é feito no meu tempo livre, com o meu carro e do meu bolso. O apoio vai para a gasolina dos rolês e eventos, produtos para testar nos vídeos e a manutenção do Fluence. É opcional e qualquer valor ajuda.</p>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,243,241,.55)">Escolha um valor</span>
+          <div role="group" aria-label="Valor do Pix" style="display:flex;flex-wrap:wrap;gap:8px">
+            <sc-for list="{{ pixValores }}" as="v" hint-placeholder-count="5">
+              <button type="button" onClick="{{ v.escolher }}" aria-pressed="{{ v.ativo }}" style="padding:10px 18px;border-radius:999px;border:1px solid {{ v.borda }};background:{{ v.bg }};color:{{ v.cor }};font:700 15px 'Archivo',sans-serif;cursor:pointer;transition:background .25s,border-color .25s,color .25s">{{ v.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      <div style="position:relative;justify-self:center;width:min(100%,380px);display:flex;flex-direction:column;align-items:center;gap:16px;padding:clamp(20px,3vw,28px);border-radius:20px;background:#f4f3f1;color:#0b0b0c">
+        <sc-if value="{{ pixTemQr }}">
+          <img src="{{ pixQr }}" alt="{{ pixQrAlt }}" width="220" height="220" style="display:block;width:min(100%,220px);height:auto;aspect-ratio:1;image-rendering:pixelated">
+        </sc-if>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center">
+          <span style="font-weight:700;font-size:16px">{{ pixItem }}</span>
+          <span style="font-weight:800;font-stretch:112%;font-size:28px;letter-spacing:-.02em">{{ pixValorTxt }}</span>
+          <span style="font-size:14px;line-height:1.45;color:rgba(11,11,12,.6);text-wrap:pretty">{{ pixDica }}</span>
+        </div>
+        <div class="wl-pix-btns" style="width:100%;display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
+          <button type="button" onClick="{{ copyPix }}" style="display:flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;border:0;background:#e3262c;color:#fff;font:700 15px 'Archivo',sans-serif;cursor:pointer" style-hover="background:#0b0b0c">{{ copyPixLabel }}</button>
+          <button type="button" onClick="{{ copyChave }}" style="display:flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;border:1px solid rgba(11,11,12,.25);background:transparent;color:#0b0b0c;font:700 15px 'Archivo',sans-serif;cursor:pointer" style-hover="border-color:#0b0b0c">{{ copyChaveLabel }}</button>
+        </div>
+        <sc-if value="{{ pixErro }}">
+          <span role="status" style="font-size:14px;font-weight:600;color:#c81e24;text-align:center">Não deu para copiar. Abra "Ver código" e copie à mão.</span>
+        </sc-if>
+        <details style="width:100%;font-size:13px;color:rgba(11,11,12,.6)">
+          <summary style="cursor:pointer;text-align:center;font-weight:600">Ver código</summary>
+          <code style="display:block;margin-top:8px;padding:10px;border-radius:10px;background:#fff;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;color:#0b0b0c;overflow-wrap:anywhere;user-select:all;-webkit-user-select:all">{{ pixCodigo }}</code>
+        </details>
+        <span style="font-size:13px;line-height:1.45;color:rgba(11,11,12,.55);text-align:center;text-wrap:pretty">O Pix cai direto na conta do Luiz, dono do canal. Pague só pelo site oficial ou pelo link da bio.</span>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+
   <!-- FOOTER -->
   <footer style="margin-top:clamp(80px,10vw,140px);border-top:1px solid rgba(244,243,241,.08);padding:48px clamp(16px,4vw,48px) 32px;max-width:1440px;margin-left:auto;margin-right:auto">
     <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:center">
       <div class="wl-footer-links" style="display:flex;flex-wrap:wrap;gap:20px;font-weight:600;font-size:15px">
         <a href="guia-compra.html">Guia de compra →</a>
+        <sc-if value="{{ pixOn }}"><a href="#apoie">Apoie o canal ♥</a></sc-if>
         <a href="https://www.tiktok.com/@whitelinefluence" target="_blank" rel="noopener">TikTok ↗</a>
         <a href="https://www.instagram.com/whitelinefluence" target="_blank" rel="noopener">Instagram ↗</a>
         <a href="https://linktr.ee/whitelinefluence" target="_blank" rel="noopener">Linktree ↗</a>
@@ -694,10 +743,22 @@ const EMAIL = ['heyxist3r', 'gmail.com'].join('@');
 // Seguidores do Instagram, atualizados à mão (as fontes automáticas pararam de funcionar na Vercel).
 // O número do topo, os cards de metas e a garagem leem daqui.
 const IG_SEGUIDORES = 1000;
+// Pix da seção "Apoie o canal". Use a chave aleatória do banco: CPF, celular e e-mail ficam públicos no código do site.
+// Com a chave vazia a seção (e o link do rodapé) não aparecem. nome: até 25 letras · cidade: até 15 (acentos são removidos)
+// valores: botões do "me paga um café"; o primeiro com valor 10 começa selecionado
+const PIX = {
+  chave: 'd579128c-7a91-4637-9b71-93366ef1b7de', nome: 'Whiteline Fluence', cidade: 'Toledo',
+  valores: [
+    { valor: 5, emoji: '☕', item: 'Um café' },
+    { valor: 10, emoji: '☕', item: 'Café com pão de queijo' },
+    { valor: 20, emoji: '🧽', item: 'Uma lavagem' },
+    { valor: 50, emoji: '⛽', item: 'Uns litros no tanque' },
+  ]
+};
 
 class Component extends DCLogic {
   // seg: seguidores usados nos cards de metas e na garagem; o TikTok segue o /api/stats, o Instagram vem de IG_SEGUIDORES
-  state = { open: -1, copied: false, copiedMsg: false, seg: { ig: IG_SEGUIDORES, tt: 4500 }, metasVistas: false };
+  state = { open: -1, copied: false, copiedMsg: false, seg: { ig: IG_SEGUIDORES, tt: 4500 }, metasVistas: false, pixValor: 10, copiedPix: '' };
 
   // Garagem dos seguidores: abre sozinha quando o Instagram ao vivo chegar na meta.
   // Depois de bater a meta, mude aberta para true (assim ela não fecha se a API cair e voltar ao número fixo).
@@ -727,6 +788,7 @@ class Component extends DCLogic {
     { q: 'Posso mandar minha dúvida sobre o carro?', a: 'Pode. Comenta em qualquer vídeo no TikTok ou manda DM no Instagram. As perguntas que mais aparecem viram vídeo.' },
     { q: 'Os links de produtos são afiliados?', a: 'Sim. Você paga o mesmo preço e uma pequena comissão vai para o canal. Só coloco na lista o que eu uso no carro.' },
     { q: 'Como fechar uma parceria ou patrocínio?', a: 'Envie um e-mail para ' + EMAIL + ' com a marca, o produto e o formato que tem em mente. Retorno com proposta e prazos.' },
+    { q: 'Como apoio o canal?', a: 'Seguindo, comentando e compartilhando os vídeos você já ajuda muito. Comprar pelos links da lista de produtos também ajuda, sem custo a mais. E se quiser me pagar um café, tem Pix logo abaixo, na seção Apoie o canal, com QR Code e código copia e cola. É opcional e qualquer valor ajuda.' },
     { q: 'Como coloco meu carro na Garagem dos seguidores?', a: 'Manda a foto no direct do @whitelinefluence com o modelo e o ano, sua cidade, o seu @ e escreve que autoriza a publicação no site. Fluence tem prioridade, mas todo carro é bem-vindo. Se mudar de ideia, é só pedir por DM que eu tiro a foto.' },
     { q: 'Você faz comparativos com outros carros?', a: 'Faço. Os comparativos colocam o Fluence lado a lado com outros sedãs em ficha técnica, espaço, custo de manutenção e rodagem.' },
     { q: 'O canal é só sobre o Fluence?', a: 'Hoje o foco é o Fluence, que é o meu carro. Mas o canal acompanha quem está ao volante: outros carros aparecem de vez em quando, e se um dia eu trocar de carro, o próximo vira conteúdo também.' }
@@ -871,6 +933,79 @@ class Component extends DCLogic {
       garagemAria: `Instagram: ${fmt(n)} de ${fmt(meta)} seguidores para abrir a garagem`,
       garagemCtaTitulo: !abriu ? 'Já pode mandar o seu: ele estreia a garagem.'
         : carros.length ? 'Manda o seu carro também.' : 'A garagem abriu. Seja o primeiro.'
+    };
+  }
+
+  // Pix copia e cola (BR Code do Banco Central): campos id + tamanho + valor, fechados pelo CRC16-CCITT.
+  // valor null = sem valor fixo, a pessoa digita no app do banco
+  pixPayload(valor) {
+    const campo = (id, v) => id + String(v.length).padStart(2, '0') + v;
+    const limpa = (s, max) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9 ]/g, '').trim().slice(0, max);
+    const p = campo('00', '01')
+      + campo('26', campo('00', 'br.gov.bcb.pix') + campo('01', PIX.chave.trim()))
+      + campo('52', '0000') + campo('53', '986')
+      + (valor ? campo('54', valor.toFixed(2)) : '')
+      + campo('58', 'BR') + campo('59', limpa(PIX.nome, 25)) + campo('60', limpa(PIX.cidade, 15))
+      + campo('62', campo('05', '***')) + '6304';
+    let crc = 0xFFFF;
+    for (let i = 0; i < p.length; i++) {
+      crc ^= p.charCodeAt(i) << 8;
+      for (let b = 0; b < 8; b++) crc = (crc & 0x8000 ? (crc << 1) ^ 0x1021 : crc << 1) & 0xFFFF;
+    }
+    return p + crc.toString(16).toUpperCase().padStart(4, '0');
+  }
+
+  // QR em data URL (GIF), guardado por código para não refazer a cada render
+  pixQrSrc(codigo) {
+    if (!window.qrcode) return '';
+    this.qrCache = this.qrCache || {};
+    if (!this.qrCache[codigo]) {
+      const qr = window.qrcode(0, 'M');
+      qr.addData(codigo);
+      qr.make();
+      this.qrCache[codigo] = qr.createDataURL(8, 2);
+    }
+    return this.qrCache[codigo];
+  }
+
+  pixVals() {
+    if (!PIX.chave.trim()) return { pixOn: false };
+    const brl = x => x.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: x % 1 ? 2 : 0 });
+    const atual = this.state.pixValor;
+    const opcao = PIX.valores.find(o => o.valor === atual);
+    const codigo = this.pixPayload(atual);
+    const qr = this.pixQrSrc(codigo);
+    // Se o navegador não deixar copiar, avisa em vez de mostrar "copiado" (o código fica em "Ver código")
+    const copiar = (texto, qual) => {
+      const fim = estado => { this.setState({ copiedPix: estado }); clearTimeout(this.tPix); this.tPix = setTimeout(() => this.setState({ copiedPix: '' }), 2500); };
+      if (navigator.clipboard) navigator.clipboard.writeText(texto).then(() => fim(qual), () => fim('erro')); else fim('erro');
+    };
+    return {
+      pixOn: true,
+      pixValores: [...PIX.valores, { valor: null }].map(o => {
+        const v = o.valor, on = v === atual;
+        return {
+          label: v ? o.emoji + ' ' + o.item + ' · ' + brl(v) : 'Outro valor',
+          ativo: on ? 'true' : 'false',
+          bg: on ? '#e3262c' : 'transparent',
+          borda: on ? '#e3262c' : 'rgba(244,243,241,.25)',
+          cor: on ? '#fff' : '#f4f3f1',
+          escolher: () => this.setState({ pixValor: v })
+        };
+      }),
+      pixTemQr: !!qr,
+      pixQr: qr,
+      pixQrAlt: 'QR Code do Pix' + (atual ? ' de ' + brl(atual) : '') + ' para o Whiteline Fluence',
+      pixItem: opcao ? opcao.emoji + ' ' + opcao.item : 'Qualquer valor ajuda',
+      pixValorTxt: atual ? brl(atual) : 'Você escolhe',
+      pixDica: atual ? 'Aponta a câmera do app do banco ou, no celular, copia o código e cola em Pix copia e cola.'
+        : 'O valor você digita no app do banco depois de escanear ou colar o código.',
+      pixCodigo: codigo,
+      pixErro: this.state.copiedPix === 'erro',
+      copyPixLabel: this.state.copiedPix === 'codigo' ? 'Código copiado ✓' : 'Copiar código Pix',
+      copyPix: () => copiar(codigo, 'codigo'),
+      copyChaveLabel: this.state.copiedPix === 'chave' ? 'Chave copiada ✓' : 'Copiar chave',
+      copyChave: () => copiar(PIX.chave.trim(), 'chave')
     };
   }
 
@@ -1032,6 +1167,7 @@ class Component extends DCLogic {
       },
       metas: this.metasData.map(m => this.metaCard(m, this.state.seg[m.id])),
       ...this.garagemVals(),
+      ...this.pixVals(),
       copyMsgLabel: this.state.copiedMsg ? 'Mensagem copiada ✓' : 'Copiar mensagem',
       copyMsg: () => {
         const done = () => { this.setState({ copiedMsg: true }); clearTimeout(this.tMsg); this.tMsg = setTimeout(() => this.setState({ copiedMsg: false }), 2000); };

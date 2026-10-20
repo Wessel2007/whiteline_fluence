@@ -204,6 +204,10 @@ a,button,label{-webkit-tap-highlight-color:transparent}
 .wl-end::after{content:"";position:absolute;right:-15%;bottom:-50%;width:70%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(227,38,44,.25),rgba(227,38,44,0) 65%);pointer-events:none}
 .wl-end>*{position:relative}
 .wl-end-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
+/* Chamada do "me paga um café" no fim do guia (leva para #apoie na página inicial) */
+.wl-cafe{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 24px;margin-top:28px;padding-top:24px;border-top:1px solid var(--line)}
+.wl-cafe p{margin:0;max-width:460px;font-size:16px;line-height:1.5;color:var(--muted)}
+.wl-cafe p strong{color:var(--fg)}
 .wl-sources{list-style:none;margin:8px 0 22px;padding:0;counter-reset:f;display:flex;flex-direction:column;gap:2px}
 .wl-sources li{counter-increment:f;display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--line);font-size:15px;line-height:1.55;color:var(--muted);scroll-margin-top:100px}
 .wl-sources li::before{content:counter(f);flex:none;width:28px;height:28px;border-radius:50%;border:1px solid rgba(227,38,44,.6);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:700;color:var(--red-hi)}
@@ -359,7 +363,7 @@ a,button,label{-webkit-tap-highlight-color:transparent}
   .wl-ck-na{margin-left:44px}
   .wl-check-foot>*{flex:1 1 100%}
   .wl-check-foot .wl-btn{justify-content:center;padding:14px 20px}
-  .wl-end-ctas>a{flex:1 1 100%}
+  .wl-end-ctas>a,.wl-cafe>a{flex:1 1 100%}
   .wl-footer-links{gap:14px 20px}
 }
 @media (max-width:380px){
@@ -713,6 +717,10 @@ a,button,label{-webkit-tap-highlight-color:transparent}
           <div class="wl-end-ctas">
             <a class="wl-btn wl-btn-solid wl-btn-big" href="https://www.tiktok.com/@whitelinefluence" target="_blank" rel="noopener">Ver no TikTok ↗</a>
             <a class="wl-btn wl-btn-big" href="https://www.instagram.com/whitelinefluence" target="_blank" rel="noopener">Instagram ↗</a>
+          </div>
+          <div class="wl-cafe">
+            <p><strong>O guia te ajudou?</strong> Ele é gratuito e feito no tempo livre. Se quiser retribuir, me paga um café pelo Pix.</p>
+            <a class="wl-btn wl-btn-big" href="./#apoie">☕ Me paga um café</a>
           </div>
         </div>
       </section>

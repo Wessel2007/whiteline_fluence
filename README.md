@@ -29,7 +29,8 @@ Ter uma página única que funcione como "cartão de visita" do canal:
 | 06 | Produtos | `#produtos` | 11 links de afiliado + link para o Linktree |
 | 07 | Parcerias | `#parcerias` | Formatos (vídeo dedicado, inserção, stories, afiliação), vaga para a 1ª marca e contato |
 | 08 | FAQ | `#faq` | Perguntas frequentes em acordeão |
-| — | Rodapé | — | Links das redes e aviso de links de afiliado |
+| — | Apoie o canal | `#apoie` | Pix com QR Code e "copia e cola", com valores prontos (R$ 5 a R$ 50) ou valor livre. Só aparece com `PIX.chave` preenchida |
+| — | Rodapé | — | Links das redes, "Apoie o canal" (quando o Pix está ativo) e aviso de links de afiliado |
 
 ## Estrutura do projeto
 
@@ -44,6 +45,8 @@ whiteline_fluence/
     ├── api/
     │   └── stats.js       ← função serverless GET /api/stats
     ├── assets/            ← fotos (hero, perfil, galeria g*, vídeos v*, eventos/, garagem/)
+    ├── vendor/
+    │   └── qrcode.js      ← qrcode-generator 1.4.4 (MIT), gera o QR do Pix sem depender de CDN
     ├── vercel.json        ← headers de segurança e cache
     └── .vercelignore      ← exclui image-slot.js do deploy
 ```
@@ -64,6 +67,7 @@ A lógica do componente cuida de:
 - **Metas**: cards montados a partir do array `metasData` (marcos de seguidores por rede). A próxima meta é o primeiro marco acima do número atual; passou de todos, ela vira o dobro do último. O progresso usa os seguidores do `/api/stats` e a barra enche quando o card aparece na tela.
 - **Eventos**: cards montados a partir do array `eventosData`, ordenados do mais recente para o mais antigo; a data `AAAA-MM-DD` vira "14 set 2026".
 - **Garagem dos seguidores**: abre sozinha quando `IG_SEGUIDORES` chega em `garagemConfig.meta` (1.000), ou na marra com `garagemConfig.aberta: true`. Os cards saem do array `garagemData`; um carro **só aparece se tiver a data de `autorizado`** preenchida. Fluence (detectado pelo nome do carro) ganha tag vermelha e vai primeiro, os outros entram como "Convidado". O botão "Copiar mensagem" copia o texto de `garagemMsg`, já com a frase de autorização.
+- **Apoie o canal (Pix)**: no estilo "me paga um café", configurado na constante `PIX` (chave, nome, cidade e os botões em `valores`: valor, emoji e item, como "☕ Um café · R$ 5"). O código "copia e cola" segue o BR Code do Banco Central (campos EMV + CRC16) e é montado no navegador por `pixPayload()`; o QR sai do `vendor/qrcode.js` como imagem GIF em data URL. "Outro valor" gera o código sem valor, e a pessoa digita no app do banco. Use a **chave aleatória**: qualquer chave colocada aqui fica pública no código do site.
 - **E-mail**: montado em tempo de execução (`['usuario', 'dominio'].join('@')`) para não ficar em texto puro no HTML e fugir de robôs coletores. Botão "Copiar e-mail" usa a Clipboard API.
 
 Props editáveis (em `data-props`): `animations` e `showMarquee`.
