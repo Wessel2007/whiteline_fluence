@@ -23,11 +23,11 @@ Ter uma página única que funcione como "cartão de visita" do canal:
 | 01 | Sobre o canal | `#sobre` | Apresentação do canal e do Luiz (história do carro e do canal, fatos rápidos, trabalho, estudo, carro dos sonhos e hobbies) |
 | 02 | Ficha técnica | `#ficha` | Potência, torque, motor, câmbio CVT, porta-malas, rodas e dimensões |
 | — | Guia de compra | `#guia` | Chamada para a página `guia-compra.html` |
-| 03 | Em destaque | `#videos` | Cards dos vídeos mais vistos |
+| 03 | Em destaque | `#videos` | Cards dos vídeos mais vistos, do mais para o menos visto, com selo de views |
 | 04 | Eventos | `#eventos` | Encontros, exposições e eventos automotivos (cards gerados do array `eventosData`) |
 | 05 | Garagem dos seguidores | `#garagem` | Fotos dos carros de quem segue o canal (array `garagemData`). Fica "trancada" com barra de progresso até 1.000 seguidores no Instagram; o card "Como participar" (copiar mensagem pronta + abrir o direct) aparece sempre |
 | 06 | Produtos | `#produtos` | 11 links de afiliado + link para o Linktree |
-| 07 | Parcerias | `#parcerias` | Formatos (vídeo dedicado, inserção, stories, afiliação), vaga para a 1ª marca e contato |
+| 07 | Parcerias | `#parcerias` | Formatos (vídeo dedicado, inserção, stories, afiliação), agenda de parcerias (selo com o mês atual e o próximo, calculado sozinho) e contato |
 | 08 | FAQ | `#faq` | Perguntas frequentes em acordeão |
 | — | Apoie o canal | `#apoie` | Pix com QR Code e "copia e cola", com valores prontos (R$ 5 a R$ 50) ou valor livre. Só aparece com `PIX.chave` preenchida |
 | — | Rodapé | — | Links das redes, "Apoie o canal" (quando o Pix está ativo) e aviso de links de afiliado |
@@ -137,6 +137,7 @@ Hospedado na **Vercel** com a pasta `site/` como *Root Directory*. Não há etap
 |--------|------------|
 | Adicionar/remover produto | Seção `<!-- PRODUTOS -->` no `index.html` (copiar uma linha `<a class="wl-prod">` e renumerar) |
 | Trocar fotos | Substituir o arquivo em `site/assets/` mantendo o nome, ou mudar o `src` |
+| Atualizar views dos vídeos em destaque | Seção `<!-- VÍDEOS -->`: texto do selo `▶ ... views` de cada card (manter a ordem do mais visto para o menos visto) |
 | Atualizar total de views | Seção `<!-- ALCANCE -->`: `data-count` + texto de cada número e a `width` (%) das barras |
 | Atualizar ficha técnica | Seção `<!-- FICHA TÉCNICA -->` (o número animado fica em `data-count`) |
 | Adicionar/mudar metas de seguidores | Array `metasData` no script do final do `index.html` (lista `marcos` de cada rede). O fallback sem API do TikTok fica em `state.seg` |

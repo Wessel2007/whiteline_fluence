@@ -94,6 +94,9 @@ a:hover{color:#ff3b3f}
 @keyframes wl-pix-beam{0%,55%{background-position:150% 0}85%,100%{background-position:-50% 0}}
 @keyframes wl-pix-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 .wl-pix-chip:active{transform:scale(.95)}
+/* Selo de views nos vídeos em destaque */
+.wl-views{position:absolute;left:12px;bottom:12px;display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:rgba(11,11,12,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.02em;white-space:nowrap;pointer-events:none}
+.wl-views>span{color:#ff3b3f;font-size:9px}
 @media (prefers-reduced-motion:reduce){.wl-foot-word,.wl-box-border rect,.wl-marquee>div,.wl-gallery>div,.wl-cup>i,.wl-pix-card,.wl-pix-card::before{animation:none!important}.wl-cup>i{display:none}}
 @supports not (overflow:clip){body{overflow-x:hidden}}
 img{max-width:100%}
@@ -475,11 +478,21 @@ a,button{-webkit-tap-highlight-color:transparent}
       </div>
       <a data-reveal="" href="https://www.tiktok.com/@whitelinefluence" target="_blank" rel="noopener" style="font-weight:700;font-size:15px;border-bottom:1px solid currentColor;padding-bottom:4px">Ver todos no TikTok ↗</a>
     </div>
+    <!-- Do mais visto para o menos visto. Views atualizadas à mão (o TikTok não deixa buscar sozinho): mudar o texto do selo "▶ ... views" -->
     <div style="margin-top:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(46%,230px),1fr));gap:clamp(10px,1.5vw,20px)">
+      <a data-reveal="" href="https://www.tiktok.com/@whitelinefluence/video/7513958202602556728" target="_blank" rel="noopener" style="display:flex;flex-direction:column;gap:12px;color:#f4f3f1" style-hover="color:#ff3b3f">
+        <div style="position:relative;aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#141416">
+          <img src="assets/v1.jpg" alt="Interior do Fluence com LEDs vermelhos dirigindo à noite" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+          <span style="position:absolute;top:12px;left:12px;padding:6px 10px;border-radius:999px;background:#f4f3f1;color:#0b0b0c;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;pointer-events:none">Tira-dúvidas</span>
+          <span class="wl-views"><span aria-hidden="true">▶</span> 357 mil views</span>
+        </div>
+        <span style="font-weight:700;font-size:16px;line-height:1.3">Carro que não dá dor de cabeça</span>
+      </a>
       <a data-reveal="" href="https://www.tiktok.com/@whitelinefluence/video/7593800263765576967" target="_blank" rel="noopener" style="display:flex;flex-direction:column;gap:12px;color:#f4f3f1" style-hover="color:#ff3b3f">
         <div style="position:relative;aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#141416">
           <img src="assets/v3.jpg" alt="Frente do Fluence branco estacionado sob o sol" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
           <span style="position:absolute;top:12px;left:12px;padding:6px 10px;border-radius:999px;background:#e3262c;color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;pointer-events:none">Comparativo</span>
+          <span class="wl-views"><span aria-hidden="true">▶</span> 308 mil views</span>
         </div>
         <span style="font-weight:700;font-size:16px;line-height:1.3">Esse carro humilha muito carro mais caro</span>
       </a>
@@ -487,6 +500,7 @@ a,button{-webkit-tap-highlight-color:transparent}
         <div style="position:relative;aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#141416">
           <img src="assets/v4.jpg" alt="Mão no volante com o painel do Fluence aceso" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
           <span style="position:absolute;top:12px;left:12px;padding:6px 10px;border-radius:999px;background:#f4f3f1;color:#0b0b0c;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;pointer-events:none">Curiosidade</span>
+          <span class="wl-views"><span aria-hidden="true">▶</span> 280 mil views</span>
         </div>
         <span style="font-weight:700;font-size:16px;line-height:1.3">Como funciona a chave cartão do Fluence</span>
       </a>
@@ -494,15 +508,9 @@ a,button{-webkit-tap-highlight-color:transparent}
         <div style="position:relative;aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#141416">
           <img src="assets/v2.jpg" alt="Fluence branco com faróis acesos na garagem" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
           <span style="position:absolute;top:12px;left:12px;padding:6px 10px;border-radius:999px;background:#e3262c;color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;pointer-events:none">Dia a dia</span>
+          <span class="wl-views"><span aria-hidden="true">▶</span> 150 mil views</span>
         </div>
         <span style="font-weight:700;font-size:16px;line-height:1.3">Fluence, o carro de quem já é alguém</span>
-      </a>
-      <a data-reveal="" href="https://www.tiktok.com/@whitelinefluence/video/7513958202602556728" target="_blank" rel="noopener" style="display:flex;flex-direction:column;gap:12px;color:#f4f3f1" style-hover="color:#ff3b3f">
-        <div style="position:relative;aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#141416">
-          <img src="assets/v1.jpg" alt="Interior do Fluence com LEDs vermelhos dirigindo à noite" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
-          <span style="position:absolute;top:12px;left:12px;padding:6px 10px;border-radius:999px;background:#f4f3f1;color:#0b0b0c;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;pointer-events:none">Tira-dúvidas</span>
-        </div>
-        <span style="font-weight:700;font-size:16px;line-height:1.3">Carro que não dá dor de cabeça</span>
       </a>
     </div>
   </section>
@@ -655,11 +663,11 @@ a,button{-webkit-tap-highlight-color:transparent}
       <div class="wl-box" data-reveal="" style="margin-top:56px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:24px;align-items:center;padding:clamp(24px,3vw,36px);border-radius:20px;position:relative">
         <svg class="wl-box-border" aria-hidden="true"><rect width="100%" height="100%" rx="20" ry="20"></rect></svg>
         <div style="display:flex;flex-direction:column;gap:10px">
-          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#c81e24">Marcas parceiras · 0 de 1</span>
-          <span style="font-weight:800;font-stretch:112%;font-size:clamp(24px,2.6vw,36px);line-height:1.05;letter-spacing:-.02em">Este espaço está reservado para a primeira marca parceira do canal.</span>
+          <span style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#c81e24"><span style="width:8px;height:8px;border-radius:50%;background:#e3262c;animation:wl-pulse 1.6s ease-in-out infinite"></span>Agenda de parcerias · {{ agendaPeriodo }}</span>
+          <span style="font-weight:800;font-stretch:112%;font-size:clamp(24px,2.6vw,36px);line-height:1.05;letter-spacing:-.02em;text-wrap:balance">Fecho poucas parcerias por mês para manter o conteúdo natural.</span>
         </div>
         <div style="display:flex;justify-content:flex-start">
-          <a href="{{ mailtoParceria }}" style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:999px;background:#0b0b0c;color:#f4f3f1;font-weight:700;font-size:15px" style-hover="background:#e3262c;color:#fff">Quero ser a primeira ↗</a>
+          <a href="{{ mailtoAgenda }}" style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:999px;background:#0b0b0c;color:#f4f3f1;font-weight:700;font-size:15px" style-hover="background:#e3262c;color:#fff">Consultar disponibilidade ↗</a>
         </div>
       </div>
 
@@ -1170,6 +1178,13 @@ class Component extends DCLogic {
     if (this.onScroll) { window.removeEventListener('scroll', this.onScroll); window.removeEventListener('resize', this.onScroll); }
   }
 
+  // Selo da agenda de parcerias: mês atual e o próximo, sempre atualizado ("Out–Nov 2026", "Dez 2026–Jan 2027")
+  agendaPeriodo() {
+    const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+    const d = new Date(), m = d.getMonth(), a = d.getFullYear();
+    return m === 11 ? `Dez ${a}–Jan ${a + 1}` : `${meses[m]}–${meses[m + 1]} ${a}`;
+  }
+
   renderVals() {
     const open = this.state.open;
     return {
@@ -1179,6 +1194,8 @@ class Component extends DCLogic {
       mailto: 'mailto:' + EMAIL,
       mailtoParceria: 'mailto:' + EMAIL + '?subject=Parceria%20Whiteline%20Fluence',
       mailtoEvento: 'mailto:' + EMAIL + '?subject=Convite%20para%20evento%20-%20Whiteline%20Fluence',
+      mailtoAgenda: 'mailto:' + EMAIL + '?subject=Disponibilidade%20de%20parceria%20-%20Whiteline%20Fluence',
+      agendaPeriodo: this.agendaPeriodo(),
       copyLabel: this.state.copied ? 'E-mail copiado ✓' : 'Copiar e-mail',
       copyEmail: () => {
         const done = () => { this.setState({ copied: true }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ copied: false }), 2000); };
