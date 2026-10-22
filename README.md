@@ -62,6 +62,9 @@ A página é escrita no formato **x-dc**: o HTML fica dentro de `<x-dc>` com mar
 A lógica do componente cuida de:
 
 - **Animações**: letras do título entrando uma a uma, elementos com `data-reveal` aparecendo no scroll, contadores (`data-count`) e parallax (`data-parallax`, desligado em telas ≤ 900px).
+- **Odômetro**: contadores com `data-odo` (números do topo e do Alcance) giram dígito por dígito como um hodômetro, em vez de só contar. Quando o número ao vivo do TikTok muda, só os dígitos que mudaram giram para a frente. O leitor de tela lê o número normal.
+- **Conta-giros**: os cards de Potência e Torque da Ficha técnica têm um mostrador (`data-gauge`). Quando o card aparece, o ponteiro acelera até a faixa vermelha e volta para o valor. A posição vem de `--v` no `style` do SVG (valor ÷ fim da escala: 143 de 200 cv = `.715`, 20,3 de 30 kgfm = `.677`).
+- **Cards inclinando**: as fotos dos vídeos em destaque (`.wl-tilt`) inclinam seguindo o mouse, com reflexo de luz e brilho vermelho embaixo. No toque ficam paradas.
 - **Acessibilidade de movimento**: se o sistema pedir `prefers-reduced-motion` (ou a prop `animations` for `false`), as animações são desligadas.
 - **FAQ**: acordeão controlado pelo estado `open`.
 - **Metas**: cards montados a partir do array `metasData` (marcos de seguidores por rede). A próxima meta é o primeiro marco acima do número atual; passou de todos, ela vira o dobro do último. O progresso usa os seguidores do `/api/stats` e a barra enche quando o card aparece na tela.

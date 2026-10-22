@@ -94,10 +94,33 @@ a:hover{color:#ff3b3f}
 @keyframes wl-pix-beam{0%,55%{background-position:150% 0}85%,100%{background-position:-50% 0}}
 @keyframes wl-pix-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 .wl-pix-chip:active{transform:scale(.95)}
+/* Odômetro: cada dígito é uma coluna 0–9 (3 voltas) que gira até o número; o dígito invisível (ph) dá largura e linha de base */
+[data-odo]{font-variant-numeric:tabular-nums}
+.wl-odo{display:inline-block;white-space:nowrap}
+.wl-odo-c{position:relative;display:inline-block;line-height:1;-webkit-clip-path:inset(0 -.05em);clip-path:inset(0 -.05em)}
+.wl-odo-ph{visibility:hidden}
+/* Número grande do Alcance usa entrelinha .85: a coluna de 1em não pode aumentar a linha */
+.wl-odo-tight .wl-odo-c{margin:-.075em 0}
+.wl-odo-s{position:absolute;left:0;top:0;width:100%;display:flex;flex-direction:column;align-items:center;transition:transform 1.9s cubic-bezier(.16,.84,.24,1)}
+.wl-odo-s>span{height:1em;line-height:1}
+.wl-sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* Conta-giros da Ficha técnica: o ponteiro acelera até a faixa vermelha e volta para o valor (--v de 0 a 1) */
+.wl-gauge{position:absolute;top:16px;right:16px;width:clamp(76px,6.4vw,88px);height:auto;pointer-events:none}
+.wl-gauge-fill{stroke-dasharray:100px;stroke-dashoffset:100px}
+.wl-gauge-needle{transform-origin:50px 50px;transform:rotate(-120deg)}
+.wl-gauge.is-on .wl-gauge-fill{stroke-dashoffset:calc((1 - var(--v)) * 100px);animation:wl-rev-fill 2s cubic-bezier(.3,.7,.3,1) .25s both}
+.wl-gauge.is-on .wl-gauge-needle{transform:rotate(calc(var(--v) * 240deg - 120deg));animation:wl-rev 2s cubic-bezier(.3,.7,.3,1) .25s both}
+@keyframes wl-rev{0%{transform:rotate(-120deg)}40%{transform:rotate(112deg)}100%{transform:rotate(calc(var(--v) * 240deg - 120deg))}}
+@keyframes wl-rev-fill{0%{stroke-dashoffset:100px}40%{stroke-dashoffset:3px}100%{stroke-dashoffset:calc((1 - var(--v)) * 100px)}}
+/* Cards dos vídeos inclinam seguindo o mouse, com reflexo de luz (--mx/--my) e brilho vermelho embaixo */
+.wl-tilt{transition:transform .6s cubic-bezier(.2,.7,.2,1),box-shadow .4s;will-change:transform}
+.wl-tilt::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.22),rgba(255,255,255,0) 55%);opacity:0;transition:opacity .4s;pointer-events:none}
+.wl-tilt.is-tilt{box-shadow:0 26px 50px -22px rgba(227,38,44,.55)}
+.wl-tilt.is-tilt::after{opacity:1}
 /* Selo de views nos vídeos em destaque */
 .wl-views{position:absolute;left:12px;bottom:12px;display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:rgba(11,11,12,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.02em;white-space:nowrap;pointer-events:none}
 .wl-views>span{color:#ff3b3f;font-size:9px}
-@media (prefers-reduced-motion:reduce){.wl-foot-word,.wl-box-border rect,.wl-marquee>div,.wl-gallery>div,.wl-cup>i,.wl-pix-card,.wl-pix-card::before{animation:none!important}.wl-cup>i{display:none}}
+@media (prefers-reduced-motion:reduce){.wl-foot-word,.wl-box-border rect,.wl-marquee>div,.wl-gallery>div,.wl-cup>i,.wl-pix-card,.wl-pix-card::before,.wl-gauge *{animation:none!important}.wl-cup>i{display:none}}
 @supports not (overflow:clip){body{overflow-x:hidden}}
 img{max-width:100%}
 a,button{-webkit-tap-highlight-color:transparent}
@@ -229,15 +252,15 @@ a,button{-webkit-tap-highlight-color:transparent}
       <img src="assets/hero.jpg" alt="Fluence GT Line branco à noite" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 72%">
       <div class="wl-hero-stats" style="position:absolute;left:0;right:0;bottom:0;padding:clamp(16px,3vw,32px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;background:linear-gradient(to top,rgba(11,11,12,.92),rgba(11,11,12,0));pointer-events:none">
         <div style="display:flex;flex-direction:column;gap:4px">
-          <span class="wl-stat-num" data-stat="tt-likes" data-count="109" data-suffix="K" data-comma="1" style="font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,64px);line-height:1">109K</span>
+          <span class="wl-stat-num" data-stat="tt-likes" data-odo="" data-count="109" data-suffix="K" data-comma="1" style="font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,64px);line-height:1">109K</span>
           <span class="wl-stat-lbl" style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,243,241,.65)">Curtidas TikTok</span>
         </div>
         <div style="display:flex;flex-direction:column;gap:4px">
-          <span class="wl-stat-num" data-stat="tt-followers" data-count="5.1" data-suffix="K" data-dec="1" data-comma="1" style="font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,64px);line-height:1">5,1K</span>
+          <span class="wl-stat-num" data-stat="tt-followers" data-odo="" data-count="5.1" data-suffix="K" data-dec="1" data-comma="1" style="font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,64px);line-height:1">5,1K</span>
           <span class="wl-stat-lbl" style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,243,241,.65)">Seguidores TikTok</span>
         </div>
         <div style="display:flex;flex-direction:column;gap:4px">
-          <span class="wl-stat-num" data-stat="ig-followers" data-count="1.4" data-suffix="K" data-dec="1" data-comma="1" style="font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,64px);line-height:1;color:#ff3b3f">1,4K</span>
+          <span class="wl-stat-num" data-stat="ig-followers" data-odo="" data-count="1.4" data-suffix="K" data-dec="1" data-comma="1" style="font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,64px);line-height:1;color:#ff3b3f">1,4K</span>
           <span class="wl-stat-lbl" style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,243,241,.65)">Seguidores Instagram</span>
         </div>
       </div>
@@ -264,16 +287,16 @@ a,button{-webkit-tap-highlight-color:transparent}
       <div style="position:absolute;left:-10%;bottom:-60%;width:55%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(227,38,44,.3),rgba(227,38,44,0) 65%);pointer-events:none"></div>
       <div style="position:relative;display:flex;flex-direction:column;gap:18px">
         <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-size:12px;color:#ff3b3f">Alcance nas plataformas</span>
-        <div style="font-weight:900;font-stretch:125%;font-size:clamp(64px,11vw,168px);line-height:.85;letter-spacing:-.04em"><span style="white-space:nowrap"><span style="color:#e3262c">+</span><span data-count="2">2</span></span> <span style="font-size:.5em;letter-spacing:-.02em">milhões</span></div>
+        <div style="font-weight:900;font-stretch:125%;font-size:clamp(64px,11vw,168px);line-height:.85;letter-spacing:-.04em"><span style="white-space:nowrap"><span style="color:#e3262c">+</span><span class="wl-odo-tight" data-odo="" data-count="2">2</span></span> <span style="font-size:.5em;letter-spacing:-.02em">milhões</span></div>
         <span style="font-size:clamp(17px,1.6vw,20px);line-height:1.45;color:rgba(244,243,241,.75);max-width:420px;text-wrap:pretty">de visualizações somando os vídeos do canal nas redes.</span>
       </div>
       <div style="position:relative;display:flex;flex-direction:column;gap:24px">
         <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,243,241,.6)">Só no TikTok</span><span style="font-weight:900;font-stretch:125%;font-size:clamp(26px,2.6vw,36px);line-height:1"><span data-count="1.6" data-dec="1" data-comma="1">1,6</span> milhões</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,243,241,.6)">Só no TikTok</span><span style="font-weight:900;font-stretch:125%;font-size:clamp(26px,2.6vw,36px);line-height:1"><span data-odo="" data-count="1.6" data-dec="1" data-comma="1">1,6</span> milhões</span></div>
           <div style="height:8px;border-radius:999px;background:rgba(244,243,241,.1);overflow:hidden"><div style="width:80%;height:100%;border-radius:999px;background:#e3262c"></div></div>
         </div>
         <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,243,241,.6)">Só no Instagram</span><span style="font-weight:900;font-stretch:125%;font-size:clamp(26px,2.6vw,36px);line-height:1"><span data-count="400">400</span> mil</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,243,241,.6)">Só no Instagram</span><span style="font-weight:900;font-stretch:125%;font-size:clamp(26px,2.6vw,36px);line-height:1"><span data-odo="" data-count="400">400</span> mil</span></div>
           <div style="height:8px;border-radius:999px;background:rgba(244,243,241,.1);overflow:hidden"><div style="width:20%;height:100%;border-radius:999px;background:#f4f3f1"></div></div>
         </div>
       </div>
@@ -404,13 +427,17 @@ a,button{-webkit-tap-highlight-color:transparent}
     </div>
 
     <div style="margin-top:40px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));gap:12px">
-      <div class="wl-spec" data-reveal="" style="background:#0b0b0c;border:1px solid rgba(244,243,241,.12);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:14px;min-height:190px" style-hover="background:#141416">
+      <!-- Conta-giros: --v = valor ÷ fim da escala (143 de 200 cv) -->
+      <div class="wl-spec" data-reveal="" style="position:relative;background:#0b0b0c;border:1px solid rgba(244,243,241,.12);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:14px;min-height:190px" style-hover="background:#141416">
         <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,243,241,.5)">Potência</span>
+        <svg class="wl-gauge" data-gauge="" aria-hidden="true" viewBox="4 4 92 76" style="--v:.715"><path d="M15.36 70.0 A40 40 0 1 1 84.64 70.0" fill="none" stroke="rgba(244,243,241,.12)" stroke-width="4" stroke-linecap="round"></path><path d="M88.04 37.64 A40 40 0 0 1 84.64 70.0" fill="none" stroke="rgba(227,38,44,.4)" stroke-width="4" stroke-linecap="round"></path><path class="wl-gauge-fill" d="M15.36 70.0 A40 40 0 1 1 84.64 70.0" pathLength="100" fill="none" stroke="#e3262c" stroke-width="4" stroke-linecap="round"></path><line x1="24.89" y1="64.5" x2="20.56" y2="67.0" stroke="rgba(244,243,241,.45)" stroke-width="2" stroke-linecap="round"></line><line x1="21.0" y1="50.0" x2="16.0" y2="50.0" stroke="rgba(244,243,241,.45)" stroke-width="2" stroke-linecap="round"></line><line x1="24.89" y1="35.5" x2="20.56" y2="33.0" stroke="rgba(244,243,241,.45)" stroke-width="2" stroke-linecap="round"></line><line x1="35.5" y1="24.89" x2="33.0" y2="20.56" stroke="rgba(244,243,241,.45)" stroke-width="2" stroke-linecap="round"></line><line x1="50.0" y1="21.0" x2="50.0" y2="16.0" stroke="rgba(244,243,241,.45)" stroke-width="2" stroke-linecap="round"></line><line x1="64.5" y1="24.89" x2="67.0" y2="20.56" stroke="rgba(244,243,241,.45)" stroke-width="2" stroke-linecap="round"></line><line x1="75.11" y1="35.5" x2="79.44" y2="33.0" stroke="rgba(244,243,241,.45)" stroke-width="2" stroke-linecap="round"></line><line x1="79.0" y1="50.0" x2="84.0" y2="50.0" stroke="#e3262c" stroke-width="2" stroke-linecap="round"></line><line x1="75.11" y1="64.5" x2="79.44" y2="67.0" stroke="#e3262c" stroke-width="2" stroke-linecap="round"></line><g class="wl-gauge-needle"><line x1="50" y1="50" x2="50" y2="17" stroke="#f4f3f1" stroke-width="2.5" stroke-linecap="round"></line></g><circle cx="50" cy="50" r="4.5" fill="#e3262c"></circle><circle cx="50" cy="50" r="1.6" fill="#0b0b0c"></circle></svg>
         <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;margin-top:auto;min-width:0"><span data-count="143" style="font-weight:900;font-stretch:125%;font-size:clamp(40px,3.6vw,56px);line-height:.95;white-space:nowrap;color:#e3262c">143</span><span style="font-weight:700;font-size:18px">cv</span></div>
         <span style="font-size:14px;color:rgba(244,243,241,.6)">E · 140 cv G</span>
       </div>
-      <div class="wl-spec" data-reveal="" style="background:#0b0b0c;border:1px solid rgba(244,243,241,.12);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:14px;min-height:190px" style-hover="background:#141416">
+      <!-- Conta-giros: --v = valor ÷ fim da escala (20,3 de 30 kgfm) -->
+      <div class="wl-spec" data-reveal="" style="position:relative;background:#0b0b0c;border:1px solid rgba(244,243,241,.12);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:14px;min-height:190px" style-hover="background:#141416">
         <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,243,241,.5)">Torque</span>
+        <svg class="wl-gauge" data-gauge="" aria-hidden="true" viewBox="4 4 92 76" style="--v:.677"><path d="M15.36 70.0 A40 40 0 1 1 84.64 70.0" fill="none" stroke="rgba(244,243,241,.12)" stroke-width="4" stroke-linecap="round"></path><path d="M88.04 37.64 A40 40 0 0 1 84.64 70.0" fill="none" stroke="rgba(227,38,44,.4)" stroke-width="4" stroke-linecap="round"></path><path class="wl-gauge-fill" d="M15.36 70.0 A40 40 0 1 1 84.64 70.0" pathLength="100" fill="none" stroke="#e3262c" stroke-width="4" stroke-linecap="round"></path><line x1="24.89" y1="64.5" x2="20.56" y2="67.0" stroke="rgba(244,243,241,.45)" stroke-width="2" stroke-linecap="round"></line><line x1="21.0" y1="50.0" x2="16.0" y2="50.0" stroke="rgba(244,243,241,.45)" stroke-width="2" stroke-linecap="round"></line><line x1="24.89" y1="35.5" x2="20.56" y2="33.0" stroke="rgba(244,243,241,.45)" stroke-width="2" stroke-linecap="round"></line><line x1="35.5" y1="24.89" x2="33.0" y2="20.56" stroke="rgba(244,243,241,.45)" stroke-width="2" stroke-linecap="round"></line><line x1="50.0" y1="21.0" x2="50.0" y2="16.0" stroke="rgba(244,243,241,.45)" stroke-width="2" stroke-linecap="round"></line><line x1="64.5" y1="24.89" x2="67.0" y2="20.56" stroke="rgba(244,243,241,.45)" stroke-width="2" stroke-linecap="round"></line><line x1="75.11" y1="35.5" x2="79.44" y2="33.0" stroke="rgba(244,243,241,.45)" stroke-width="2" stroke-linecap="round"></line><line x1="79.0" y1="50.0" x2="84.0" y2="50.0" stroke="#e3262c" stroke-width="2" stroke-linecap="round"></line><line x1="75.11" y1="64.5" x2="79.44" y2="67.0" stroke="#e3262c" stroke-width="2" stroke-linecap="round"></line><g class="wl-gauge-needle"><line x1="50" y1="50" x2="50" y2="17" stroke="#f4f3f1" stroke-width="2.5" stroke-linecap="round"></line></g><circle cx="50" cy="50" r="4.5" fill="#e3262c"></circle><circle cx="50" cy="50" r="1.6" fill="#0b0b0c"></circle></svg>
         <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;margin-top:auto;min-width:0"><span data-count="20.3" data-dec="1" data-comma="1" style="font-weight:900;font-stretch:125%;font-size:clamp(40px,3.6vw,56px);line-height:.95;white-space:nowrap">20,3</span><span style="font-weight:700;font-size:18px">kgfm</span></div>
         <span style="font-size:14px;color:rgba(244,243,241,.6)">E · 19,9 kgfm G</span>
       </div>
@@ -481,7 +508,7 @@ a,button{-webkit-tap-highlight-color:transparent}
     <!-- Do mais visto para o menos visto. Views atualizadas à mão (o TikTok não deixa buscar sozinho): mudar o texto do selo "▶ ... views" -->
     <div style="margin-top:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(46%,230px),1fr));gap:clamp(10px,1.5vw,20px)">
       <a data-reveal="" href="https://www.tiktok.com/@whitelinefluence/video/7513958202602556728" target="_blank" rel="noopener" style="display:flex;flex-direction:column;gap:12px;color:#f4f3f1" style-hover="color:#ff3b3f">
-        <div style="position:relative;aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#141416">
+        <div class="wl-tilt" style="position:relative;aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#141416">
           <img src="assets/v1.jpg" alt="Interior do Fluence com LEDs vermelhos dirigindo à noite" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
           <span style="position:absolute;top:12px;left:12px;padding:6px 10px;border-radius:999px;background:#f4f3f1;color:#0b0b0c;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;pointer-events:none">Tira-dúvidas</span>
           <span class="wl-views"><span aria-hidden="true">▶</span> 357 mil views</span>
@@ -489,7 +516,7 @@ a,button{-webkit-tap-highlight-color:transparent}
         <span style="font-weight:700;font-size:16px;line-height:1.3">Carro que não dá dor de cabeça</span>
       </a>
       <a data-reveal="" href="https://www.tiktok.com/@whitelinefluence/video/7593800263765576967" target="_blank" rel="noopener" style="display:flex;flex-direction:column;gap:12px;color:#f4f3f1" style-hover="color:#ff3b3f">
-        <div style="position:relative;aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#141416">
+        <div class="wl-tilt" style="position:relative;aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#141416">
           <img src="assets/v3.jpg" alt="Frente do Fluence branco estacionado sob o sol" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
           <span style="position:absolute;top:12px;left:12px;padding:6px 10px;border-radius:999px;background:#e3262c;color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;pointer-events:none">Comparativo</span>
           <span class="wl-views"><span aria-hidden="true">▶</span> 308 mil views</span>
@@ -497,7 +524,7 @@ a,button{-webkit-tap-highlight-color:transparent}
         <span style="font-weight:700;font-size:16px;line-height:1.3">Esse carro humilha muito carro mais caro</span>
       </a>
       <a data-reveal="" href="https://www.tiktok.com/@whitelinefluence/video/7514325015127461125" target="_blank" rel="noopener" style="display:flex;flex-direction:column;gap:12px;color:#f4f3f1" style-hover="color:#ff3b3f">
-        <div style="position:relative;aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#141416">
+        <div class="wl-tilt" style="position:relative;aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#141416">
           <img src="assets/v4.jpg" alt="Mão no volante com o painel do Fluence aceso" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
           <span style="position:absolute;top:12px;left:12px;padding:6px 10px;border-radius:999px;background:#f4f3f1;color:#0b0b0c;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;pointer-events:none">Curiosidade</span>
           <span class="wl-views"><span aria-hidden="true">▶</span> 280 mil views</span>
@@ -505,7 +532,7 @@ a,button{-webkit-tap-highlight-color:transparent}
         <span style="font-weight:700;font-size:16px;line-height:1.3">Como funciona a chave cartão do Fluence</span>
       </a>
       <a data-reveal="" href="https://www.tiktok.com/@whitelinefluence/video/7573474585551703303" target="_blank" rel="noopener" style="display:flex;flex-direction:column;gap:12px;color:#f4f3f1" style-hover="color:#ff3b3f">
-        <div style="position:relative;aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#141416">
+        <div class="wl-tilt" style="position:relative;aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#141416">
           <img src="assets/v2.jpg" alt="Fluence branco com faróis acesos na garagem" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
           <span style="position:absolute;top:12px;left:12px;padding:6px 10px;border-radius:999px;background:#e3262c;color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;pointer-events:none">Dia a dia</span>
           <span class="wl-views"><span aria-hidden="true">▶</span> 150 mil views</span>
@@ -864,6 +891,47 @@ class Component extends DCLogic {
     requestAnimationFrame(step);
   }
 
+  // Texto final de um contador a partir dos data-* (ex.: "5,1K")
+  odoStr(el) {
+    let s = parseFloat(el.dataset.count).toFixed(+(el.dataset.dec || 0));
+    if (el.dataset.comma) s = s.replace('.', ',');
+    return s + (el.dataset.suffix || '');
+  }
+
+  // Odômetro: cada dígito vira uma coluna 0–9 repetida 3 vezes que gira até o número.
+  // Na primeira vez parte do zero e a coluna da direita dá mais voltas; numa atualização ao vivo
+  // com o mesmo formato, gira só o que mudou e sempre para a frente, como um hodômetro.
+  odoSet(el, str) {
+    const prev = el.__odo;
+    const igual = prev && prev.length === str.length && [...str].every((c, i) => /\d/.test(c) === /\d/.test(prev[i]));
+    el.__odo = str;
+    const nDig = (str.match(/\d/g) || []).length;
+    const box = document.createElement('span');
+    box.className = 'wl-odo';
+    box.setAttribute('aria-hidden', 'true');
+    const cols = [];
+    let k = 0;
+    for (let i = 0; i < str.length; i++) {
+      const c = str[i];
+      if (!/\d/.test(c)) { box.append(c); continue; }
+      const d = +c, de = igual ? +prev[i] : 0;
+      const fim = igual ? d + (d < de ? 10 : 0) : d + 10 * Math.max(0, 2 - (nDig - 1 - k));
+      const col = document.createElement('span'); col.className = 'wl-odo-c';
+      const ph = document.createElement('span'); ph.className = 'wl-odo-ph'; ph.textContent = c;
+      const strip = document.createElement('span'); strip.className = 'wl-odo-s';
+      for (let j = 0; j < 30; j++) { const n = document.createElement('span'); n.textContent = j % 10; strip.appendChild(n); }
+      strip.style.transform = `translateY(${-de}em)`;
+      strip.style.transitionDelay = `${k * 70}ms`;
+      col.append(ph, strip);
+      box.appendChild(col);
+      cols.push([strip, fim]);
+      k++;
+    }
+    const sr = document.createElement('span'); sr.className = 'wl-sr'; sr.textContent = str; // leitor de tela lê o número, não as colunas
+    el.replaceChildren(box, sr);
+    requestAnimationFrame(() => requestAnimationFrame(() => cols.forEach(([s, fim]) => { s.style.transform = `translateY(${-fim}em)`; })));
+  }
+
   // Escreve os números do topo ({ 'tt-likes': 92000, ... }) no formato curto, com vírgula
   applyStats(vals) {
     document.querySelectorAll('[data-stat]').forEach(el => {
@@ -872,7 +940,11 @@ class Component extends DCLogic {
       const { v, dec, suf } = this.fmtStat(n);
       const prev = el.__val != null ? el.__val : (parseFloat(el.textContent.replace(',', '.')) || 0);
       el.dataset.count = v; el.dataset.dec = dec; el.dataset.suffix = suf;
-      if (this.animOn && el.__counted) { if (v !== prev) this.tweenCount(el, prev, v, dec, suf, true); }
+      if (this.animOn && el.__counted) {
+        if (v === prev) return;
+        if (el.hasAttribute('data-odo')) { el.__val = v; this.odoSet(el, this.odoStr(el)); }
+        else this.tweenCount(el, prev, v, dec, suf, true);
+      }
       else el.textContent = v.toFixed(dec).replace('.', ',') + suf; // ainda não animou: o runCount lê os data-* novos ao aparecer
     });
   }
@@ -1089,7 +1161,8 @@ class Component extends DCLogic {
     this.startStats();
     this.startSpy(reduce);
     this.startMetas();
-    if (!this.animOn) return;
+    // Sem animação, os conta-giros já aparecem parados no valor
+    if (!this.animOn) { document.querySelectorAll('[data-gauge]').forEach(g => g.classList.add('is-on')); return; }
     const ease = 'cubic-bezier(.2,.7,.2,1)';
     const canHover = window.matchMedia('(hover: hover)').matches;
     const narrow = window.matchMedia('(max-width: 900px)');
@@ -1126,8 +1199,10 @@ class Component extends DCLogic {
     const counters = Array.from(document.querySelectorAll('[data-count]'));
     const runCount = el => {
       if (el.__counted) return; el.__counted = true;
+      if (el.hasAttribute('data-odo')) { el.__val = parseFloat(el.dataset.count); this.odoSet(el, this.odoStr(el)); return; }
       this.tweenCount(el, 0, parseFloat(el.dataset.count), +(el.dataset.dec || 0), el.dataset.suffix || '', !!el.dataset.comma);
     };
+    const gauges = Array.from(document.querySelectorAll('[data-gauge]'));
     this.io = new IntersectionObserver(entries => {
       entries.forEach(en => {
         if (!en.isIntersecting) return;
@@ -1140,11 +1215,32 @@ class Component extends DCLogic {
           setTimeout(() => { el.style.transitionDelay = '0ms'; }, 1200);
         }
         if (el.hasAttribute('data-count')) runCount(el);
+        if (el.hasAttribute('data-gauge')) el.classList.add('is-on');
         this.io.unobserve(el);
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
     els.forEach(el => this.io.observe(el));
     counters.forEach(el => this.io.observe(el));
+    gauges.forEach(el => this.io.observe(el));
+
+    // Cards dos vídeos inclinam seguindo o mouse (no toque ficam parados)
+    if (canHover) document.querySelectorAll('.wl-tilt').forEach(card => {
+      card.addEventListener('pointermove', e => {
+        if (e.pointerType !== 'mouse') return;
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        card.style.transition = 'transform .12s ease-out, box-shadow .4s';
+        card.style.transform = `perspective(900px) rotateX(${((0.5 - y) * 12).toFixed(2)}deg) rotateY(${((x - 0.5) * 14).toFixed(2)}deg) scale(1.03)`;
+        card.style.setProperty('--mx', (x * 100).toFixed(1) + '%');
+        card.style.setProperty('--my', (y * 100).toFixed(1) + '%');
+        card.classList.add('is-tilt');
+      });
+      card.addEventListener('pointerleave', () => {
+        card.style.transition = '';
+        card.style.transform = '';
+        card.classList.remove('is-tilt');
+      });
+    });
 
     const par = Array.from(document.querySelectorAll('[data-parallax]'));
     let ticking = false;
