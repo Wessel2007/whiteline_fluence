@@ -1,0 +1,372 @@
+// CVT Monitor: landing page do app.
+// Arquivo separado porque a CSP do site (vercel.json) não permite script inline.
+(function () {
+  'use strict';
+
+  // ===================================================================
+  // CONFIGURAÇÃO: é só mexer aqui
+  // ===================================================================
+  var CONFIG = {
+    // Link do checkout da Cakto. Vazio = pré-lançamento (botões "Me avise").
+    // Preenchido = vendas abertas (botões "Comprar" levam para a Cakto).
+    caktoUrl: '',
+
+    // Link do APK para o teste grátis. Vazio = botão de download escondido.
+    // Ex.: 'downloads/cvt-monitor.apk' (arquivo dentro de site/downloads/).
+    apkUrl: '',
+
+    // Preço (texto, com vírgula). precoDepois = preço cheio depois do
+    // lançamento; deixe '' para não mostrar.
+    preco: '39,90',
+    precoDepois: '49,90',
+
+    // Instagram que recebe os "me avise" (direct)
+    instagram: 'whitelinefluence',
+    msgAvise: 'Oi! Quero ser avisado quando o CVT Monitor for lançado. Meu carro é um Fluence ',
+  };
+  // ===================================================================
+
+  var live = !!CONFIG.caktoUrl;
+  var motion = !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  if (motion) document.documentElement.classList.add('wl-anim');
+
+  var $ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
+  var fmt = function (x, d) {
+    d = d || 0;
+    return Number(x || 0).toLocaleString('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d });
+  };
+
+  // ===== Ano do rodapé =====
+  $('[data-ano]').forEach(function (el) { el.textContent = new Date().getFullYear(); });
+
+  // ===== Aviso rápido (toast) =====
+  var toast = document.querySelector('[data-toast]');
+  var toastT;
+  function showToast(msg) {
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add('is-on');
+    clearTimeout(toastT);
+    toastT = setTimeout(function () { toast.classList.remove('is-on'); }, 4200);
+  }
+
+  // ===== Preço, estado de lançamento e botões =====
+  $('[data-preco]').forEach(function (el) { el.textContent = CONFIG.preco; });
+  $('[data-preco-depois]').forEach(function (el) { el.textContent = CONFIG.precoDepois; });
+  if (!CONFIG.precoDepois) $('[data-preco-depois-wrap]').forEach(function (el) { el.hidden = true; });
+
+  $('[data-only="pre"]').forEach(function (el) { el.hidden = live; });
+  $('[data-only="live"]').forEach(function (el) { el.hidden = !live; });
+
+  var dmUrl = 'https://ig.me/m/' + CONFIG.instagram;
+
+  function copy(text) {
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+    return Promise.reject(new Error('sem clipboard'));
+  }
+
+  $('[data-cta]').forEach(function (a) {
+    var arrow = '<span class="wl-arrow" aria-hidden="true">→</span>';
+    if (live) {
+      a.href = CONFIG.caktoUrl;
+      a.removeAttribute('target');
+      a.innerHTML = 'Comprar · R$ ' + CONFIG.preco + ' ' + arrow;
+      return;
+    }
+    // Pré-lançamento: copia a mensagem pronta e abre o direct do Instagram
+    a.href = dmUrl;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.addEventListener('click', function () {
+      copy(CONFIG.msgAvise).then(function () {
+        showToast('Mensagem copiada! É só colar no direct e enviar.');
+      }, function () {
+        showToast('Manda um “me avisa do CVT Monitor” no direct que eu te chamo no lançamento.');
+      });
+    });
+  });
+
+  $('[data-cta-short]').forEach(function (a) {
+    if (!live) return;
+    a.href = CONFIG.caktoUrl;
+    a.textContent = 'Comprar';
+  });
+
+  if (CONFIG.apkUrl) {
+    $('[data-apk]').forEach(function (a) { a.href = CONFIG.apkUrl; });
+    $('[data-apk-wrap]').forEach(function (el) { el.hidden = false; });
+  }
+
+  // ===== Surgir ao rolar =====
+  var reveals = $('[data-reveal]');
+  if (motion && 'IntersectionObserver' in window) {
+    var ro = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('is-in'); ro.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    reveals.forEach(function (el) { ro.observe(el); });
+  } else {
+    reveals.forEach(function (el) { el.classList.add('is-in'); });
+  }
+
+  // ===================================================================
+  // Simulação do app (mesma lógica do modo demonstração do CVT Monitor)
+  // ===================================================================
+  var phones = $('[data-ph]');
+  var demo = document.querySelector('[data-demo]');
+  if (!phones.length) return;
+
+  var N = 80;
+  var scen = 'normal';
+  var tick = 0;
+  var lastBand = 0;
+  var chartKey = 'cvt';
+  var userActed = false; // voz só depois de um clique da pessoa
+  var cl = function (x, a, b) { return Math.max(a, Math.min(b, x)); };
+  var rnd = function (a) { return (Math.random() - 0.5) * a; };
+
+  var v = { cvt: 74, rpm: 1650, speed: 48, eng: 88, intake: 31, sec: 1.6, pri: 0.9, lu: 0.6, ratio: 1.12, acc: 1.4, slip: 8, bat: 14.1,
+    det: 148320, detStart: 148320, kml: 12.4, avg: 11.8, fuel: 58, dist: 23.4, time: 1960, used: 1.98, max: 74, above: 0 };
+  var h = { cvt: [], eng: [], rpm: [], speed: [], kml: [] };
+
+  function target() {
+    if (scen === 'atencao') return 99;
+    if (scen === 'quente') return 116;
+    // Normal: passeia entre ~72 e ~86 °C, como um dia comum de trânsito
+    return 79 + Math.sin(tick / 26) * 7;
+  }
+
+  function sim(warm) {
+    v.cvt = cl(v.cvt + (target() - v.cvt) * (warm ? 0.05 : 0.08) + rnd(0.5), 20, 135);
+    v.speed = cl(v.speed + rnd(9) + (60 - v.speed) * 0.03, 0, 130);
+    v.acc = cl(v.acc + rnd(0.8), 0, 8);
+    v.ratio = cl(2.2 - v.speed / 55 + rnd(0.05), 0.45, 2.3);
+    v.rpm = cl(800 + v.speed * 20 + v.acc * 120 + rnd(80), 700, 6000);
+    v.sec = cl(1.2 + v.acc * 0.35 + rnd(0.1), 0.6, 6);
+    v.pri = cl(v.sec * 0.62 + rnd(0.05), 0.3, 5);
+    v.lu = v.speed > 20 ? 1 : 0;
+    v.slip = v.speed > 20 ? Math.round(cl(4 + rnd(8), 0, 20)) : Math.round(80 + rnd(40));
+    v.eng = cl(v.eng + (91 - v.eng) * 0.05 + rnd(0.4), 70, 110);
+    v.intake = cl(v.intake + rnd(0.4), 22, 45);
+    v.bat = cl(14.1 + rnd(0.12), 12, 14.6);
+    v.kml = v.speed < 3 ? 0 : cl(26 - v.rpm / 180 - v.acc * 0.8 + rnd(1.2), 3, 30);
+    if (!warm) {
+      if (v.cvt > 90) { v.det += Math.round((v.cvt - 90) * 0.8); v.above += 0.7; }
+      v.max = Math.max(v.max, Math.round(v.cvt));
+      v.dist += v.speed * 0.7 / 3600; v.time += 0.7;
+      v.used += v.kml ? (v.speed * 0.7 / 3600) / v.kml : 0.0002;
+      v.avg = v.dist / Math.max(v.used, 0.01);
+      v.fuel = cl(v.fuel - 0.002, 0, 100);
+    }
+    for (var k in h) { h[k].push(v[k]); if (h[k].length > N) h[k].shift(); }
+  }
+  for (var i = 0; i < N; i++) { tick = i; sim(true); }
+  v.max = Math.round(v.cvt);
+
+  var band = function (t) { return t < 90 ? 0 : t < 110 ? 1 : 2; };
+  var STATES = [
+    { label: 'TRANQUILO', head: 'Temperatura ideal', body: 'O câmbio está trabalhando na faixa certa. Pode dirigir normalmente.', icon: 'check_circle' },
+    { label: 'ATENÇÃO', head: 'Câmbio esquentando', body: 'Dirija com suavidade. Evite acelerações fortes, subidas longas e trânsito pesado por enquanto.', icon: 'warning' },
+    { label: 'MUITO QUENTE', head: 'Reduza agora', body: 'Diminua a velocidade e, se puder, pare em local seguro com o motor em marcha lenta até a temperatura baixar.', icon: 'local_fire_department' },
+  ];
+  var COLORS = ['var(--a-ok)', 'var(--a-warn)', 'var(--a-hot)'];
+  var TITLES = { painel: 'Renault Fluence', monitor: 'Monitor ao vivo', graf: 'Gráficos', fluido: 'Fluido do câmbio', consumo: 'Consumo' };
+  var CHARTS = {
+    cvt: ['Óleo do câmbio', '°C', 0, 'Faixas amarela e vermelha marcam 90°C e 110°C. A linha tracejada é a velocidade, para relacionar o aquecimento com o jeito de dirigir.'],
+    eng: ['Motor', '°C', 0, 'Últimos 60 segundos. A linha tracejada é a velocidade.'],
+    rpm: ['Rotação', 'rpm', 0, 'Últimos 60 segundos. A linha tracejada é a velocidade.'],
+    speed: ['Velocidade', 'km/h', 0, 'Últimos 60 segundos.'],
+  };
+
+  // Marcas do medidor (geradas uma vez)
+  $('[data-g-ticks]').forEach(function (g) {
+    var out = '';
+    for (var t = 0; t <= 22; t++) {
+      var a = (135 + 270 * t / 22) * Math.PI / 180, mj = t % 2 === 0, r1 = 104, r2 = mj ? 94 : 99;
+      out += '<line x1="' + (150 + r1 * Math.cos(a)).toFixed(1) + '" y1="' + (150 + r1 * Math.sin(a)).toFixed(1) +
+        '" x2="' + (150 + r2 * Math.cos(a)).toFixed(1) + '" y2="' + (150 + r2 * Math.sin(a)).toFixed(1) +
+        '" stroke="var(--a-tx)" stroke-width="' + (mj ? 2 : 1) + '" opacity="' + (mj ? 0.55 : 0.25) + '"/>';
+    }
+    g.innerHTML = out;
+  });
+
+  // Barras do consumo
+  var fuelBars = document.querySelector('[data-fuel-bars]');
+  if (fuelBars) for (var b = 0; b < 30; b++) fuelBars.appendChild(document.createElement('i'));
+
+  function set(key, val) {
+    $('[data-v="' + key + '"]').forEach(function (el) { if (el.textContent !== String(val)) el.textContent = val; });
+  }
+
+  function render() {
+    var bnd = band(v.cvt), st = STATES[bnd];
+    var frac = cl((v.cvt - 20) / 110, 0, 1);
+    var ang = (135 + 270 * frac) * Math.PI / 180;
+    var gear = v.ratio > 2 ? 1 : v.ratio > 1.5 ? 2 : v.ratio > 1.15 ? 3 : v.ratio > 0.9 ? 4 : v.ratio > 0.72 ? 5 : v.ratio > 0.58 ? 6 : 7;
+
+    phones.forEach(function (p) { p.classList.remove('b0', 'b1', 'b2'); p.classList.add('b' + bnd); });
+    $('[data-g-arc]').forEach(function (c) { c.setAttribute('stroke-dasharray', (556 * frac).toFixed(1) + ' 742'); });
+    $('[data-g-needle]').forEach(function (l) {
+      l.setAttribute('x1', (150 + 100 * Math.cos(ang)).toFixed(1)); l.setAttribute('y1', (150 + 100 * Math.sin(ang)).toFixed(1));
+      l.setAttribute('x2', (150 + 126 * Math.cos(ang)).toFixed(1)); l.setAttribute('y2', (150 + 126 * Math.sin(ang)).toFixed(1));
+    });
+
+    set('cvt', Math.round(v.cvt));
+    set('sLabel', st.label); set('sHead', st.head); set('sBody', st.body); set('sIcon', st.icon);
+    set('eng', Math.round(v.eng)); set('rpm', fmt(v.rpm)); set('speed', fmt(v.speed)); set('gear', 'D' + gear);
+    set('max', v.max + '°C');
+    set('above', Math.floor(v.above / 60) + ' min ' + String(Math.floor(v.above % 60)).padStart(2, '0') + ' s');
+    set('intake', Math.round(v.intake)); set('gearN', gear + 'ª'); set('ratio', fmt(v.ratio, 2));
+    set('lu', v.lu ? 'Travado' : 'Livre'); set('slip', fmt(v.slip));
+    set('sec', fmt(v.sec, 2)); set('pri', fmt(v.pri, 2)); set('bat', fmt(v.bat, 1));
+
+    // Gráfico
+    var cd = CHARTS[chartKey], ser = h[chartKey], lo, hi;
+    if (chartKey === 'cvt') { lo = 40; hi = 130; }
+    else { lo = Math.min.apply(null, ser); hi = Math.max.apply(null, ser); var pad = (hi - lo) * 0.2 || 1; lo -= pad; hi += pad; }
+    var W = 300, H = 170, yOf = function (x) { return H - (x - lo) / (hi - lo) * H; };
+    var pts = ser.map(function (x, j) { return (j * W / (N - 1)).toFixed(1) + ',' + yOf(x).toFixed(1); }).join(' ');
+    var spPts = h.speed.map(function (x, j) { return (j * W / (N - 1)).toFixed(1) + ',' + (H - x / 140 * H).toFixed(1); }).join(' ');
+    $('[data-c-line]').forEach(function (el) { el.setAttribute('points', pts); });
+    $('[data-c-speed]').forEach(function (el) { el.setAttribute('points', spPts); });
+    $('[data-c-hot]').forEach(function (el) { el.setAttribute('height', yOf(110).toFixed(1)); });
+    $('[data-c-warn]').forEach(function (el) { el.setAttribute('y', yOf(110).toFixed(1)); el.setAttribute('height', (yOf(90) - yOf(110)).toFixed(1)); });
+    var avg = ser.reduce(function (a, c) { return a + c; }, 0) / ser.length;
+    var disp = function (x) { return fmt(x); };
+    set('chName', cd[0]); set('chUnit', cd[1]); set('chNote', cd[3]);
+    set('chCur', disp(ser[ser.length - 1]));
+    set('chMin', disp(Math.min.apply(null, ser))); set('chAvg', disp(avg)); set('chMax', disp(Math.max.apply(null, ser)));
+    $('[data-v="chCur"]').forEach(function (el) { el.style.color = chartKey === 'cvt' ? COLORS[bnd] : 'var(--a-tx)'; });
+
+    // Fluido
+    var pct = v.det / 210000;
+    set('detPct', fmt(pct * 100) + '%'); set('det', fmt(v.det));
+    set('detSess', '+' + fmt(v.det - v.detStart)); set('detLeft', fmt(Math.max(0, 210000 - v.det)));
+    $('[data-det-bar]').forEach(function (el) {
+      el.style.width = Math.min(100, pct * 100).toFixed(1) + '%';
+      el.style.background = pct > 0.9 ? 'var(--a-hot)' : pct > 0.7 ? 'var(--a-warn)' : 'var(--a-acc)';
+    });
+
+    // Consumo
+    set('kml', v.kml ? fmt(v.kml, 1) : '—');
+    set('lph', v.speed < 3 ? 'parado · 0,8 L/h' : fmt(100 / Math.max(v.kml, 0.1), 1) + ' L/100 km');
+    set('avg', fmt(v.avg, 1)); set('range', fmt(v.fuel / 100 * 60 * v.avg));
+    set('dist', fmt(v.dist, 1)); set('time', Math.floor(v.time / 60));
+    if (fuelBars) {
+      var fb = h.kml.slice(-30), bars = fuelBars.children;
+      for (var q = 0; q < bars.length; q++) bars[q].style.height = Math.max(4, (fb[q] || 0) / 30 * 52).toFixed(0) + 'px';
+    }
+
+    // Faixas da seção "Por que monitorar": a marquinha acompanha a temperatura
+    $('[data-scale-mark]').forEach(function (el) {
+      // As faixas têm 70fr / 20fr / 20fr = 20–90 / 90–110 / 110–130 °C, então a escala é linear de 20 a 130
+      el.style.left = ((cl(v.cvt, 20, 130) - 20) / 110 * 100).toFixed(1) + '%';
+    });
+
+    // Alerta quando sobe de faixa (como no app)
+    if (bnd !== lastBand) {
+      var up = bnd > lastBand;
+      lastBand = bnd;
+      if (up && bnd > 0) alertBand(bnd);
+    }
+  }
+
+  // ===== Notificação e voz =====
+  var banner = demo && demo.querySelector('[data-banner]');
+  var bannerT;
+  var voiceBox = document.querySelector('[data-voice]');
+  var voiceWrap = document.querySelector('[data-voice-wrap]');
+  if (voiceWrap && 'speechSynthesis' in window) voiceWrap.hidden = false;
+
+  function alertBand(bnd) {
+    var t = Math.round(v.cvt) + '°C';
+    var msg = bnd === 1
+      ? { title: 'Câmbio em atenção · ' + t, body: 'Dirija com suavidade e evite acelerações fortes.', speak: 'Atenção. Temperatura do câmbio em ' + Math.round(v.cvt) + ' graus.' }
+      : { title: 'Câmbio muito quente · ' + t, body: 'Reduza a velocidade. Se puder, pare em local seguro.', speak: 'Alerta. Câmbio muito quente. Reduza a velocidade.' };
+    if (banner) {
+      banner.querySelector('[data-banner-title]').textContent = msg.title;
+      banner.querySelector('[data-banner-body]').textContent = msg.body;
+      banner.style.setProperty('--bc', COLORS[bnd]);
+      banner.hidden = false;
+      clearTimeout(bannerT);
+      bannerT = setTimeout(function () { banner.hidden = true; }, 5500);
+    }
+    if (userActed && voiceBox && voiceBox.checked && 'speechSynthesis' in window) {
+      try {
+        var u = new SpeechSynthesisUtterance(msg.speak);
+        u.lang = 'pt-BR';
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(u);
+      } catch (e) {}
+    }
+  }
+  if (banner) banner.addEventListener('click', function () { banner.hidden = true; });
+
+  // ===== Abas do celular e lista de recursos =====
+  function goTab(tab) {
+    if (!demo) return;
+    demo.setAttribute('data-tab', tab);
+    var title = demo.querySelector('[data-ph-title]');
+    if (title) title.textContent = TITLES[tab];
+    var body = demo.querySelector('[data-ph-body]');
+    if (body) body.scrollTop = 0;
+    $('[data-go]').forEach(function (btn) {
+      var on = btn.getAttribute('data-go') === tab;
+      if (btn.getAttribute('role') === 'tab') btn.setAttribute('aria-selected', on);
+      else btn.setAttribute('aria-pressed', on);
+    });
+  }
+  $('[data-go]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      goTab(btn.getAttribute('data-go'));
+      // No celular o aparelho fica acima da lista: rola até ele para mostrar a troca
+      if (btn.classList.contains('wl-feat') && window.matchMedia('(max-width:1060px)').matches && demo) {
+        demo.scrollIntoView({ behavior: motion ? 'smooth' : 'auto', block: 'center' });
+      }
+    });
+  });
+
+  $('[data-chart-key]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      chartKey = btn.getAttribute('data-chart-key');
+      if (demo) demo.setAttribute('data-chart', chartKey);
+      $('[data-chart-key]').forEach(function (o) { o.setAttribute('aria-pressed', o === btn); });
+      render();
+    });
+  });
+
+  $('[data-scen]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      userActed = true;
+      scen = btn.getAttribute('data-scen');
+      $('[data-scen]').forEach(function (o) { o.setAttribute('aria-pressed', o === btn); });
+      if (scen !== 'normal') goTab('painel');
+    });
+  });
+  if (voiceBox) voiceBox.addEventListener('change', function () { userActed = true; });
+
+  // ===== Loop: só roda com a aba visível e algum celular na tela =====
+  var visible = 0;
+  var timer = null;
+  function step() { tick++; sim(false); render(); }
+  function sync() {
+    var run = visible > 0 && !document.hidden;
+    if (run && !timer) timer = setInterval(step, 700);
+    if (!run && timer) { clearInterval(timer); timer = null; }
+  }
+  render();
+  if ('IntersectionObserver' in window) {
+    var seen = new Set();
+    var po = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) seen.add(e.target); else seen.delete(e.target); });
+      visible = seen.size;
+      sync();
+    });
+    phones.concat($('[data-scale-mark]')).forEach(function (p) { po.observe(p); });
+  } else {
+    visible = 1;
+  }
+  document.addEventListener('visibilitychange', sync);
+  sync();
+})();

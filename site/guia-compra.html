@@ -54,6 +54,9 @@ a,button,label{-webkit-tap-highlight-color:transparent}
 .wl-nav-guia{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;border:1px solid rgba(227,38,44,.55);color:var(--fg);font-weight:600;transition:background .25s,border-color .25s}
 .wl-nav-guia.is-active{text-decoration:none;background:rgba(227,38,44,.14);border-color:var(--red)}
 .wl-nav-cta{display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:var(--red);color:#fff;font-weight:700}
+/* CVT Monitor (landing do app): pílula com bolinha piscando de "novo" */
+.wl-nav-cvt::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--red);animation:wl-pulse 1.6s ease-in-out infinite}
+.wl-nav-strip>a.wl-strip-cvt{border-color:var(--red);color:var(--fg);font-weight:700}
 .wl-nav-cta:hover{background:var(--fg);color:var(--bg)}
 .wl-nav-strip{display:none}
 .wl-nav-strip::-webkit-scrollbar{display:none}
@@ -333,11 +336,23 @@ a,button,label{-webkit-tap-highlight-color:transparent}
   .wl-totoc{display:flex}
 }
 /* Menu não cabe inteiro: o Apoie sai primeiro, depois os outros extras (no celular a faixa de atalhos mostra todos) */
-@media (max-width:1240px){
+@media (max-width:1440px){
   .wl-nav-apoie{display:none!important}
 }
-@media (max-width:1060px){
+@media (max-width:1240px){
   .wl-nav-extra{display:none!important}
+}
+@media (max-width:1000px){
+  .wl-nav-mid{display:none!important}
+}
+@media (max-width:800px){
+  .wl-nav-narrow{display:none!important}
+}
+@media (max-width:760px){
+  .wl-nav-sec:not(.wl-nav-guia){display:none!important}
+}
+@media (max-width:720px){
+  .wl-nav-guia:not(.wl-nav-cvt){display:none!important}
 }
 
 /* ===== Celular ===== */
@@ -395,19 +410,21 @@ a,button,label{-webkit-tap-highlight-color:transparent}
     </a>
     <div class="wl-nav-links">
       <a class="wl-nav-sec wl-nav-extra" href="./#sobre">Sobre</a>
-      <a class="wl-nav-sec" href="./#ficha">Ficha</a>
+      <a class="wl-nav-sec wl-nav-narrow" href="./#ficha">Ficha</a>
       <a class="wl-nav-sec" href="./#videos">Vídeos</a>
-      <a class="wl-nav-sec" href="./#eventos">Eventos</a>
+      <a class="wl-nav-sec wl-nav-mid" href="./#eventos">Eventos</a>
       <a class="wl-nav-sec wl-nav-extra" href="./#garagem">Garagem</a>
-      <a class="wl-nav-sec" href="./#produtos">Produtos</a>
+      <a class="wl-nav-sec wl-nav-mid" href="./#produtos">Produtos</a>
       <a class="wl-nav-sec wl-nav-extra" href="./#faq">FAQ</a>
       <a class="wl-nav-sec wl-nav-apoie" href="./#apoie">Apoie ☕</a>
       <a class="wl-nav-sec wl-nav-guia is-active" href="guia-compra.html" aria-current="page">Guia de compra</a>
+      <a class="wl-nav-sec wl-nav-guia wl-nav-cvt" href="cvt-monitor.html">CVT Monitor</a>
       <a class="wl-nav-cta" href="./#parcerias">Parcerias</a>
     </div>
     <div class="wl-read" aria-hidden="true"><i></i></div>
     <div class="wl-nav-strip">
       <a href="./">← Início</a>
+      <a class="wl-strip-cvt" href="cvt-monitor.html">CVT Monitor →</a>
       <a href="#indice">Índice</a>
       <a href="#checklist">Checklist</a>
       <a href="#fontes">Fontes</a>

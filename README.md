@@ -23,6 +23,7 @@ Ter uma página única que funcione como "cartão de visita" do canal:
 | 01 | Sobre o canal | `#sobre` | Apresentação do canal e do Luiz (história do carro e do canal, fatos rápidos, trabalho, estudo, carro dos sonhos e hobbies) |
 | 02 | Ficha técnica | `#ficha` | Potência, torque, motor, câmbio CVT, porta-malas, rodas e dimensões |
 | — | Guia de compra | `#guia` | Chamada para a página `guia-compra.html` |
+| — | CVT Monitor | `#cvt` | Chamada para a landing do app, `cvt-monitor.html` |
 | 03 | Em destaque | `#videos` | Cards dos vídeos mais vistos, do mais para o menos visto, com selo de views |
 | 04 | Eventos | `#eventos` | Encontros, exposições e eventos automotivos (cards gerados do array `eventosData`) |
 | 05 | Garagem dos seguidores | `#garagem` | Fotos dos carros de quem segue o canal (array `garagemData`). Fica "trancada" com barra de progresso até 1.000 seguidores no Instagram; o card "Como participar" (copiar mensagem pronta + abrir o direct) aparece sempre |
@@ -40,6 +41,8 @@ whiteline_fluence/
     ├── index.html         ← a página inteira (HTML + CSS + lógica do componente)
     ├── guia-compra.html   ← Guia de compra do Fluence usado (HTML + CSS, sem x-dc)
     ├── guia-compra.js     ← checklist, cópia da mensagem e índice do guia
+    ├── cvt-monitor.html   ← landing do app CVT Monitor (HTML + CSS, sem x-dc)
+    ├── cvt-monitor.js     ← CONFIG (Cakto, APK, preço), simulação do app e botões
     ├── support.js         ← runtime "dc" gerado (carrega React/Babel da unpkg e renderiza o <x-dc>)
     ├── image-slot.js      ← ferramenta do editor de design (não vai para produção)
     ├── api/
@@ -85,6 +88,17 @@ Página estática à parte (não usa o runtime x-dc). Tem link no menu da págin
 - **Animações**: título entrando palavra por palavra, faixa vermelha com os temas, conteúdo surgindo ao rolar, barra de leitura embaixo do menu, brilho no cartão da regra e confete quando o checklist fica completo. Desligam com `prefers-reduced-motion`, e sem o script a página aparece inteira, sem animação.
 - **Links do menu para a página inicial** (`./#sobre` etc.): como a página inicial é montada pelo React, o `scrollToHash()` do componente rola até a seção depois de montar.
 - Para editar o texto, é só mexer no HTML. As referências `[1]`–`[5]` apontam para `#fonte-1`…`#fonte-5`.
+
+### Landing do CVT Monitor (`cvt-monitor.html`)
+
+Página estática à parte, no mesmo esquema do Guia de compra, para o app Android CVT Monitor. Tem link no menu (pílula "CVT Monitor" com bolinha piscando), na faixa do celular, no rodapé e um card logo depois do Guia de compra.
+
+- **Tudo que muda fica no `CONFIG`**, no topo do `cvt-monitor.js`:
+  - `caktoUrl`: vazio = **pré-lançamento** (botões "Me avise", que copiam uma mensagem pronta e abrem o direct do Instagram). Colou o link do checkout da Cakto = **vendas abertas**: os botões viram "Comprar · R$ …", o selo vira "Já disponível" e aparecem os textos de pagamento e garantia (os elementos `data-only="pre"`/`"live"` trocam sozinhos).
+  - `apkUrl`: vazio = botão de download do teste grátis escondido. Para hospedar o APK no próprio site, ponha o arquivo em `site/downloads/` e use `'downloads/cvt-monitor.apk'`.
+  - `preco` e `precoDepois` (preço cheio depois do lançamento; `''` esconde).
+- **Celulares com as telas do app**: recriados em HTML/CSS a partir do protótipo do app (cores do tema escuro, fontes Barlow Condensed e Material Symbols só com os ícones usados; a lista `icon_names` no `<link>` precisa ficar em ordem alfabética). O do topo mostra só o Painel; o da seção "Por dentro do app" tem as 5 abas e o simulador Normal / Atenção / Quente, com notificação e voz opcional (`speechSynthesis`, só depois de um clique). Os números vêm de uma simulação igual à do modo demonstração, que só roda com a aba visível e um celular na tela.
+- Sem JS a página aparece inteira no estado de pré-lançamento, com os números parados.
 
 ### Contadores ao vivo (`api/stats.js`)
 

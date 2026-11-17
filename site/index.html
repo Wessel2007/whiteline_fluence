@@ -63,6 +63,9 @@ a:hover{color:#ff3b3f}
 .wl-nav-guia{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;border:1px solid rgba(227,38,44,.55);color:#f4f3f1;font-weight:600;transition:background .25s,border-color .25s}
 .wl-nav-guia:hover{background:rgba(227,38,44,.14);border-color:#e3262c}
 .wl-nav-strip>a.wl-strip-guia{border-color:rgba(227,38,44,.6);color:#f4f3f1;font-weight:600}
+/* CVT Monitor (landing do app, cvt-monitor.html): mesma pílula do Guia, com bolinha piscando de "novo" */
+.wl-nav-cvt::before{content:"";width:7px;height:7px;border-radius:50%;background:#e3262c;animation:wl-pulse 1.6s ease-in-out infinite}
+.wl-nav-strip>a.wl-strip-cvt{background:#e3262c;border-color:#e3262c;color:#fff;font-weight:700}
 /* Título do topo centralizado (align-items:center centraliza mesmo se a linha passar da tela);
    padding-right compensa o letter-spacing negativo depois da última letra */
 .wl-h1{display:flex;flex-direction:column;align-items:center;text-align:center}
@@ -131,11 +134,23 @@ a,button{-webkit-tap-highlight-color:transparent}
 }
 
 /* ===== Menu não cabe inteiro: o Apoie sai primeiro, depois os outros extras (no celular a faixa de atalhos mostra todos) ===== */
-@media (max-width:1240px){
+@media (max-width:1440px){
   .wl-nav-apoie{display:none!important}
 }
-@media (max-width:1060px){
+@media (max-width:1240px){
   .wl-nav-extra{display:none!important}
+}
+@media (max-width:1000px){
+  .wl-nav-mid{display:none!important}
+}
+@media (max-width:800px){
+  .wl-nav-narrow{display:none!important}
+}
+@media (max-width:760px){
+  .wl-nav-sec:not(.wl-nav-guia){display:none!important}
+}
+@media (max-width:720px){
+  .wl-nav-guia:not(.wl-nav-cvt){display:none!important}
 }
 
 /* ===== Celular ===== */
@@ -207,17 +222,19 @@ a,button{-webkit-tap-highlight-color:transparent}
     </a>
     <div style="display:flex;align-items:center;gap:clamp(12px,2.4vw,28px);font-size:13px;font-weight:500">
       <a class="wl-nav-sec wl-nav-extra" href="#sobre" style="color:rgba(244,243,241,.7)">Sobre</a>
-      <a class="wl-nav-sec" href="#ficha" style="color:rgba(244,243,241,.7)">Ficha</a>
+      <a class="wl-nav-sec wl-nav-narrow" href="#ficha" style="color:rgba(244,243,241,.7)">Ficha</a>
       <a class="wl-nav-sec" href="#videos" style="color:rgba(244,243,241,.7)">Vídeos</a>
-      <a class="wl-nav-sec" href="#eventos" style="color:rgba(244,243,241,.7)">Eventos</a>
+      <a class="wl-nav-sec wl-nav-mid" href="#eventos" style="color:rgba(244,243,241,.7)">Eventos</a>
       <a class="wl-nav-sec wl-nav-extra" href="#garagem" style="color:rgba(244,243,241,.7)">Garagem</a>
-      <a class="wl-nav-sec" href="#produtos" style="color:rgba(244,243,241,.7)">Produtos</a>
+      <a class="wl-nav-sec wl-nav-mid" href="#produtos" style="color:rgba(244,243,241,.7)">Produtos</a>
       <a class="wl-nav-sec wl-nav-extra" href="#faq" style="color:rgba(244,243,241,.7)">FAQ</a>
       <sc-if value="{{ pixOn }}"><a class="wl-nav-sec wl-nav-apoie" href="#apoie" style="color:rgba(244,243,241,.7)">Apoie ☕</a></sc-if>
       <a class="wl-nav-sec wl-nav-guia" href="guia-compra.html">Guia de compra <span style="font-family:'JetBrains Mono',monospace" aria-hidden="true">→</span></a>
+      <a class="wl-nav-sec wl-nav-guia wl-nav-cvt" href="cvt-monitor.html">CVT Monitor</a>
       <a class="wl-nav-cta" href="#parcerias" style="display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:#e3262c;color:#fff;font-weight:700" style-hover="background:#f4f3f1;color:#0b0b0c">Parcerias</a>
     </div>
     <div class="wl-nav-strip">
+      <a class="wl-strip-cvt" href="cvt-monitor.html">CVT Monitor →</a>
       <a class="wl-strip-guia" href="guia-compra.html">Guia de compra →</a>
       <a href="#sobre">Sobre</a>
       <a href="#ficha">Ficha</a>
@@ -492,6 +509,33 @@ a,button{-webkit-tap-highlight-color:transparent}
           <span style="padding:8px 14px;border-radius:999px;border:1px solid rgba(244,243,241,.18);font-size:13px">Checklist</span>
         </div>
         <span class="wl-guia-btn" style="display:flex;align-items:center;gap:10px;padding:16px 24px;border-radius:999px;background:#e3262c;color:#fff;font-weight:700;font-size:15px">Ler o guia <span style="font-family:'JetBrains Mono',monospace">→</span></span>
+      </div>
+    </a>
+  </section>
+
+  <!-- CVT MONITOR (chamada para a landing cvt-monitor.html) -->
+  <section id="cvt" style="max-width:1440px;margin:0 auto;padding:16px clamp(16px,4vw,48px) 0">
+    <a class="wl-guia" data-reveal="" href="cvt-monitor.html" style="position:relative;overflow:hidden;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:clamp(24px,4vw,56px);align-items:center;padding:clamp(24px,4vw,56px);border:1px solid rgba(48,141,255,.28);border-radius:24px;background:#0b0d12;color:#f4f3f1" style-hover="border-color:#308dff;color:#f4f3f1">
+      <div style="position:absolute;left:-10%;bottom:-70%;width:55%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(48,141,255,.26),rgba(48,141,255,0) 65%);pointer-events:none"></div>
+      <div style="position:relative;display:flex;flex-direction:column;gap:18px">
+        <span style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ff3b3f"><span style="width:8px;height:8px;border-radius:50%;background:#e3262c;animation:wl-pulse 1.6s ease-in-out infinite"></span>Em breve · App CVT Monitor</span>
+        <span style="font-weight:800;font-stretch:112%;font-size:clamp(30px,4vw,56px);line-height:1;letter-spacing:-.03em;text-wrap:balance">A temperatura do câmbio <span style="color:#e3262c">CVT</span> do seu Fluence no celular.</span>
+        <span style="font-size:clamp(16px,1.5vw,18px);line-height:1.55;color:rgba(244,243,241,.72);max-width:560px;text-wrap:pretty">Meu app para Android: lê o óleo do câmbio ao vivo com um scanner OBD2 Bluetooth e avisa por voz antes de esquentar demais.</span>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span style="padding:8px 14px;border-radius:999px;border:1px solid rgba(244,243,241,.18);font-size:13px">Temperatura do óleo</span>
+          <span style="padding:8px 14px;border-radius:999px;border:1px solid rgba(244,243,241,.18);font-size:13px">Alerta por voz</span>
+          <span style="padding:8px 14px;border-radius:999px;border:1px solid rgba(244,243,241,.18);font-size:13px">Desgaste do fluido</span>
+          <span style="padding:8px 14px;border-radius:999px;border:1px solid rgba(244,243,241,.18);font-size:13px">Teste grátis</span>
+        </div>
+        <span class="wl-guia-btn" style="align-self:flex-start;display:flex;align-items:center;gap:10px;padding:16px 24px;border-radius:999px;background:#e3262c;color:#fff;font-weight:700;font-size:15px">Conhecer o app <span style="font-family:'JetBrains Mono',monospace">→</span></span>
+      </div>
+      <div aria-hidden="true" style="position:relative;justify-self:center;width:min(100%,300px);aspect-ratio:1;border-radius:50%;background:conic-gradient(from 225deg,#4fd57f 0deg 140deg,#24272a 140deg 270deg,transparent 270deg);display:flex;align-items:center;justify-content:center">
+        <div style="position:absolute;inset:16px;border-radius:50%;background:#0b0d12"></div>
+        <div style="position:relative;display:flex;flex-direction:column;align-items:center;gap:6px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;color:#868b90">ÓLEO DO CÂMBIO</span>
+          <span style="font-weight:900;font-stretch:118%;font-style:italic;font-size:clamp(64px,8vw,96px);line-height:.9;letter-spacing:-.04em">78<span style="font-size:.3em;font-style:normal;font-weight:500;color:#aeb2b6;vertical-align:top">°C</span></span>
+          <span style="padding:5px 13px;border-radius:14px;background:#4fd57f;color:#060607;font-weight:800;font-size:13px;letter-spacing:.06em">TRANQUILO</span>
+        </div>
       </div>
     </a>
   </section>
@@ -777,6 +821,7 @@ a,button{-webkit-tap-highlight-color:transparent}
   <footer style="margin-top:clamp(80px,10vw,140px);border-top:1px solid rgba(244,243,241,.08);padding:48px clamp(16px,4vw,48px) 32px;max-width:1440px;margin-left:auto;margin-right:auto">
     <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:center">
       <div class="wl-footer-links" style="display:flex;flex-wrap:wrap;gap:20px;font-weight:600;font-size:15px">
+        <a href="cvt-monitor.html">CVT Monitor →</a>
         <a href="guia-compra.html">Guia de compra →</a>
         <sc-if value="{{ pixOn }}"><a href="#apoie">Apoie o canal ♥</a></sc-if>
         <a href="https://www.tiktok.com/@whitelinefluence" target="_blank" rel="noopener">TikTok ↗</a>

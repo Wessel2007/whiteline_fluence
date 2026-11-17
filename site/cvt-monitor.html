@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CVT Monitor · Temperatura do câmbio CVT do Fluence no celular</title>
+<meta name="description" content="App Android que mostra a temperatura do óleo do câmbio CVT do Renault Fluence ao vivo e avisa por voz antes de esquentar. Funciona com scanner ELM327 Bluetooth. Pagamento único, licença vitalícia.">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="theme-color" content="#0b0b0c">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<!-- Prévia ao compartilhar o link (WhatsApp, Instagram, X...) -->
+<meta property="og:type" content="product">
+<meta property="og:url" content="https://whitelinefluence-site.vercel.app/cvt-monitor.html">
+<link rel="canonical" href="https://whitelinefluence-site.vercel.app/cvt-monitor.html">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Whiteline Fluence">
+<meta property="og:title" content="CVT Monitor · o câmbio do seu Fluence no celular">
+<meta property="og:description" content="Temperatura do óleo do câmbio CVT ao vivo, alerta por voz e desgaste do fluido. App Android do canal Whiteline Fluence.">
+<meta property="og:image" content="https://whitelinefluence-site.vercel.app/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Fluence GT Line branco à noite com o Luiz sentado ao lado">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Barlow+Condensed:ital,wght@1,800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<!-- Ícones das telas do app: só os usados (a lista precisa ficar em ordem alfabética) -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0&icon_names=ac_unit,battery_5_bar,bluetooth,bolt,check_circle,chevron_right,device_thermostat,info,local_fire_department,local_gas_station,monitor_heart,navigation,restart_alt,settings,settings_input_component,show_chart,signal_cellular_alt,speed,thermostat,touch_app,warning,water_drop&display=block" rel="stylesheet">
+<style>
+:root{--bg:#0b0b0c;--bg2:#141416;--fg:#f4f3f1;--red:#e3262c;--red-hi:#ff3b3f;--red-dk:#c81e24;--line:rgba(244,243,241,.12);--muted:rgba(244,243,241,.75);--dim:rgba(244,243,241,.55);--mono:'JetBrains Mono',ui-monospace,monospace;
+  /* cores do app (tema escuro do CVT Monitor) */
+  --a-bg:#060607;--a-s1:#16181a;--a-s3:#24272a;--a-tx:#f2f1ee;--a-mu:#868b90;--a-mu2:#aeb2b6;--a-ln:rgba(255,255,255,.07);--a-acc:#308dff;--a-ok:#4fd57f;--a-warn:#fac131;--a-hot:#ff534b}
+html{scroll-behavior:smooth;scroll-padding-top:88px}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Archivo',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:var(--fg);text-decoration:none}
+a:hover{color:var(--red-hi)}
+::selection{background:var(--red);color:#fff}
+img{max-width:100%}
+a,button,label{-webkit-tap-highlight-color:transparent}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--red-hi);outline-offset:3px}
+[hidden]{display:none!important}
+@keyframes wl-pulse{0%,100%{opacity:1}50%{opacity:.25}}
+@keyframes wl-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes wl-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes wl-in{from{opacity:0;transform:translateY(-14px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes wl-beam{0%{background-position:-80% 0,0 0}61%,100%{background-position:180% 0,0 0}}
+@keyframes wl-glow{0%,100%{box-shadow:0 0 0 0 rgba(227,38,44,0)}50%{box-shadow:0 0 0 1px rgba(227,38,44,.35),0 18px 60px -20px rgba(227,38,44,.55)}}
+@supports not (overflow:clip){body{overflow-x:hidden}}
+.wl-page{min-height:100vh;overflow-x:clip}
+.wl-mono{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.wl-red{color:var(--red)}
+.wl-skip{position:absolute;left:16px;top:-60px;z-index:100;padding:10px 16px;border-radius:999px;background:var(--red);color:#fff;font-weight:700}
+.wl-skip:focus{top:12px;color:#fff}
+
+/* ===== Menu (igual ao das outras páginas; "CVT Monitor" aceso aqui) ===== */
+.wl-nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px clamp(16px,4vw,48px);background:rgba(11,11,12,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.07)}
+.wl-nav-home{display:flex;align-items:center;gap:10px}
+.wl-nav-home img{width:30px;height:30px;border-radius:50%;object-fit:cover;border:1.5px solid var(--red)}
+.wl-brand{font-weight:800;font-stretch:125%;font-size:14px;letter-spacing:.02em;color:var(--fg)}
+.wl-nav-links{display:flex;align-items:center;gap:clamp(12px,2.4vw,28px);font-size:13px;font-weight:500}
+.wl-nav-sec{color:rgba(244,243,241,.7);white-space:nowrap;transition:color .25s}
+.wl-nav-sec.is-active{color:var(--fg);text-decoration:underline;text-decoration-color:var(--red);text-decoration-thickness:2px;text-underline-offset:6px}
+.wl-nav-pill{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;border:1px solid rgba(227,38,44,.55);color:var(--fg);font-weight:600;transition:background .25s,border-color .25s}
+.wl-nav-pill:hover{background:rgba(227,38,44,.14);border-color:var(--red);color:var(--fg)}
+.wl-nav-pill.is-active{text-decoration:none;background:rgba(227,38,44,.14);border-color:var(--red)}
+.wl-nav-cta{display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:var(--red);color:#fff;font-weight:700;white-space:nowrap}
+.wl-nav-cta:hover{background:var(--fg);color:var(--bg)}
+.wl-nav-strip{display:none}
+.wl-nav-strip::-webkit-scrollbar{display:none}
+.wl-nav-strip>a{flex:none;padding:6px 13px;border-radius:999px;border:1px solid rgba(244,243,241,.16);font-size:13px;font-weight:500;color:rgba(244,243,241,.75);white-space:nowrap;transition:background .25s,border-color .25s,color .25s}
+.wl-nav-strip>a:active{background:var(--red);border-color:var(--red);color:#fff}
+
+/* ===== Botões ===== */
+.wl-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 24px;border-radius:999px;border:1px solid rgba(244,243,241,.3);background:transparent;color:var(--fg);font:700 15px 'Archivo',sans-serif;cursor:pointer;transition:background .25s,border-color .25s,color .25s,transform .25s;white-space:nowrap}
+.wl-btn:hover{border-color:var(--red);color:var(--red-hi)}
+.wl-btn-red{background:var(--red);border-color:var(--red);color:#fff}
+.wl-btn-red:hover{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+.wl-btn .wl-arrow{font-family:var(--mono)}
+@media (hover:hover){.wl-btn:hover{transform:translateY(-2px)}}
+
+/* ===== Topo ===== */
+.wl-hero{position:relative;max-width:1240px;margin:0 auto;padding:clamp(36px,6vw,80px) clamp(16px,4vw,48px) 0;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(32px,5vw,72px);align-items:center}
+.wl-hero::before{content:"";position:absolute;right:-8%;top:4%;width:min(620px,70vw);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(48,141,255,.16),rgba(48,141,255,0) 62%);pointer-events:none;z-index:-1}
+.wl-crumbs{display:flex;flex-wrap:wrap;align-items:center;gap:8px;color:var(--dim)}
+.wl-crumbs a{color:var(--dim)}
+.wl-crumbs a:hover{color:var(--red-hi)}
+.wl-eyebrow{display:flex;align-items:center;gap:10px;margin-top:24px;color:var(--red-hi)}
+.wl-eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--red);animation:wl-pulse 1.6s ease-in-out infinite}
+.wl-h1{margin:18px 0 0;font-weight:900;font-stretch:112%;font-size:clamp(40px,5.2vw,74px);line-height:.92;letter-spacing:-.035em;text-wrap:balance}
+.wl-lead{margin:24px 0 0;max-width:600px;font-size:clamp(17px,1.6vw,20px);line-height:1.6;color:var(--muted);text-wrap:pretty}
+.wl-lead strong{color:var(--fg)}
+.wl-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.wl-facts{display:flex;flex-wrap:wrap;gap:8px 18px;margin:22px 0 0;padding:0;list-style:none;font-size:14px;color:var(--muted)}
+.wl-facts li{display:flex;align-items:center;gap:8px}
+.wl-facts li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red)}
+.wl-price-chip{display:inline-flex;align-items:baseline;gap:10px;margin-top:28px;padding:10px 18px 10px 14px;border:1px solid var(--line);border-radius:14px;background:rgba(244,243,241,.03)}
+.wl-price-chip b{font-weight:900;font-stretch:115%;font-size:26px;letter-spacing:-.02em}
+.wl-price-chip s{color:var(--dim);font-size:14px}
+.wl-price-chip .wl-mono{color:var(--red-hi)}
+
+.wl-hero-art{position:relative;display:flex;justify-content:center;padding:20px 0 40px}
+.wl-bubble{position:absolute;z-index:3;max-width:250px;padding:14px 16px;border-radius:18px;background:rgba(22,24,26,.92);border:1px solid rgba(255,255,255,.1);box-shadow:0 20px 50px rgba(0,0,0,.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-size:14px;line-height:1.4}
+.wl-bubble .wl-mono{display:flex;align-items:center;gap:8px;font-size:10.5px;color:var(--a-mu)}
+.wl-bubble strong{display:block;margin-top:4px;font-weight:600}
+.wl-stage{position:relative}
+.wl-bubble-voice{left:-150px;bottom:150px;border-left:3px solid var(--a-warn)}
+.wl-bubble-voice .wl-mono::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--a-warn)}
+.wl-bubble-fluid{right:-84px;top:70px;max-width:220px;border-left:3px solid var(--a-acc)}
+.wl-bubble-fluid i{display:block;height:6px;margin-top:10px;border-radius:3px;background:var(--a-s3);overflow:hidden}
+.wl-bubble-fluid i::after{content:"";display:block;width:71%;height:100%;border-radius:3px;background:var(--a-acc)}
+
+/* ===== Celular com as telas do app ===== */
+.ph{--sc:var(--a-ok);position:relative;flex:none;width:340px;height:712px;padding:9px;border-radius:50px;background:#0a0a0a;box-shadow:0 40px 90px -20px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.08),inset 0 0 0 1px rgba(255,255,255,.04)}
+.ph.b1{--sc:var(--a-warn)}
+.ph.b2{--sc:var(--a-hot)}
+.ph-screen{position:relative;width:100%;height:100%;overflow:hidden;border-radius:41px;background:var(--a-bg);color:var(--a-tx);font-family:'Archivo',sans-serif;font-stretch:100%}
+.ph-glow{position:absolute;left:50%;top:-130px;width:460px;height:400px;margin-left:-230px;border-radius:50%;background:var(--sc);opacity:.3;filter:blur(80px);transition:background 1.4s ease,opacity 1s ease;pointer-events:none}
+.ph.b1 .ph-glow{opacity:.5}.ph.b2 .ph-glow{opacity:.7}
+.ph:not([data-tab="painel"]) .ph-glow{opacity:0}
+.ph-status{position:absolute;top:0;left:0;right:0;z-index:5;height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 22px 0 26px;font:500 13px 'Archivo',sans-serif}
+.ph-status::after{content:"";position:absolute;left:50%;top:10px;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:#000}
+.ph-status>span:last-child{display:flex;gap:4px}
+.ms{font-family:'Material Symbols Rounded';font-weight:normal;font-style:normal;font-size:22px;line-height:1;letter-spacing:normal;text-transform:none;white-space:nowrap;word-wrap:normal;direction:ltr;font-feature-settings:'liga';-webkit-font-smoothing:antialiased;display:inline-block;overflow:hidden;max-width:1.2em}
+.ph-body{position:absolute;top:34px;left:0;right:0;bottom:70px;overflow-y:auto;scrollbar-width:none;padding:6px 14px 22px;overscroll-behavior:contain}
+.ph-body::-webkit-scrollbar{display:none}
+.ph-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 12px -4px;padding:4px 4px 10px 12px;border-left:4px solid var(--a-acc)}
+.ph-title{font:italic 800 20px/1.15 'Barlow Condensed',sans-serif;text-transform:uppercase}
+.ph-conn{display:flex;align-items:center;gap:6px;margin-top:3px;font:500 11px var(--mono);color:var(--a-mu)}
+.ph-conn::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--a-ok)}
+.ph-gear{flex:none;width:40px;height:40px;border-radius:50%;border:1px solid var(--a-ln);background:var(--a-s1);display:flex;align-items:center;justify-content:center}
+.ph-gear .ms{font-size:20px}
+.ph-bc{font:italic 800 1em/1 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.ph-card{padding:16px;border-radius:20px;background:var(--a-s1);border:1px solid var(--a-ln)}
+.ph-scr{display:none;flex-direction:column;gap:10px}
+.ph[data-tab="painel"] [data-screen="painel"],.ph[data-tab="monitor"] [data-screen="monitor"],.ph[data-tab="graf"] [data-screen="graf"],.ph[data-tab="fluido"] [data-screen="fluido"],.ph[data-tab="consumo"] [data-screen="consumo"]{display:flex}
+.ph-lbl{font:500 12px 'Archivo',sans-serif;color:var(--a-mu)}
+.ph-sec{padding:0 4px 7px;font:500 10.5px var(--mono);letter-spacing:.1em;color:var(--a-mu)}
+
+/* Painel: medidor */
+.ph-gauge{position:relative;width:262px;height:254px;margin:0 auto}
+.ph-gauge svg{position:absolute;left:0;top:0;width:262px;height:262px}
+.ph-gauge .g-arc{stroke:var(--sc);transition:stroke-dasharray .7s ease,stroke 1s ease}
+.ph-gauge .g-band{opacity:.35;transition:opacity .6s}
+.ph.b0 .g-band0,.ph.b1 .g-band1,.ph.b2 .g-band2{opacity:1}
+.ph-gauge .g-needle{transition:all .7s ease}
+.ph-gauge-mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:18px}
+.ph-gauge-mid>.ph-sec{padding:0;letter-spacing:.12em}
+.ph-temp{display:flex;align-items:flex-start;margin-top:2px}
+.ph-temp .ph-bc{font-size:86px}
+.ph-temp small{margin-top:8px;font:500 20px 'Archivo',sans-serif;color:var(--a-mu2)}
+.ph-pill{margin-top:6px;padding:5px 13px;border-radius:14px;background:var(--sc);color:#060607;font:italic 800 14px 'Barlow Condensed',sans-serif;letter-spacing:.06em;transform:skewX(-8deg);transition:background 1s ease}
+.ph-gauge-min,.ph-gauge-max{position:absolute;bottom:4px;font:500 10.5px var(--mono);color:var(--a-mu)}
+.ph-gauge-min{left:40px}.ph-gauge-max{right:34px}
+.ph-state{display:flex;align-items:center;gap:9px;font:600 16px 'Archivo',sans-serif}
+.ph-state .ms{color:var(--sc);font-size:21px}
+.ph-state-txt{margin:7px 0 14px;font:400 14px/1.45 'Archivo',sans-serif;color:var(--a-mu2);text-wrap:pretty}
+.ph-bands{display:grid;grid-template-columns:70fr 20fr 20fr;gap:4px}
+.ph-bands>div{display:flex;flex-direction:column;gap:6px;font:500 10.5px var(--mono);color:var(--a-mu);white-space:nowrap}
+.ph-bands i{height:6px;border-radius:3px;opacity:.25;transition:opacity .6s}
+.ph.b0 .ph-bands>div:nth-child(1),.ph.b1 .ph-bands>div:nth-child(2),.ph.b2 .ph-bands>div:nth-child(3){color:var(--a-tx)}
+.ph.b0 .ph-bands>div:nth-child(1) i,.ph.b1 .ph-bands>div:nth-child(2) i,.ph.b2 .ph-bands>div:nth-child(3) i{opacity:1}
+.ph-tiles{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.ph-tile{display:flex;flex-direction:column;gap:9px;padding:14px;border-radius:18px;background:var(--a-s1);border:1px solid var(--a-ln)}
+.ph-tile>span:first-child{display:flex;align-items:center;justify-content:space-between;font:500 12.5px 'Archivo',sans-serif;color:var(--a-mu)}
+.ph-tile .ms{font-size:17px}
+.ph-tile>span:last-child{display:flex;align-items:baseline;gap:5px}
+.ph-tile .ph-bc{font-size:31px}
+.ph-tile small,.ph-row small,.ph-big small{font:500 12px 'Archivo',sans-serif;color:var(--a-mu)}
+.ph-split{display:grid;grid-template-columns:1fr 1fr;border-radius:18px;background:var(--a-s1);border:1px solid var(--a-ln)}
+.ph-split>div{padding:13px 15px}
+.ph-split>div+div{border-left:1px solid var(--a-ln)}
+.ph-split .ph-bc{margin-top:5px;font-size:21px}
+
+/* Monitor */
+.ph-hint{display:flex;align-items:center;gap:8px;padding:9px 13px;border-radius:13px;background:var(--a-s1);border:1px solid var(--a-ln);font:400 12.5px 'Archivo',sans-serif;color:var(--a-mu2)}
+.ph-hint .ms{font-size:17px}
+.ph-group{border-radius:18px;background:var(--a-s1);border:1px solid var(--a-ln);overflow:hidden;margin-bottom:6px}
+.ph-row{display:flex;align-items:center;gap:10px;min-height:52px;padding:8px 14px}
+.ph-row+.ph-row{border-top:1px solid var(--a-ln)}
+.ph-row>span:first-child{flex:1;min-width:0;font:500 14px 'Archivo',sans-serif}
+.ph-row>span:first-child small{display:block;margin-top:2px;font:400 10.5px var(--mono)}
+.ph-row .ph-bc{font-size:20px}
+.ph-row .ph-ok{color:var(--a-ok)}
+.ph-row .ph-cvt{color:var(--sc)}
+
+/* Gráficos */
+.ph-chips{display:flex;gap:7px;margin:0 -14px;padding:0 14px;overflow-x:auto;scrollbar-width:none}
+.ph-chips::-webkit-scrollbar{display:none}
+.ph-chips button{flex:none;height:34px;padding:0 13px;border-radius:17px;border:1px solid var(--a-ln);background:var(--a-s1);color:var(--a-tx);font:600 12.5px 'Archivo',sans-serif;cursor:pointer}
+.ph-chips button[aria-pressed="true"]{background:var(--a-acc);border-color:var(--a-acc);color:#fff}
+.ph-chart-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.ph-chart-top .ph-bc{font-size:42px}
+.ph-live{display:flex;align-items:center;gap:6px;font:500 10.5px var(--mono);color:var(--a-mu)}
+.ph-live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--a-hot);animation:wl-pulse 1.4s ease-in-out infinite}
+.ph-chart{display:block;width:100%;height:170px;margin-top:14px;overflow:visible}
+.ph-chart .c-line{stroke:var(--a-acc)}
+.ph[data-chart="cvt"] .c-line{stroke:var(--sc)}
+.ph-chart .c-zone{display:none}
+.ph[data-chart="cvt"] .ph-chart .c-zone{display:inline}
+.ph-axis{display:flex;justify-content:space-between;margin-top:6px;font:400 10.5px var(--mono);color:var(--a-mu)}
+.ph-legend{display:flex;gap:14px;margin-top:10px;font:500 11.5px 'Archivo',sans-serif;color:var(--a-mu2)}
+.ph-legend span{display:flex;align-items:center;gap:6px}
+.ph-legend i{width:14px;height:3px;border-radius:2px;background:var(--a-acc)}
+.ph[data-chart="cvt"] .ph-legend i{background:var(--sc)}
+.ph-legend i.dash{height:0;border-top:2px dashed var(--a-mu);background:none!important}
+.ph-three{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.ph-three>div{padding:12px;border-radius:16px;background:var(--a-s1);border:1px solid var(--a-ln)}
+.ph-three .ph-bc{margin-top:4px;font-size:21px}
+.ph-note{margin:0;padding:0 4px;font:400 12.5px/1.5 'Archivo',sans-serif;color:var(--a-mu)}
+
+/* Fluido e consumo */
+.ph-big{display:flex;align-items:baseline;gap:8px;margin-top:5px}
+.ph-big .ph-bc{font-size:56px}
+.ph-meter{height:13px;margin-top:18px;border-radius:7px;background:var(--a-s3);overflow:hidden}
+.ph-meter i{display:block;height:100%;width:0;border-radius:7px;background:var(--a-acc);transition:width .6s,background .6s}
+.ph-scale{display:flex;justify-content:space-between;margin-top:7px;font:500 10.5px var(--mono);color:var(--a-mu)}
+.ph-quad{display:grid;grid-template-columns:1fr 1fr;gap:1px;margin-top:18px;border-radius:15px;overflow:hidden;background:var(--a-ln)}
+.ph-quad>div{padding:12px;background:var(--a-s1)}
+.ph-quad b{display:block;margin-top:4px;font:600 16px var(--mono)}
+.ph-info{display:flex;gap:11px}
+.ph-info .ms{flex:none;color:var(--a-mu2)}
+.ph-info p{margin:0;font:400 13px/1.5 'Archivo',sans-serif;color:var(--a-mu2);text-wrap:pretty}
+.ph-ghost{display:flex;align-items:center;justify-content:center;gap:8px;height:50px;border-radius:25px;border:1px solid var(--a-ln);font:600 14px 'Archivo',sans-serif}
+.ph-ghost .ms{font-size:19px}
+.ph-bars{display:flex;align-items:flex-end;gap:3px;height:52px;margin-top:18px}
+.ph-bars i{flex:1;border-radius:2px;background:var(--a-tx);opacity:.22;transition:height .5s}
+.ph-bars i:last-child{opacity:1}
+.ph-stats{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.ph-stats .ph-tile .ph-bc{font-size:27px}
+
+/* Barra de abas e notificação */
+.ph-nav{position:absolute;left:0;right:0;bottom:0;height:70px;padding:6px 4px 16px;background:var(--a-bg);border-top:1px solid var(--a-ln);display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+.ph-nav>button,.ph-nav>span{display:flex;flex-direction:column;align-items:center;gap:3px;padding:0;border:0;background:none;color:var(--a-mu);font:600 10.5px 'Archivo',sans-serif;cursor:pointer}
+.ph-nav i{width:52px;height:28px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-style:normal;transition:background .25s}
+.ph-nav .ms{font-size:21px;font-variation-settings:'FILL' 0}
+.ph-nav [aria-current="true"],.ph-nav [aria-selected="true"]{color:var(--a-acc)}
+.ph-nav [aria-current="true"] i,.ph-nav [aria-selected="true"] i{background:rgba(48,141,255,.22)}
+.ph-nav [aria-current="true"] .ms,.ph-nav [aria-selected="true"] .ms{font-variation-settings:'FILL' 1}
+.ph-home{position:absolute;bottom:5px;left:50%;z-index:11;width:100px;height:4px;margin-left:-50px;border-radius:2px;background:var(--a-tx);opacity:.5}
+.ph-banner{position:absolute;top:40px;left:9px;right:9px;z-index:10;display:flex;gap:11px;padding:13px 14px;border-radius:22px;background:var(--a-s1);border:1px solid var(--a-ln);box-shadow:0 12px 40px rgba(0,0,0,.45);cursor:pointer;animation:wl-in .4s cubic-bezier(.2,.7,.2,1)}
+.ph-banner>.ms{flex:none;width:34px;height:34px;max-width:none;border-radius:50%;background:var(--bc,var(--a-warn));color:#0c0d0e;display:flex;align-items:center;justify-content:center;font-size:19px}
+.ph-banner>span:last-child{flex:1;min-width:0}
+.ph-banner .ph-sec{display:flex;justify-content:space-between;padding:0;letter-spacing:.04em}
+.ph-banner b{display:block;margin-top:3px;font:600 14.5px 'Archivo',sans-serif}
+.ph-banner small{display:block;margin-top:2px;font:400 12.5px/1.4 'Archivo',sans-serif;color:var(--a-mu2)}
+.ph-demo-tag{position:absolute;left:50%;bottom:-14px;z-index:4;transform:translateX(-50%);padding:6px 12px;border-radius:999px;background:var(--bg2);border:1px solid var(--line);font:500 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
+
+/* ===== Faixa vermelha ===== */
+.wl-marquee{margin-top:clamp(56px,7vw,96px);background:var(--red);color:#fff;overflow:hidden;transform:rotate(-1.5deg) scale(1.03);padding:16px 0}
+.wl-marquee-track{display:flex;width:max-content;animation:wl-marquee 34s linear infinite;font-weight:900;font-stretch:125%;font-size:clamp(20px,2.6vw,34px);letter-spacing:-.01em;white-space:nowrap}
+.wl-marquee-track>div{display:flex;gap:36px;padding-right:36px}
+
+/* ===== Seções ===== */
+.wl-sec{max-width:1240px;margin:0 auto;padding:clamp(80px,10vw,136px) clamp(16px,4vw,48px) 0}
+.wl-sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,4vw,56px);align-items:end;margin-bottom:clamp(32px,4vw,56px)}
+.wl-num{display:flex;align-items:center;gap:10px;color:var(--red-hi)}
+.wl-h2{margin:14px 0 0;font-weight:800;font-stretch:112%;font-size:clamp(32px,4.6vw,64px);line-height:1;letter-spacing:-.03em;text-wrap:balance}
+.wl-sec-head p{margin:0;font-size:clamp(16px,1.5vw,19px);line-height:1.6;color:var(--muted);text-wrap:pretty}
+
+/* Por que monitorar */
+.wl-why{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.wl-why>div{display:flex;flex-direction:column;gap:12px;padding:clamp(22px,2.6vw,32px);border:1px solid var(--line);border-radius:22px;background:#0f0f11}
+.wl-why b{font-weight:800;font-stretch:112%;font-size:clamp(21px,2vw,26px);line-height:1.1;letter-spacing:-.02em}
+.wl-why p{margin:0;font-size:16px;line-height:1.6;color:var(--muted);text-wrap:pretty}
+.wl-why .wl-mono{color:var(--dim)}
+.wl-scale{margin-top:12px;padding:clamp(22px,2.6vw,32px);border:1px solid var(--line);border-radius:22px;background:#0f0f11}
+.wl-scale-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 20px;align-items:baseline}
+.wl-scale-top b{font-weight:800;font-stretch:112%;font-size:clamp(19px,1.8vw,23px);letter-spacing:-.01em}
+.wl-scale-bar{position:relative;display:grid;grid-template-columns:70fr 20fr 20fr;gap:4px;margin-top:22px}
+.wl-scale-bar>div{display:flex;flex-direction:column;gap:10px}
+.wl-scale-bar i{height:12px;border-radius:6px}
+.wl-scale-bar span{font-size:14px;line-height:1.35;color:var(--muted)}
+.wl-scale-bar span strong{display:block;color:var(--fg);font-size:15px}
+.wl-scale-mark{position:absolute;top:-8px;width:3px;height:28px;margin-left:-1.5px;border-radius:2px;background:var(--fg);box-shadow:0 0 0 3px var(--bg);transition:left 1.6s cubic-bezier(.3,.7,.2,1)}
+.wl-scale-ends{display:flex;justify-content:space-between;margin-top:14px;color:var(--dim)}
+
+/* Como funciona */
+.wl-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;counter-reset:passo}
+.wl-step{position:relative;display:flex;flex-direction:column;gap:12px;padding:clamp(22px,2.6vw,32px);border-radius:22px;background:var(--bg2);border:1px solid var(--line);overflow:hidden}
+.wl-step::before{counter-increment:passo;content:"0" counter(passo);font-weight:900;font-stretch:125%;font-size:64px;line-height:.9;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1px rgba(227,38,44,.7)}
+.wl-step b{font-weight:800;font-stretch:112%;font-size:22px;line-height:1.15;letter-spacing:-.02em}
+.wl-step p{margin:0;font-size:16px;line-height:1.6;color:var(--muted);text-wrap:pretty}
+.wl-step:last-child{background:var(--red);border-color:var(--red)}
+.wl-step:last-child::before{-webkit-text-stroke:1px rgba(255,255,255,.75)}
+.wl-step:last-child p{color:rgba(255,255,255,.88)}
+
+/* Por dentro do app */
+.wl-demo{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:clamp(32px,5vw,80px);align-items:start}
+.wl-demo-art{position:sticky;top:96px;display:flex;flex-direction:column;align-items:center;gap:30px}
+.wl-feats{display:flex;flex-direction:column;gap:10px}
+.wl-feat{display:grid;grid-template-columns:44px minmax(0,1fr);gap:4px 16px;width:100%;padding:20px 22px;border:1px solid var(--line);border-radius:20px;background:transparent;color:var(--fg);text-align:left;cursor:pointer;transition:background .3s,border-color .3s}
+.wl-feat:hover{border-color:rgba(227,38,44,.55)}
+.wl-feat[aria-pressed="true"]{background:#141416;border-color:var(--red)}
+.wl-feat .ms{grid-row:span 2;width:44px;height:44px;max-width:none;border-radius:14px;background:rgba(244,243,241,.06);display:flex;align-items:center;justify-content:center;transition:background .3s,color .3s}
+.wl-feat[aria-pressed="true"] .ms{background:var(--red);color:#fff;font-variation-settings:'FILL' 1}
+.wl-feat b{font-weight:800;font-stretch:110%;font-size:20px;letter-spacing:-.01em}
+.wl-feat span:last-child{font-size:15.5px;line-height:1.55;color:var(--muted);text-wrap:pretty}
+.wl-feat-more{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.wl-feat-more span{padding:8px 14px;border-radius:999px;border:1px solid var(--line);font-size:13px;color:var(--muted)}
+.wl-sim{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;max-width:340px}
+.wl-sim-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;padding:5px;border:1px solid var(--line);border-radius:16px}
+.wl-sim-btns button{height:38px;border:0;border-radius:11px;background:transparent;color:var(--muted);font:600 13px 'Archivo',sans-serif;cursor:pointer;transition:background .25s,color .25s}
+.wl-sim-btns button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.wl-sim-btns button[data-scen="atencao"][aria-pressed="true"]{background:var(--a-warn)}
+.wl-sim-btns button[data-scen="quente"][aria-pressed="true"]{background:var(--a-hot);color:#fff}
+.wl-voice{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--muted);cursor:pointer}
+.wl-voice input{width:18px;height:18px;accent-color:var(--red)}
+
+/* Teste grátis */
+.wl-free{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:center;padding:clamp(28px,4.5vw,64px);border:1px solid var(--line);border-radius:28px;background:#0f0f11}
+.wl-free::after{content:"";position:absolute;right:-12%;top:-70%;width:60%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(79,213,127,.18),rgba(79,213,127,0) 65%);pointer-events:none}
+.wl-free p{margin:18px 0 0;font-size:clamp(16px,1.5vw,18px);line-height:1.6;color:var(--muted);text-wrap:pretty}
+.wl-free ul{position:relative;z-index:1;margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.wl-free li{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;border-radius:16px;background:rgba(244,243,241,.04);border:1px solid var(--line);font-size:15.5px;line-height:1.5;color:var(--muted)}
+.wl-free li strong{display:block;color:var(--fg);font-size:16.5px}
+.wl-free li::before{content:"✓";flex:none;width:26px;height:26px;border-radius:50%;background:var(--a-ok);color:#0b0b0c;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px}
+.wl-free li.is-lock::before{content:"🔒";background:rgba(244,243,241,.1);font-size:12px}
+
+/* Compatibilidade */
+.wl-compat{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px}
+.wl-compat>div{display:flex;flex-direction:column;gap:12px;padding:clamp(22px,2.6vw,30px);border:1px solid var(--line);border-radius:22px}
+.wl-compat .wl-ok{border-color:rgba(79,213,127,.45);background:rgba(79,213,127,.05)}
+.wl-compat b{font-weight:800;font-stretch:112%;font-size:22px;line-height:1.15;letter-spacing:-.02em}
+.wl-compat p{margin:0;font-size:15.5px;line-height:1.6;color:var(--muted);text-wrap:pretty}
+.wl-tag{align-self:flex-start;padding:5px 11px;border-radius:999px;font:700 11px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.wl-tag-ok{background:var(--a-ok);color:#0b0b0c}
+.wl-tag-soon{border:1px solid var(--line);color:var(--dim)}
+.wl-tag-req{background:rgba(244,243,241,.1);color:var(--fg)}
+.wl-compat ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;font-size:15.5px;color:var(--muted)}
+.wl-compat li{display:flex;gap:10px}
+.wl-compat li::before{content:"—";color:var(--dim)}
+
+/* Preço */
+.wl-buy{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:center}
+.wl-buy-card{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:22px;padding:clamp(26px,3.6vw,44px);border-radius:28px;background:var(--red);color:#fff}
+.wl-anim .wl-buy-card{animation:wl-glow 4.5s ease-in-out 1s infinite}
+.wl-buy-card::after{content:"";position:absolute;right:-20%;top:-50%;width:70%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.22),rgba(255,255,255,0) 65%);pointer-events:none}
+.wl-buy-card>*{position:relative;z-index:1}
+.wl-buy-card .wl-mono{color:rgba(255,255,255,.85)}
+.wl-buy-price{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+.wl-buy-price b{font-weight:900;font-stretch:118%;font-size:clamp(56px,7vw,92px);line-height:.9;letter-spacing:-.04em}
+.wl-buy-price>span{font-size:15px;line-height:1.4;color:rgba(255,255,255,.88)}
+.wl-buy-card ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;font-size:16px;line-height:1.45}
+.wl-buy-card li{display:flex;gap:12px}
+.wl-buy-card li::before{content:"✓";flex:none;width:22px;height:22px;border-radius:50%;background:#fff;color:var(--red);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px}
+.wl-buy-card .wl-btn{background:#fff;border-color:#fff;color:var(--red);justify-content:center}
+.wl-buy-card .wl-btn:hover{background:var(--bg);border-color:var(--bg);color:#fff}
+.wl-buy-fine{font-size:13px;line-height:1.5;color:rgba(255,255,255,.82);text-align:center;text-wrap:pretty}
+.wl-buy-side{display:flex;flex-direction:column;gap:14px}
+.wl-buy-side>div{display:flex;gap:16px;padding:18px 20px;border:1px solid var(--line);border-radius:18px}
+.wl-buy-side .ms{flex:none;max-width:none;color:var(--red-hi)}
+.wl-buy-side b{display:block;font-size:17px}
+.wl-buy-side p{margin:4px 0 0;font-size:15px;line-height:1.55;color:var(--muted)}
+
+/* Quem fez */
+.wl-who{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(24px,4vw,64px);align-items:center}
+.wl-who-photo{position:relative;border-radius:26px;overflow:hidden;aspect-ratio:4/5;background:#141416}
+.wl-who-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.wl-who-photo span{position:absolute;left:14px;bottom:14px;padding:8px 13px;border-radius:999px;background:rgba(11,11,12,.75);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.wl-who blockquote{margin:0;font-weight:800;font-stretch:112%;font-size:clamp(26px,3.2vw,44px);line-height:1.08;letter-spacing:-.025em;text-wrap:balance}
+.wl-who p{margin:20px 0 0;font-size:clamp(16px,1.5vw,18px);line-height:1.65;color:var(--muted);text-wrap:pretty}
+.wl-who-nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:28px}
+.wl-who-nums>div{padding:16px;border:1px solid var(--line);border-radius:16px}
+.wl-who-nums b{display:block;font-weight:900;font-stretch:118%;font-size:clamp(24px,2.6vw,34px);letter-spacing:-.03em}
+.wl-who-nums span{font-size:13px;color:var(--dim)}
+
+/* FAQ */
+.wl-faq{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.wl-faq details{border-bottom:1px solid var(--line)}
+.wl-faq summary{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:24px 4px;cursor:pointer;list-style:none;font-weight:700;font-stretch:108%;font-size:clamp(17px,1.7vw,21px);line-height:1.3}
+.wl-faq summary::-webkit-details-marker{display:none}
+.wl-faq summary::after{content:"+";flex:none;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font:400 20px var(--mono);transition:transform .3s,background .3s,border-color .3s}
+.wl-faq details[open] summary::after{transform:rotate(45deg);background:var(--red);border-color:var(--red)}
+.wl-faq summary:hover{color:var(--red-hi)}
+.wl-faq details p{margin:0;padding:0 56px 24px 4px;font-size:16px;line-height:1.65;color:var(--muted);text-wrap:pretty}
+.wl-faq details p+p{margin-top:-12px}
+
+/* Aviso e chamada final */
+.wl-disclaimer{display:flex;gap:14px;margin-top:clamp(40px,5vw,64px);padding:18px 20px;border:1px solid var(--line);border-radius:18px;font-size:14.5px;line-height:1.6;color:var(--muted)}
+.wl-disclaimer::before{content:"!";flex:none;width:24px;height:24px;border-radius:50%;border:1px solid rgba(244,243,241,.35);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:700;color:var(--fg)}
+.wl-end{text-align:center}
+.wl-end .wl-h2{max-width:900px;margin:14px auto 0}
+.wl-end .wl-ctas{justify-content:center}
+
+/* Rodapé */
+.wl-footer{margin:clamp(80px,10vw,140px) auto 0;border-top:1px solid rgba(244,243,241,.08);padding:48px clamp(16px,4vw,48px) 32px;max-width:1440px}
+.wl-footer-row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:center}
+.wl-footer-links{display:flex;flex-wrap:wrap;gap:20px;font-weight:600;font-size:15px}
+.wl-foot-word{position:relative;left:50%;translate:-50% 0;width:max-content;padding:0 .14em 0 .1em;margin-top:40px;font-weight:900;font-stretch:125%;font-size:clamp(44px,12.5vw,210px);line-height:.85;letter-spacing:-.04em;color:#141416;-webkit-text-stroke:1px rgba(244,243,241,.12);white-space:nowrap;text-align:center}
+.wl-anim .wl-foot-word{background:linear-gradient(105deg,rgba(255,246,235,0) 15%,rgba(255,246,235,.9) 50%,rgba(255,246,235,0) 85%) no-repeat,#141416;background-size:40% 100%,auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:wl-beam 4s cubic-bezier(.45,0,.3,1) 1s infinite}
+
+/* Aviso "mensagem copiada" */
+.wl-toast{position:fixed;left:50%;bottom:24px;z-index:80;max-width:calc(100% - 32px);transform:translate(-50%,20px);padding:14px 20px;border-radius:16px;background:var(--fg);color:var(--bg);font-weight:600;font-size:15px;line-height:1.4;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .3s,transform .3s}
+.wl-toast.is-on{opacity:1;transform:translate(-50%,0)}
+
+/* ===== Animações (só com JS e sem prefers-reduced-motion) ===== */
+.wl-anim [data-reveal]{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.wl-anim [data-reveal].is-in{opacity:1;transform:none}
+.wl-anim .wl-bubble-voice{animation:wl-float 6s ease-in-out infinite}
+.wl-anim .wl-bubble-fluid{animation:wl-float 7s ease-in-out 1.5s infinite}
+@media (prefers-reduced-motion:reduce){
+  .wl-marquee-track,.wl-eyebrow::before,.ph-live::before{animation:none!important}
+  .ph *{transition:none!important}
+}
+
+/* ===== Telas menores ===== */
+@media (max-width:1240px){.wl-nav-extra{display:none!important}}
+@media (max-width:1060px){
+  .wl-nav-guia{display:none!important}
+  .wl-hero{grid-template-columns:minmax(0,1fr)}
+  .wl-hero-art{padding-top:8px}
+  .wl-demo{grid-template-columns:minmax(0,1fr)}
+  .wl-demo-art{position:static;order:-1}
+  .wl-feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+  .wl-buy,.wl-free,.wl-who{grid-template-columns:minmax(0,1fr)}
+  .wl-who-photo{max-width:440px;aspect-ratio:1}
+}
+@media (max-width:860px){
+  .wl-sec-head{grid-template-columns:minmax(0,1fr)}
+  .wl-why,.wl-steps{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:640px){
+  html{scroll-padding-top:112px}
+  .wl-nav{padding:10px 16px;gap:10px;flex-wrap:wrap;row-gap:10px}
+  .wl-nav-sec{display:none!important}
+  .wl-nav-strip{display:flex;gap:8px;flex:1 1 100%;margin:0 -16px;padding:0 16px 2px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;-webkit-mask-image:linear-gradient(to right,#000 85%,transparent);mask-image:linear-gradient(to right,#000 85%,transparent)}
+  .wl-brand{font-size:12px}
+  .wl-nav-cta{padding:8px 14px;font-size:13px}
+  .wl-hero{padding-top:24px}
+  .wl-crumbs{font-size:10px}
+  .wl-h1{font-size:clamp(36px,10.6vw,54px)}
+  .wl-ctas>.wl-btn{flex:1 1 100%}
+  .wl-bubble{display:none}
+  .wl-scale-bar span{font-size:12.5px}
+  .wl-scale-bar span strong{font-size:13px}
+  .wl-who-nums{grid-template-columns:1fr 1fr}
+  .wl-who-nums>div:last-child{grid-column:span 2}
+  .wl-faq details p{padding-right:4px}
+  .wl-footer-links{gap:14px 20px}
+}
+/* Celular estreito: o aparelho encolhe para não vazar da tela */
+@media (max-width:390px){
+  .ph-fit{zoom:.86}
+  .wl-nav-home{gap:8px;min-width:0}
+  .wl-nav-home img{width:26px;height:26px}
+  .wl-brand{font-size:10.5px;letter-spacing:0}
+  .wl-nav-cta{padding:7px 12px;font-size:12px}
+}
+@media (max-width:340px){.ph-fit{zoom:.76}}
+</style>
+</head>
+<body>
+<a class="wl-skip" href="#conteudo">Pular para o conteúdo</a>
+<div class="wl-page">
+
+  <!-- MENU (mesmos links das outras páginas; "CVT Monitor" fica ativo aqui) -->
+  <nav class="wl-nav" aria-label="Principal">
+    <a class="wl-nav-home" href="./" aria-label="Whiteline Fluence, página inicial">
+      <img src="assets/perfil.jpg" alt="">
+      <span class="wl-brand">WHITELINE<span style="color:#e3262c">.</span>FLUENCE</span>
+    </a>
+    <div class="wl-nav-links">
+      <a class="wl-nav-sec wl-nav-extra" href="./#sobre">Sobre</a>
+      <a class="wl-nav-sec wl-nav-extra" href="./#ficha">Ficha</a>
+      <a class="wl-nav-sec" href="./#videos">Vídeos</a>
+      <a class="wl-nav-sec wl-nav-extra" href="./#produtos">Produtos</a>
+      <a class="wl-nav-sec wl-nav-pill wl-nav-guia" href="guia-compra.html">Guia de compra</a>
+      <a class="wl-nav-sec wl-nav-pill is-active" href="cvt-monitor.html" aria-current="page">CVT Monitor</a>
+      <a class="wl-nav-cta" href="#preco" data-cta-short>Me avise</a>
+    </div>
+    <div class="wl-nav-strip">
+      <a href="./">← Início</a>
+      <a href="#como">Como funciona</a>
+      <a href="#app">O app</a>
+      <a href="#compat">Compatível</a>
+      <a href="#preco">Preço</a>
+      <a href="#faq">Dúvidas</a>
+      <a href="guia-compra.html">Guia de compra</a>
+    </div>
+  </nav>
+
+  <main id="conteudo">
+
+  <!-- TOPO -->
+  <header class="wl-hero" id="topo">
+    <div>
+      <div class="wl-crumbs wl-mono"><a href="./">Whiteline Fluence</a><span aria-hidden="true">/</span><span>CVT Monitor</span></div>
+      <div class="wl-eyebrow wl-mono">
+        <span data-only="pre">Em breve · App para Android</span>
+        <span data-only="live" hidden>Já disponível · App para Android</span>
+      </div>
+      <h1 class="wl-h1">O câmbio do seu Fluence está <span class="wl-red">esquentando?</span> Agora você vê.</h1>
+      <p class="wl-lead">O <strong>CVT Monitor</strong> mostra no celular a temperatura do óleo do câmbio CVT, ao vivo, e <strong>avisa por voz</strong> antes de virar problema. Basta um scanner OBD2 Bluetooth plugado embaixo do volante.</p>
+      <div class="wl-ctas">
+        <a class="wl-btn wl-btn-red" href="#preco" data-cta>Me avise no lançamento <span class="wl-arrow" aria-hidden="true">→</span></a>
+        <a class="wl-btn" href="#app">Ver o app por dentro <span class="wl-arrow" aria-hidden="true">↓</span></a>
+      </div>
+      <div class="wl-price-chip" data-show-price>
+        <span class="wl-mono" data-only="pre">No lançamento</span><span class="wl-mono" data-only="live" hidden>Preço de lançamento</span>
+        <b>R$ <span data-preco>39,90</span></b>
+        <s data-preco-depois-wrap>R$ <span data-preco-depois>49,90</span></s>
+      </div>
+      <ul class="wl-facts">
+        <li>Pagamento único</li>
+        <li>Licença vitalícia</li>
+        <li>Funciona sem internet</li>
+        <li>Teste grátis</li>
+      </ul>
+    </div>
+
+    <div class="wl-hero-art" aria-hidden="true">
+      <div class="ph-fit wl-stage">
+        <div class="wl-bubble wl-bubble-voice">
+        <span class="wl-mono">Alerta por voz</span>
+        <strong>“Atenção. Temperatura do câmbio em 98 graus.”</strong>
+      </div>
+        <div class="wl-bubble wl-bubble-fluid">
+        <span class="wl-mono">Desgaste do fluido</span>
+        <strong>71% da vida útil · troca em ~60 mil pontos</strong>
+        <i></i>
+      </div>
+        <!-- Celular do topo: só a tela Painel, ao vivo -->
+        <div class="ph b0" data-ph data-tab="painel">
+          <div class="ph-screen">
+            <div class="ph-glow"></div>
+            <div class="ph-status"><span>9:41</span><span><span class="ms" style="font-size:15px">bluetooth</span><span class="ms" style="font-size:15px">signal_cellular_alt</span><span class="ms" style="font-size:15px">battery_5_bar</span></span></div>
+            <div class="ph-body">
+              <div class="ph-head"><div><div class="ph-title">Renault Fluence</div><div class="ph-conn">OBDII · conectado</div></div><span class="ph-gear"><span class="ms">settings</span></span></div>
+              <div class="ph-scr" data-screen="painel">
+                <div class="ph-gauge">
+                  <svg viewBox="0 0 300 300"><g transform="rotate(135 150 150)" fill="none"><circle class="g-band g-band0" cx="150" cy="150" r="138" stroke="var(--a-ok)" stroke-width="4" stroke-dasharray="404 900"/><circle class="g-band g-band1" cx="150" cy="150" r="138" stroke="var(--a-warn)" stroke-width="4" stroke-dasharray="113 900" stroke-dashoffset="-410"/><circle class="g-band g-band2" cx="150" cy="150" r="138" stroke="var(--a-hot)" stroke-width="4" stroke-dasharray="117 900" stroke-dashoffset="-527"/><circle cx="150" cy="150" r="118" stroke="var(--a-s3)" stroke-width="16" stroke-dasharray="556 742"/><circle class="g-arc" data-g-arc cx="150" cy="150" r="118" stroke-width="16" stroke-dasharray="273 742"/></g><g data-g-ticks></g><line class="g-needle" data-g-needle x1="150" y1="250" x2="150" y2="276" stroke="var(--a-tx)" stroke-width="3"/></svg>
+                  <div class="ph-gauge-mid"><div class="ph-sec">ÓLEO DO CÂMBIO</div><div class="ph-temp"><span class="ph-bc" data-v="cvt">78</span><small>°C</small></div><div class="ph-pill" data-v="sLabel">TRANQUILO</div></div>
+                  <div class="ph-gauge-min">20°</div><div class="ph-gauge-max">130°</div>
+                </div>
+                <div class="ph-card">
+                  <div class="ph-state"><span class="ms" data-v="sIcon">check_circle</span><span data-v="sHead">Temperatura ideal</span></div>
+                  <p class="ph-state-txt" data-v="sBody">O câmbio está trabalhando na faixa certa. Pode dirigir normalmente.</p>
+                  <div class="ph-bands"><div><i style="background:var(--a-ok)"></i>&lt; 90°</div><div><i style="background:var(--a-warn)"></i>90–110°</div><div><i style="background:var(--a-hot)"></i>&gt; 110°</div></div>
+                </div>
+                <div class="ph-tiles">
+                  <div class="ph-tile"><span>Motor<span class="ms">thermostat</span></span><span><span class="ph-bc" data-v="eng">89</span><small>°C</small></span></div>
+                  <div class="ph-tile"><span>Rotação<span class="ms">speed</span></span><span><span class="ph-bc" data-v="rpm">1.650</span><small>rpm</small></span></div>
+                  <div class="ph-tile"><span>Velocidade<span class="ms">navigation</span></span><span><span class="ph-bc" data-v="speed">48</span><small>km/h</small></span></div>
+                  <div class="ph-tile"><span>Marcha<span class="ms">settings_input_component</span></span><span><span class="ph-bc" data-v="gear">D4</span><small>virtual</small></span></div>
+                </div>
+              </div>
+            </div>
+            <div class="ph-nav"><span aria-current="true"><i><span class="ms">speed</span></i>Painel</span><span><i><span class="ms">monitor_heart</span></i>Monitor</span><span><i><span class="ms">show_chart</span></i>Gráficos</span><span><i><span class="ms">water_drop</span></i>Fluido</span><span><i><span class="ms">local_gas_station</span></i>Consumo</span></div>
+            <div class="ph-home"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="wl-marquee" aria-hidden="true">
+    <div class="wl-marquee-track">
+      <div><span>TEMPERATURA DO ÓLEO</span><span>✦</span><span>ALERTA POR VOZ</span><span>✦</span><span>DESGASTE DO FLUIDO</span><span>✦</span><span>GRÁFICOS AO VIVO</span><span>✦</span><span>CONSUMO</span><span>✦</span><span>FEITO PARA O FLUENCE</span><span>✦</span></div>
+      <div><span>TEMPERATURA DO ÓLEO</span><span>✦</span><span>ALERTA POR VOZ</span><span>✦</span><span>DESGASTE DO FLUIDO</span><span>✦</span><span>GRÁFICOS AO VIVO</span><span>✦</span><span>CONSUMO</span><span>✦</span><span>FEITO PARA O FLUENCE</span><span>✦</span></div>
+    </div>
+  </div>
+
+  <!-- 01 POR QUE -->
+  <section class="wl-sec" id="porque" aria-labelledby="porque-t">
+    <div class="wl-sec-head">
+      <div data-reveal>
+        <span class="wl-num wl-mono">01 · Por que monitorar</span>
+        <h2 class="wl-h2" id="porque-t">Calor é o maior inimigo do câmbio CVT.</h2>
+      </div>
+      <p data-reveal>Trânsito parado, subida de serra, dia de 35 °C, carro carregado. É nessas horas que o óleo do câmbio esquenta, e o painel do Fluence não mostra nada sobre isso.</p>
+    </div>
+    <div class="wl-why">
+      <div data-reveal><span class="wl-mono">O problema</span><b>O painel não mostra a temperatura do câmbio.</b><p>Você tem o ponteiro do motor, mas o óleo do CVT fica no escuro. Não dá para saber se está tudo bem ou se é hora de aliviar o pé.</p></div>
+      <div data-reveal><span class="wl-mono">O que acontece</span><b>Óleo quente se desgasta mais rápido.</b><p>Acima de 90 °C o fluido começa a perder as propriedades mais depressa. Óleo gasto é o caminho para trancos, patinação e conserto caro.</p></div>
+      <div data-reveal><span class="wl-mono">A solução</span><b>Ver o número e ser avisado na hora.</b><p>Com a temperatura na tela e um alerta de voz, você muda o jeito de dirigir no momento certo e sabe quando trocar o fluido.</p></div>
+    </div>
+    <div class="wl-scale" data-reveal>
+      <div class="wl-scale-top"><b>As faixas que o app usa</b><span class="wl-mono" style="color:var(--dim)">Óleo do câmbio · °C</span></div>
+      <div class="wl-scale-bar">
+        <span class="wl-scale-mark" data-scale-mark style="left:52%" aria-hidden="true"></span>
+        <div><i style="background:var(--a-ok)"></i><span><strong>Tranquilo</strong>até 89 °C</span></div>
+        <div><i style="background:var(--a-warn)"></i><span><strong>Atenção</strong>90–109 °C</span></div>
+        <div><i style="background:var(--a-hot)"></i><span><strong>Muito quente</strong>110 °C+</span></div>
+      </div>
+      <div class="wl-scale-ends wl-mono"><span>20 °C</span><span>130 °C</span></div>
+    </div>
+  </section>
+
+  <!-- 02 COMO FUNCIONA -->
+  <section class="wl-sec" id="como" aria-labelledby="como-t">
+    <div class="wl-sec-head">
+      <div data-reveal>
+        <span class="wl-num wl-mono">02 · Como funciona</span>
+        <h2 class="wl-h2" id="como-t">Plugou, conectou, pode rodar.</h2>
+      </div>
+      <p data-reveal>Leva menos de um minuto na primeira vez. Depois o app conecta sozinho toda vez que você liga o carro.</p>
+    </div>
+    <div class="wl-steps">
+      <div class="wl-step" data-reveal><b>Plugue o scanner na porta OBD2</b><p>Ela fica embaixo do volante, perto dos pedais. Serve qualquer scanner ELM327 v1.5 Bluetooth, aquele pequeno e barato.</p></div>
+      <div class="wl-step" data-reveal><b>Conecte pelo app</b><p>Ligue a ignição, abra o CVT Monitor e escolha o scanner. O app encontra o câmbio e o motor e começa a ler os dados.</p></div>
+      <div class="wl-step" data-reveal><b>Dirija tranquilo</b><p>Se o óleo passar de 90 °C ou de 110 °C, o app avisa por voz e por notificação, mesmo com a tela apagada ou com outro app aberto.</p></div>
+    </div>
+  </section>
+
+  <!-- 03 POR DENTRO DO APP -->
+  <section class="wl-sec" id="app" aria-labelledby="app-t">
+    <div class="wl-sec-head">
+      <div data-reveal>
+        <span class="wl-num wl-mono">03 · Por dentro do app</span>
+        <h2 class="wl-h2" id="app-t">Mexe aí: é o app de verdade.</h2>
+      </div>
+      <p data-reveal>Toque nas abas para trocar de tela e use o simulador para ver o que acontece quando o câmbio esquenta. Os números são simulados, como no modo demonstração do app.</p>
+    </div>
+    <div class="wl-demo">
+      <div class="wl-feats" role="group" aria-label="Telas do app">
+        <button type="button" class="wl-feat" data-go="painel" aria-pressed="true"><span class="ms" aria-hidden="true">speed</span><b>Painel</b><span>A temperatura do óleo do câmbio em um medidor grande, com cor e recado do que fazer. Mais motor, rotação, velocidade e marcha virtual.</span></button>
+        <button type="button" class="wl-feat" data-go="monitor" aria-pressed="false"><span class="ms" aria-hidden="true">monitor_heart</span><b>Monitor ao vivo</b><span>Tudo que o módulo do câmbio e do motor informa, organizado: temperaturas, relação, lockup, patinação, pressões das polias e bateria.</span></button>
+        <button type="button" class="wl-feat" data-go="graf" aria-pressed="false"><span class="ms" aria-hidden="true">show_chart</span><b>Gráficos</b><span>Os últimos 60 segundos de cada valor, com a velocidade junto. Dá para ver exatamente que tipo de trecho esquenta o câmbio.</span></button>
+        <button type="button" class="wl-feat" data-go="fluido" aria-pressed="false"><span class="ms" aria-hidden="true">water_drop</span><b>Desgaste do fluido</b><span>Um contador que sobe só quando o óleo passa de 90 °C e mostra quanto da vida útil já foi. Trocou o fluido? Zera e começa de novo.</span></button>
+        <button type="button" class="wl-feat" data-go="consumo" aria-pressed="false"><span class="ms" aria-hidden="true">local_gas_station</span><b>Consumo e viagem</b><span>Consumo instantâneo e médio, autonomia, distância e tempo de viagem, para gasolina ou etanol.</span></button>
+        <div class="wl-feat-more" data-reveal>
+          <span>Alerta por voz em português</span><span>Funciona com a tela apagada</span><span>Reconecta sozinho</span><span>Tema escuro e claro</span><span>°C ou °F</span><span>Só leitura: não altera nada no carro</span>
+        </div>
+      </div>
+
+      <div class="wl-demo-art">
+        <div class="ph-fit">
+          <!-- Celular interativo: as 5 abas -->
+          <div class="ph b0" id="demo-phone" data-ph data-demo data-tab="painel" data-chart="cvt">
+            <div class="ph-screen">
+              <div class="ph-glow"></div>
+              <div class="ph-status" aria-hidden="true"><span>9:41</span><span><span class="ms" style="font-size:15px">bluetooth</span><span class="ms" style="font-size:15px">signal_cellular_alt</span><span class="ms" style="font-size:15px">battery_5_bar</span></span></div>
+
+              <div class="ph-banner" data-banner hidden role="status">
+                <span class="ms" aria-hidden="true">device_thermostat</span>
+                <span><span class="ph-sec"><span>CVT MONITOR · AGORA</span><span>VOZ ATIVA</span></span><b data-banner-title></b><small data-banner-body></small></span>
+              </div>
+
+              <div class="ph-body" data-ph-body>
+                <div class="ph-head"><div><div class="ph-title" data-ph-title>Renault Fluence</div><div class="ph-conn">OBDII · conectado</div></div><span class="ph-gear" aria-hidden="true"><span class="ms">settings</span></span></div>
+
+                <!-- Painel -->
+                <div class="ph-scr" data-screen="painel">
+                  <div class="ph-gauge" aria-hidden="true">
+                    <svg viewBox="0 0 300 300"><g transform="rotate(135 150 150)" fill="none"><circle class="g-band g-band0" cx="150" cy="150" r="138" stroke="var(--a-ok)" stroke-width="4" stroke-dasharray="404 900"/><circle class="g-band g-band1" cx="150" cy="150" r="138" stroke="var(--a-warn)" stroke-width="4" stroke-dasharray="113 900" stroke-dashoffset="-410"/><circle class="g-band g-band2" cx="150" cy="150" r="138" stroke="var(--a-hot)" stroke-width="4" stroke-dasharray="117 900" stroke-dashoffset="-527"/><circle cx="150" cy="150" r="118" stroke="var(--a-s3)" stroke-width="16" stroke-dasharray="556 742"/><circle class="g-arc" data-g-arc cx="150" cy="150" r="118" stroke-width="16" stroke-dasharray="273 742"/></g><g data-g-ticks></g><line class="g-needle" data-g-needle x1="150" y1="250" x2="150" y2="276" stroke="var(--a-tx)" stroke-width="3"/></svg>
+                    <div class="ph-gauge-mid"><div class="ph-sec">ÓLEO DO CÂMBIO</div><div class="ph-temp"><span class="ph-bc" data-v="cvt">78</span><small>°C</small></div><div class="ph-pill" data-v="sLabel">TRANQUILO</div></div>
+                    <div class="ph-gauge-min">20°</div><div class="ph-gauge-max">130°</div>
+                  </div>
+                  <div class="ph-card">
+                    <div class="ph-state"><span class="ms" data-v="sIcon" aria-hidden="true">check_circle</span><span data-v="sHead">Temperatura ideal</span></div>
+                    <p class="ph-state-txt" data-v="sBody">O câmbio está trabalhando na faixa certa. Pode dirigir normalmente.</p>
+                    <div class="ph-bands"><div><i style="background:var(--a-ok)"></i>&lt; 90°</div><div><i style="background:var(--a-warn)"></i>90–110°</div><div><i style="background:var(--a-hot)"></i>&gt; 110°</div></div>
+                  </div>
+                  <div class="ph-tiles">
+                    <div class="ph-tile"><span>Motor<span class="ms" aria-hidden="true">thermostat</span></span><span><span class="ph-bc" data-v="eng">89</span><small>°C</small></span></div>
+                    <div class="ph-tile"><span>Rotação<span class="ms" aria-hidden="true">speed</span></span><span><span class="ph-bc" data-v="rpm">1.650</span><small>rpm</small></span></div>
+                    <div class="ph-tile"><span>Velocidade<span class="ms" aria-hidden="true">navigation</span></span><span><span class="ph-bc" data-v="speed">48</span><small>km/h</small></span></div>
+                    <div class="ph-tile"><span>Marcha<span class="ms" aria-hidden="true">settings_input_component</span></span><span><span class="ph-bc" data-v="gear">D4</span><small>virtual</small></span></div>
+                  </div>
+                  <div class="ph-split"><div><div class="ph-lbl">Máxima na sessão</div><div class="ph-bc" data-v="max">78°C</div></div><div><div class="ph-lbl">Tempo acima de 90°C</div><div class="ph-bc" data-v="above">0 min 00 s</div></div></div>
+                </div>
+
+                <!-- Monitor -->
+                <div class="ph-scr" data-screen="monitor">
+                  <div class="ph-hint"><span class="ms" aria-hidden="true">touch_app</span>Toque em um valor para ver o gráfico</div>
+                  <div>
+                    <div class="ph-sec">TEMPERATURAS</div>
+                    <div class="ph-group">
+                      <div class="ph-row"><span>Óleo do câmbio<small class="ph-lbl">ATF TEMP</small></span><span><span class="ph-bc ph-cvt" data-v="cvt">78</span> <small>°C</small></span></div>
+                      <div class="ph-row"><span>Motor<small class="ph-lbl">COOLANT TEMP</small></span><span><span class="ph-bc" data-v="eng">89</span> <small>°C</small></span></div>
+                      <div class="ph-row"><span>Ar de admissão<small class="ph-lbl">INTAKE AIR TEMP</small></span><span><span class="ph-bc" data-v="intake">31</span> <small>°C</small></span></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="ph-sec">CÂMBIO</div>
+                    <div class="ph-group">
+                      <div class="ph-row"><span>Marcha virtual<small class="ph-lbl">D · aprox.</small></span><span class="ph-bc" data-v="gearN">4ª</span></div>
+                      <div class="ph-row"><span>Relação<small class="ph-lbl">GEAR RATIO</small></span><span class="ph-bc" data-v="ratio">1,12</span></div>
+                      <div class="ph-row"><span>Lockup do conversor<small class="ph-lbl">LOCKUP</small></span><span class="ph-bc ph-ok" data-v="lu">Travado</span></div>
+                      <div class="ph-row"><span>Patinação<small class="ph-lbl">SLIP REV</small></span><span><span class="ph-bc" data-v="slip">8</span> <small>rpm</small></span></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="ph-sec">PRESSÕES</div>
+                    <div class="ph-group">
+                      <div class="ph-row"><span>Polia secundária<small class="ph-lbl">SEC PRESS</small></span><span><span class="ph-bc" data-v="sec">1,62</span> <small>MPa</small></span></div>
+                      <div class="ph-row"><span>Polia primária<small class="ph-lbl">PRI PRESS</small></span><span><span class="ph-bc" data-v="pri">0,98</span> <small>MPa</small></span></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="ph-sec">MOTOR E ELÉTRICA</div>
+                    <div class="ph-group">
+                      <div class="ph-row"><span>Rotação<small class="ph-lbl">ENG SPEED</small></span><span><span class="ph-bc" data-v="rpm">1.650</span> <small>rpm</small></span></div>
+                      <div class="ph-row"><span>Bateria<small class="ph-lbl">VOLTAGE</small></span><span><span class="ph-bc" data-v="bat">14,1</span> <small>V</small></span></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Gráficos -->
+                <div class="ph-scr" data-screen="graf">
+                  <div class="ph-chips" role="group" aria-label="Valor do gráfico">
+                    <button type="button" data-chart-key="cvt" aria-pressed="true">Óleo do câmbio</button>
+                    <button type="button" data-chart-key="eng" aria-pressed="false">Motor</button>
+                    <button type="button" data-chart-key="rpm" aria-pressed="false">Rotação</button>
+                    <button type="button" data-chart-key="speed" aria-pressed="false">Velocidade</button>
+                  </div>
+                  <div class="ph-card">
+                    <div class="ph-chart-top">
+                      <div><div class="ph-lbl" data-v="chName">Óleo do câmbio</div><div style="display:flex;align-items:baseline;gap:5px;margin-top:4px"><span class="ph-bc" data-v="chCur" style="color:var(--a-tx)">78</span><small class="ph-lbl" data-v="chUnit">°C</small></div></div>
+                      <div class="ph-live">AO VIVO</div>
+                    </div>
+                    <svg class="ph-chart" viewBox="0 0 300 170" preserveAspectRatio="none" aria-hidden="true">
+                      <rect class="c-zone" data-c-hot x="0" y="0" width="300" height="38" fill="var(--a-hot)" opacity=".1"/>
+                      <rect class="c-zone" data-c-warn x="0" y="38" width="300" height="38" fill="var(--a-warn)" opacity=".1"/>
+                      <line x1="0" y1="42" x2="300" y2="42" stroke="var(--a-ln)"/><line x1="0" y1="85" x2="300" y2="85" stroke="var(--a-ln)"/><line x1="0" y1="128" x2="300" y2="128" stroke="var(--a-ln)"/>
+                      <polyline data-c-speed fill="none" stroke="var(--a-mu)" stroke-width="1.5" stroke-dasharray="3 4" opacity=".7" vector-effect="non-scaling-stroke" points=""/>
+                      <polyline class="c-line" data-c-line fill="none" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke" points=""/>
+                    </svg>
+                    <div class="ph-axis"><span>−60 s</span><span>agora</span></div>
+                    <div class="ph-legend"><span><i></i><span data-v="chName">Óleo do câmbio</span></span><span><i class="dash"></i>Velocidade</span></div>
+                  </div>
+                  <div class="ph-three"><div><div class="ph-lbl">Mínimo</div><div class="ph-bc" data-v="chMin">74</div></div><div><div class="ph-lbl">Média</div><div class="ph-bc" data-v="chAvg">77</div></div><div><div class="ph-lbl">Máximo</div><div class="ph-bc" data-v="chMax">80</div></div></div>
+                  <p class="ph-note" data-v="chNote">Faixas amarela e vermelha marcam 90°C e 110°C. A linha tracejada é a velocidade, para relacionar o aquecimento com o jeito de dirigir.</p>
+                </div>
+
+                <!-- Fluido -->
+                <div class="ph-scr" data-screen="fluido">
+                  <div class="ph-card" style="padding:20px 16px">
+                    <div class="ph-lbl" style="font-size:13px">Desgaste do fluido CVT</div>
+                    <div class="ph-big"><span class="ph-bc" data-v="detPct">71%</span><small>da vida útil</small></div>
+                    <div class="ph-meter"><i data-det-bar></i></div>
+                    <div class="ph-scale"><span>0</span><span>210.000 · troca</span></div>
+                    <div class="ph-quad">
+                      <div><div class="ph-lbl">Contador</div><b data-v="det">148.320</b></div>
+                      <div><div class="ph-lbl">Nesta sessão</div><b data-v="detSess">+0</b></div>
+                      <div><div class="ph-lbl">Faltam até a troca</div><b data-v="detLeft">61.680</b></div>
+                      <div><div class="ph-lbl">Zerado em</div><b>14/03/2025</b></div>
+                    </div>
+                  </div>
+                  <div class="ph-card ph-info"><span class="ms" aria-hidden="true">info</span><p>O contador só sobe quando o óleo passa de 90°C. A troca é recomendada acima de 210.000 pontos, mas óleo escuro ou com cheiro de queimado também pede troca.</p></div>
+                  <div class="ph-ghost"><span class="ms" aria-hidden="true">restart_alt</span>Troquei o fluido, zerar contador</div>
+                </div>
+
+                <!-- Consumo -->
+                <div class="ph-scr" data-screen="consumo">
+                  <div class="ph-card" style="padding:20px 16px">
+                    <div class="ph-lbl" style="font-size:13px">Consumo instantâneo</div>
+                    <div class="ph-big"><span class="ph-bc" data-v="kml" style="font-size:66px">12,4</span><small style="font-size:16px">km/l</small></div>
+                    <div class="ph-lbl" data-v="lph" style="margin-top:6px;font-family:var(--mono)">8,1 L/100 km</div>
+                    <div class="ph-bars" data-fuel-bars aria-hidden="true"></div>
+                  </div>
+                  <div class="ph-stats">
+                    <div class="ph-tile"><span>Média da viagem</span><span><span class="ph-bc" data-v="avg">11,8</span><small>km/l</small></span></div>
+                    <div class="ph-tile"><span>Autonomia</span><span><span class="ph-bc" data-v="range">281</span><small>km</small></span></div>
+                    <div class="ph-tile"><span>Distância</span><span><span class="ph-bc" data-v="dist">23,4</span><small>km</small></span></div>
+                    <div class="ph-tile"><span>Tempo</span><span><span class="ph-bc" data-v="time">32</span><small>min</small></span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ph-nav" role="tablist" aria-label="Abas do app">
+                <button type="button" role="tab" data-go="painel" aria-selected="true"><i><span class="ms" aria-hidden="true">speed</span></i>Painel</button>
+                <button type="button" role="tab" data-go="monitor" aria-selected="false"><i><span class="ms" aria-hidden="true">monitor_heart</span></i>Monitor</button>
+                <button type="button" role="tab" data-go="graf" aria-selected="false"><i><span class="ms" aria-hidden="true">show_chart</span></i>Gráficos</button>
+                <button type="button" role="tab" data-go="fluido" aria-selected="false"><i><span class="ms" aria-hidden="true">water_drop</span></i>Fluido</button>
+                <button type="button" role="tab" data-go="consumo" aria-selected="false"><i><span class="ms" aria-hidden="true">local_gas_station</span></i>Consumo</button>
+              </div>
+              <div class="ph-home" aria-hidden="true"></div>
+            </div>
+            <span class="ph-demo-tag">Dados simulados</span>
+          </div>
+        </div>
+
+        <div class="wl-sim">
+          <span class="wl-mono" style="color:var(--dim)">Simule a temperatura do câmbio</span>
+          <div class="wl-sim-btns" role="group" aria-label="Simular temperatura">
+            <button type="button" data-scen="normal" aria-pressed="true">Normal</button>
+            <button type="button" data-scen="atencao" aria-pressed="false">Atenção</button>
+            <button type="button" data-scen="quente" aria-pressed="false">Quente</button>
+          </div>
+          <label class="wl-voice" data-voice-wrap hidden><input type="checkbox" data-voice> Ouvir o alerta por voz</label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTE GRÁTIS -->
+  <section class="wl-sec" id="gratis" aria-labelledby="gratis-t">
+    <div class="wl-free" data-reveal>
+      <div style="position:relative;z-index:1">
+        <span class="wl-num wl-mono">Teste antes de pagar</span>
+        <h2 class="wl-h2" id="gratis-t">Instale, teste no seu carro e só depois decida.</h2>
+        <p>O app é o mesmo para todo mundo. Sem a chave, ele já funciona em modo de teste. Com a chave, libera tudo para sempre.</p>
+        <div class="wl-ctas" data-apk-wrap hidden>
+          <a class="wl-btn wl-btn-red" href="#" data-apk download>Baixar o app grátis <span class="wl-arrow" aria-hidden="true">↓</span></a>
+        </div>
+        <p data-only="pre" style="font-size:15px;color:var(--dim)">O download abre aqui no dia do lançamento.</p>
+      </div>
+      <ul>
+        <li><span><strong>Modo demonstração completo</strong>Todas as telas, com dados simulados, sem precisar de scanner.</span></li>
+        <li><span><strong>5 minutos por dia com o carro real</strong>Para conferir se o seu scanner conecta e ver os seus dados de verdade.</span></li>
+        <li class="is-lock"><span><strong>Com a chave: sem limite de tempo</strong>Monitoramento o tempo todo, em todas as viagens, para sempre.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 04 COMPATIBILIDADE -->
+  <section class="wl-sec" id="compat" aria-labelledby="compat-t">
+    <div class="wl-sec-head">
+      <div data-reveal>
+        <span class="wl-num wl-mono">04 · Compatibilidade</span>
+        <h2 class="wl-h2" id="compat-t">O que você precisa.</h2>
+      </div>
+      <p data-reveal>Feito primeiro para o Fluence, porque é o carro do canal e onde cada leitura foi conferida. Outros carros com o mesmo tipo de câmbio entram depois.</p>
+    </div>
+    <div class="wl-compat">
+      <div class="wl-ok" data-reveal><span class="wl-tag wl-tag-ok">Compatível</span><b>Renault Fluence 2.0 CVT</b><p>Câmbio X-Tronic (Jatco JF011E), de todos os anos. Versões Dynamique, Privilège e GT Line.</p></div>
+      <div data-reveal><span class="wl-tag wl-tag-req">Você precisa</span><b>Celular e scanner</b><ul><li>Celular Android 8 ou mais novo</li><li>Scanner OBD2 ELM327 v1.5 Bluetooth</li><li>Internet só para ativar a chave, uma vez</li></ul></div>
+      <div data-reveal><span class="wl-tag wl-tag-soon">Planejado</span><b>Outros CVT Jatco</b><p>Nissan Sentra, Kicks e Versa são os próximos da fila. Depois, outras marcas com câmbio CVT.</p></div>
+    </div>
+  </section>
+
+  <!-- 05 PREÇO -->
+  <section class="wl-sec" id="preco" aria-labelledby="preco-t">
+    <div class="wl-sec-head">
+      <div data-reveal>
+        <span class="wl-num wl-mono">05 · Preço</span>
+        <h2 class="wl-h2" id="preco-t">Paga uma vez, usa para sempre.</h2>
+      </div>
+      <p data-reveal>Sem mensalidade e sem anúncio. Custa menos que um tanque de combustível e menos que uma única troca de fluido do câmbio.</p>
+    </div>
+    <div class="wl-buy">
+      <div class="wl-buy-card" data-reveal>
+        <span class="wl-mono" data-only="pre">Preço previsto de lançamento</span>
+        <span class="wl-mono" data-only="live" hidden>Preço de lançamento</span>
+        <div class="wl-buy-price">
+          <b>R$ <span data-preco>39,90</span></b>
+          <span data-preco-depois-wrap>Pagamento único.<br>Depois passa para R$ <span data-preco-depois>49,90</span>.</span>
+        </div>
+        <ul>
+          <li>Licença vitalícia, com todas as atualizações</li>
+          <li>Use em até 2 celulares ao mesmo tempo</li>
+          <li>Trocou de celular? Transfere pelo próprio app</li>
+          <li>Funciona sem internet depois de ativar</li>
+          <li>Suporte direto comigo pelo Instagram</li>
+        </ul>
+        <a class="wl-btn" href="https://ig.me/m/whitelinefluence" data-cta target="_blank" rel="noopener">Me avise no lançamento <span class="wl-arrow" aria-hidden="true">→</span></a>
+        <span class="wl-buy-fine" data-only="pre">Toque no botão para abrir o direct do Instagram com a mensagem pronta. Eu te aviso assim que abrir.</span>
+        <span class="wl-buy-fine" data-only="live" hidden>Pagamento seguro pela Cakto, com Pix ou cartão. Garantia de 7 dias.</span>
+      </div>
+      <div class="wl-buy-side">
+        <div data-reveal><span class="ms" aria-hidden="true">bolt</span><div><b>Chave na hora, por e-mail</b><p>Depois do pagamento você recebe a chave de ativação e o link para baixar o app.</p></div></div>
+        <div data-reveal><span class="ms" aria-hidden="true">check_circle</span><div><b>7 dias de garantia</b><p>Não gostou ou não funcionou no seu carro? Peça o dinheiro de volta em até 7 dias.</p></div></div>
+        <div data-reveal><span class="ms" aria-hidden="true">info</span><div><b>Teste grátis antes</b><p>O modo de teste mostra se o seu scanner conecta no seu carro antes de você pagar qualquer coisa.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUEM FEZ -->
+  <section class="wl-sec" id="quem" aria-labelledby="quem-t">
+    <div class="wl-who">
+      <div class="wl-who-photo" data-reveal>
+        <img src="assets/eu.jpg" alt="Luiz, do canal Whiteline Fluence" loading="lazy">
+        <span class="wl-mono">Luiz · @whitelinefluence</span>
+      </div>
+      <div data-reveal>
+        <span class="wl-num wl-mono">Quem fez</span>
+        <blockquote id="quem-t" style="margin-top:14px">“Fiz o app que eu queria ter no meu Fluence. Cada leitura foi conferida no meu carro antes de chegar no seu.”</blockquote>
+        <p>Sou o Luiz, do canal Whiteline Fluence. Ando de Fluence GT Line todo dia e a pergunta que mais recebo é sobre o câmbio CVT. O CVT Monitor é a resposta prática: em vez de adivinhar, você vê.</p>
+        <div class="wl-who-nums">
+          <div><b>+2 mi</b><span>views no canal</span></div>
+          <div><b>126 mil</b><span>km rodados no Fluence</span></div>
+          <div><b>2016</b><span>GT Line, câmbio CVT</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 FAQ -->
+  <section class="wl-sec" id="faq" aria-labelledby="faq-t">
+    <div class="wl-sec-head">
+      <div data-reveal>
+        <span class="wl-num wl-mono">06 · Dúvidas</span>
+        <h2 class="wl-h2" id="faq-t">Perguntas frequentes.</h2>
+      </div>
+      <p data-reveal>Ficou alguma? Me chama no direct do <a href="https://ig.me/m/whitelinefluence" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:4px">Instagram</a>.</p>
+    </div>
+    <div class="wl-faq" data-reveal>
+      <details><summary>Qual scanner eu preciso comprar?</summary><p>Um scanner OBD2 ELM327 versão 1.5 com Bluetooth. É aquele pequeno, vendido em qualquer loja de autopeças ou marketplace. Prefira o Bluetooth, não o Wi-Fi.</p><p>O app tem três jeitos diferentes de conectar justamente para aceitar os modelos genéricos mais comuns. Na dúvida, use os 5 minutos grátis por dia para confirmar antes de comprar a licença.</p></details>
+      <details><summary>Funciona no iPhone?</summary><p>Não. Por enquanto o CVT Monitor é só para Android 8 ou mais novo.</p></details>
+      <details><summary>O app mexe em alguma coisa no carro?</summary><p>Não. Ele só lê os dados que o módulo do câmbio e o do motor já informam. Comandos que poderiam alterar alguma configuração ficam bloqueados dentro do app.</p></details>
+      <details><summary>Precisa de internet?</summary><p>Só uma vez, para ativar a chave. Depois disso o app funciona totalmente offline, inclusive na estrada sem sinal.</p></details>
+      <details><summary>Posso usar em mais de um celular?</summary><p>Sim, em até 2 celulares ao mesmo tempo. Se trocar de aparelho, você mesmo libera o antigo pelo app e ativa no novo.</p></details>
+      <details><summary>Como instalo? Por que não está na Play Store?</summary><p>O app é instalado pelo arquivo (APK) baixado aqui no site, e o passo a passo aparece junto com o download. Vender direto, sem a loja no meio, é o que permite o pagamento único com licença vitalícia.</p></details>
+      <details><summary>E se não funcionar no meu carro?</summary><p>Primeiro, teste de graça: o modo de teste mostra se o scanner conecta e se os dados chegam. Se mesmo assim você comprar e não der certo, você tem 7 dias para pedir o dinheiro de volta.</p></details>
+      <details><summary>O app substitui a revisão do câmbio?</summary><p>Não. Ele ajuda a acompanhar a temperatura e o desgaste do fluido para você dirigir e planejar a manutenção melhor, mas não é diagnóstico. Barulho, tranco ou patinação são caso para um especialista em câmbio CVT.</p></details>
+      <details><summary>Quando lança?</summary><p>Em breve. Os últimos testes estão sendo feitos no Fluence do canal, com scanner de verdade, para calibrar a leitura do câmbio. Toque em “Me avise” que eu te chamo no dia, e acompanhe os bastidores no <a href="https://www.tiktok.com/@whitelinefluence" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:4px">TikTok</a>.</p></details>
+    </div>
+
+    <div class="wl-disclaimer">O CVT Monitor é um app independente, sem ligação com a Renault, a Nissan ou a Jatco. Ele só lê dados e não substitui a revisão nem o diagnóstico de um profissional. As faixas de temperatura são uma referência para dirigir com mais cuidado.</div>
+  </section>
+
+  <!-- CHAMADA FINAL -->
+  <section class="wl-sec wl-end" aria-labelledby="fim-t">
+    <span class="wl-num wl-mono" style="justify-content:center" data-reveal>CVT Monitor</span>
+    <h2 class="wl-h2" id="fim-t" data-reveal>Pare de adivinhar o que o seu câmbio está sentindo.</h2>
+    <div class="wl-ctas" data-reveal>
+      <a class="wl-btn wl-btn-red" href="#preco" data-cta>Me avise no lançamento <span class="wl-arrow" aria-hidden="true">→</span></a>
+      <a class="wl-btn" href="https://www.instagram.com/whitelinefluence" target="_blank" rel="noopener">Seguir no Instagram ↗</a>
+    </div>
+  </section>
+
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="wl-footer">
+    <div class="wl-footer-row">
+      <div class="wl-footer-links">
+        <a href="./">Início</a>
+        <a href="guia-compra.html">Guia de compra</a>
+        <a href="https://www.tiktok.com/@whitelinefluence" target="_blank" rel="noopener">TikTok ↗</a>
+        <a href="https://www.instagram.com/whitelinefluence" target="_blank" rel="noopener">Instagram ↗</a>
+      </div>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:rgba(244,243,241,.45)">© <span data-ano>2026</span> Whiteline Fluence · CVT Monitor</span>
+    </div>
+    <div class="wl-foot-word" aria-hidden="true">WHITELINE</div>
+  </footer>
+
+  <div class="wl-toast" data-toast role="status" aria-live="polite"></div>
+</div>
+<script src="cvt-monitor.js"></script>
+</body>
+</html>
