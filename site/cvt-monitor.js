@@ -11,6 +11,15 @@
     // Preenchido = vendas abertas (botões "Comprar" levam para a Cakto).
     caktoUrl: '',
 
+    // Link do checkout da oferta com o preço cheio (precoDepois), usado quando o
+    // lote de lançamento esgota. Crie as duas ofertas no mesmo produto da Cakto.
+    caktoUrlDepois: '',
+
+    // Lote de lançamento: as primeiras N licenças saem por "preco"; depois, "precoDepois".
+    // O contador "restam X" vem de /api/vagas (vendas pagas na Cakto) e só aparece
+    // com as vendas abertas e as variáveis CAKTO_* configuradas na Vercel.
+    loteTotal: 100,
+
     // Link do APK para o teste grátis. Vazio = botão de download escondido.
     // Ex.: 'downloads/cvt-monitor.apk' (arquivo dentro de site/downloads/).
     apkUrl: '',
@@ -50,13 +59,59 @@
     toastT = setTimeout(function () { toast.classList.remove('is-on'); }, 4200);
   }
 
-  // ===== Preço, estado de lançamento e botões =====
-  $('[data-preco]').forEach(function (el) { el.textContent = CONFIG.preco; });
-  $('[data-preco-depois]').forEach(function (el) { el.textContent = CONFIG.precoDepois; });
-  if (!CONFIG.precoDepois) $('[data-preco-depois-wrap]').forEach(function (el) { el.hidden = true; });
-
+  // ===== Preço, lote de lançamento, estado de lançamento e botões =====
   $('[data-only="pre"]').forEach(function (el) { el.hidden = live; });
   $('[data-only="live"]').forEach(function (el) { el.hidden = !live; });
+
+  // restantes: null = ainda não sabemos (pré-lançamento ou /api/vagas sem resposta)
+  var lote = { total: CONFIG.loteTotal, restantes: null };
+  var esgotado = function () { return live && lote.restantes === 0; };
+  var precoAtual = function () { return esgotado() && CONFIG.precoDepois ? CONFIG.precoDepois : CONFIG.preco; };
+  var urlCompra = function () { return esgotado() && CONFIG.caktoUrlDepois ? CONFIG.caktoUrlDepois : CONFIG.caktoUrl; };
+  var arrow = '<span class="wl-arrow" aria-hidden="true">→</span>';
+
+  function aplicarPreco() {
+    var esg = esgotado();
+    var temContador = live && lote.restantes != null && !esg;
+    $('[data-preco]').forEach(function (el) { el.textContent = precoAtual(); });
+    $('[data-preco-lote]').forEach(function (el) { el.textContent = CONFIG.preco; });
+    $('[data-preco-depois]').forEach(function (el) { el.textContent = CONFIG.precoDepois; });
+    $('[data-lote-total]').forEach(function (el) { el.textContent = lote.total; });
+    // Sem preço cheio, não existe "lote": somem os textos de lote e o preço riscado
+    $('[data-preco-depois-wrap]').forEach(function (el) { el.hidden = !CONFIG.precoDepois || esg; });
+    $('[data-lote="aberto"]').forEach(function (el) { el.hidden = !CONFIG.precoDepois || esg; });
+    $('[data-lote="esgotado"]').forEach(function (el) { el.hidden = !!CONFIG.precoDepois && !esg; });
+    $('[data-lote-count-wrap]').forEach(function (el) { el.hidden = !temContador; });
+    if (temContador) {
+      $('[data-lote-restam]').forEach(function (el) { el.textContent = lote.restantes; });
+      $('[data-lote-bar]').forEach(function (el) {
+        el.style.width = Math.round((lote.total - lote.restantes) / lote.total * 100) + '%';
+      });
+    }
+    if (!live) return;
+    $('[data-cta]').forEach(function (a) {
+      a.href = urlCompra();
+      a.removeAttribute('target');
+      a.innerHTML = 'Comprar · R$ ' + precoAtual() + ' ' + arrow;
+    });
+    $('[data-cta-short]').forEach(function (a) {
+      a.href = urlCompra();
+      a.textContent = 'Comprar';
+    });
+  }
+  aplicarPreco();
+
+  // Vendas abertas: busca quantas licenças do lote já foram pagas
+  if (live && CONFIG.precoDepois && lote.total > 0 && window.fetch) {
+    fetch('api/vagas', { headers: { Accept: 'application/json' } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d || !Number.isInteger(d.vendidos) || d.vendidos < 0) return;
+        lote.restantes = Math.max(0, lote.total - d.vendidos);
+        aplicarPreco();
+      })
+      .catch(function () { /* sem contador: a página segue sem o "restam X" */ });
+  }
 
   var dmUrl = 'https://ig.me/m/' + CONFIG.instagram;
 
@@ -65,32 +120,72 @@
     return Promise.reject(new Error('sem clipboard'));
   }
 
-  $('[data-cta]').forEach(function (a) {
-    var arrow = '<span class="wl-arrow" aria-hidden="true">→</span>';
-    if (live) {
-      a.href = CONFIG.caktoUrl;
-      a.removeAttribute('target');
-      a.innerHTML = 'Comprar · R$ ' + CONFIG.preco + ' ' + arrow;
-      return;
-    }
-    // Pré-lançamento: copia a mensagem pronta e abre o direct do Instagram
-    a.href = dmUrl;
-    a.target = '_blank';
-    a.rel = 'noopener';
-    a.addEventListener('click', function () {
-      copy(CONFIG.msgAvise).then(function () {
-        showToast('Mensagem copiada! É só colar no direct e enviar.');
-      }, function () {
-        showToast('Manda um “me avisa do CVT Monitor” no direct que eu te chamo no lançamento.');
+  // Pré-lançamento: copia a mensagem pronta e abre o direct do Instagram
+  if (!live) {
+    $('[data-cta]').forEach(function (a) {
+      a.href = dmUrl;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.addEventListener('click', function () {
+        copy(CONFIG.msgAvise).then(function () {
+          showToast('Mensagem copiada! É só colar no direct e enviar.');
+        }, function () {
+          showToast('Manda um “me avisa do CVT Monitor” no direct que eu te chamo no lançamento.');
+        });
       });
     });
-  });
+  }
 
-  $('[data-cta-short]').forEach(function (a) {
-    if (!live) return;
-    a.href = CONFIG.caktoUrl;
-    a.textContent = 'Comprar';
-  });
+  // ===== Pop-up do lote de lançamento =====
+  // Aparece uma vez a cada 3 dias: na intenção de sair (mouse indo para a barra do
+  // navegador, no computador), depois de rolar até o fim de "Por dentro do app" ou após 50 s
+  // na página. Não aparece se a pessoa já está na seção de preço ou já clicou em comprar.
+  var pop = document.querySelector('[data-pop]');
+  var POP_KEY = 'cvtm-pop';
+  var POP_PAUSA = 3 * 24 * 60 * 60 * 1000;
+  var popVisto = false;
+  try { popVisto = Date.now() - Number(localStorage.getItem(POP_KEY) || 0) < POP_PAUSA; } catch (e) { /* sem storage: mostra 1x nesta visita */ }
+
+  var precoSec = document.getElementById('preco');
+  // Mede na hora (e não por observer, que chega atrasado quando a pessoa pula direto para #preco)
+  function noPreco() {
+    if (!precoSec) return false;
+    var r = precoSec.getBoundingClientRect();
+    return r.top < window.innerHeight * 0.85 && r.bottom > window.innerHeight * 0.15;
+  }
+
+  function abrirPop() {
+    if (!pop || popVisto || pop.open || typeof pop.showModal !== 'function' || noPreco()) return;
+    popVisto = true;
+    try { localStorage.setItem(POP_KEY, String(Date.now())); } catch (e) { /* ignora */ }
+    pop.showModal();
+  }
+  function fecharPop() { if (pop && pop.open) pop.close(); }
+
+  if (pop && typeof pop.showModal === 'function' && !popVisto) {
+    // Já clicou num botão de compra / me avise: não precisa do pop-up
+    $('[data-cta],[data-cta-short]').forEach(function (a) {
+      if (!pop.contains(a)) a.addEventListener('click', function () { popVisto = true; });
+    });
+    $('[data-pop-close]').forEach(function (b) { b.addEventListener('click', fecharPop); });
+    $('[data-cta]', pop).forEach(function (a) { a.addEventListener('click', function () { setTimeout(fecharPop, 300); }); });
+    // Clique no fundo escuro fecha
+    pop.addEventListener('click', function (e) { if (e.target === pop) fecharPop(); });
+
+    document.addEventListener('mouseout', function (e) {
+      if (!e.relatedTarget && e.clientY <= 0) abrirPop();
+    });
+    var gatilho = document.getElementById('app');
+    if (gatilho && 'IntersectionObserver' in window) {
+      var go = new IntersectionObserver(function (es) {
+        // Só quando a pessoa terminou de ver o app (a seção saiu por cima da tela)
+        // Espera a rolagem assentar: quem clicou em "Preço" no menu só passa pela seção no caminho
+        if (!es[0].isIntersecting && es[0].boundingClientRect.top < 0) { go.disconnect(); setTimeout(abrirPop, 1500); }
+      });
+      go.observe(gatilho);
+    }
+    setTimeout(abrirPop, 50 * 1000);
+  }
 
   if (CONFIG.apkUrl) {
     $('[data-apk]').forEach(function (a) { a.href = CONFIG.apkUrl; });
