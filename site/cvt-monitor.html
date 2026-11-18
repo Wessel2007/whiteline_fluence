@@ -3,21 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CVT Monitor · Temperatura do câmbio CVT do Fluence no celular</title>
-<meta name="description" content="App Android que mostra a temperatura do óleo do câmbio CVT do Renault Fluence ao vivo e avisa por voz antes de esquentar. Funciona com scanner ELM327 Bluetooth. Pagamento único, licença vitalícia.">
+<title>CVT Monitor WhiteLine · Temperatura do câmbio CVT do Fluence no celular</title>
+<meta name="description" content="App Android que mostra a temperatura do óleo do câmbio CVT do Renault Fluence ao vivo e avisa por voz quando o óleo esquenta. Funciona com scanner ELM327 Bluetooth. Pagamento único, licença vitalícia.">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="theme-color" content="#0b0b0c">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <!-- Prévia ao compartilhar o link (WhatsApp, Instagram, X...) -->
 <meta property="og:type" content="product">
-<meta property="og:url" content="https://whitelinefluence-site.vercel.app/cvt-monitor.html">
-<link rel="canonical" href="https://whitelinefluence-site.vercel.app/cvt-monitor.html">
+<meta property="og:url" content="https://whitelinefluence.com/cvt-monitor.html">
+<link rel="canonical" href="https://whitelinefluence.com/cvt-monitor.html">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="Whiteline Fluence">
-<meta property="og:title" content="CVT Monitor · o câmbio do seu Fluence no celular">
+<meta property="og:title" content="CVT Monitor WhiteLine · o câmbio do seu Fluence no celular">
 <meta property="og:description" content="Temperatura do óleo do câmbio CVT ao vivo, alerta por voz e desgaste do fluido. App Android do canal Whiteline Fluence.">
-<meta property="og:image" content="https://whitelinefluence-site.vercel.app/assets/og.jpg">
+<meta property="og:image" content="https://whitelinefluence.com/assets/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Fluence GT Line branco à noite com o Luiz sentado ao lado">
@@ -100,6 +100,7 @@ button{font-family:inherit}
 .wl-price-chip b{font-weight:900;font-stretch:115%;font-size:26px;letter-spacing:-.02em}
 .wl-price-chip s{color:var(--dim);font-size:14px}
 .wl-price-chip .wl-mono{color:var(--red-hi)}
+.wl-price-chip .wl-chip-left{font-size:13px;color:var(--muted)}
 
 .wl-hero-art{position:relative;display:flex;justify-content:center;padding:20px 0 40px}
 .wl-bubble{position:absolute;z-index:3;max-width:250px;padding:14px 16px;border-radius:18px;background:rgba(22,24,26,.92);border:1px solid rgba(255,255,255,.1);box-shadow:0 20px 50px rgba(0,0,0,.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-size:14px;line-height:1.4}
@@ -364,6 +365,26 @@ button{font-family:inherit}
   .wl-plans.wl-vs td{font-size:12.5px;line-height:1.45}
 }
 /* Preço */
+/* Ancoragem: quanto custa cuidar do câmbio */
+.wl-anchor{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 clamp(36px,5vw,64px)}
+.wl-anchor>div{display:flex;flex-direction:column;gap:10px;padding:clamp(20px,2.6vw,28px);border:1px solid var(--line);border-radius:22px;background:#0f0f11}
+.wl-anchor .wl-mono{color:var(--dim)}
+.wl-anchor b{font-weight:900;font-stretch:115%;font-size:clamp(28px,3.2vw,40px);line-height:1;letter-spacing:-.03em;color:var(--muted)}
+.wl-anchor p{margin:0;font-size:15px;line-height:1.5;color:var(--muted);text-wrap:pretty}
+.wl-anchor .is-us{border-color:var(--red);background:rgba(227,38,44,.1)}
+.wl-anchor .is-us .wl-mono{color:var(--red-hi)}
+.wl-anchor .is-us b{color:var(--fg)}
+.wl-anchor-src{grid-column:1/-1;margin:0;font-size:13px;line-height:1.5;color:var(--dim);text-wrap:pretty}
+.wl-anchor-src a{color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+@media (max-width:860px){.wl-anchor{grid-template-columns:minmax(0,1fr)}}
+/* Contador do lote (cartão vermelho e pop-up) */
+.wl-lote{display:flex;flex-direction:column;gap:10px;padding:14px 16px;border-radius:16px;background:rgba(0,0,0,.2)}
+.wl-lote-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:15px}
+.wl-lote-top b{font-weight:900;font-stretch:115%;font-size:22px;letter-spacing:-.02em}
+.wl-lote-top .wl-mono{display:flex;align-items:center;gap:7px;font-size:10.5px}
+.wl-lote-top .wl-mono::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;animation:wl-pulse 1.4s ease-in-out infinite}
+.wl-lote i{display:block;height:8px;border-radius:4px;background:rgba(255,255,255,.25);overflow:hidden}
+.wl-lote i b{display:block;height:100%;width:0;border-radius:4px;background:#fff;transition:width 1.2s cubic-bezier(.3,.7,.2,1)}
 /* Tabela grátis x completa */
 .wl-plans{margin:0 0 clamp(36px,5vw,64px);border:1px solid var(--line);border-radius:24px;background:var(--bg2);overflow:hidden}
 .wl-plans-t{margin:0;padding:18px 22px 4px;font-size:clamp(20px,2.4vw,26px);font-weight:900;font-stretch:110%;letter-spacing:-.01em}
@@ -443,6 +464,33 @@ button{font-family:inherit}
 .wl-foot-word{position:relative;left:50%;translate:-50% 0;width:max-content;padding:0 .14em 0 .1em;margin-top:40px;font-weight:900;font-stretch:125%;font-size:clamp(44px,12.5vw,210px);line-height:.85;letter-spacing:-.04em;color:#141416;-webkit-text-stroke:1px rgba(244,243,241,.12);white-space:nowrap;text-align:center}
 .wl-anim .wl-foot-word{background:linear-gradient(105deg,rgba(255,246,235,0) 15%,rgba(255,246,235,.9) 50%,rgba(255,246,235,0) 85%) no-repeat,#141416;background-size:40% 100%,auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:wl-beam 4s cubic-bezier(.45,0,.3,1) 1s infinite}
 
+/* Pop-up do lote de lançamento */
+.wl-pop{width:min(440px,calc(100% - 32px));max-height:calc(100% - 32px);margin:auto;padding:0;border:1px solid rgba(227,38,44,.6);border-radius:28px;background:var(--bg2);color:var(--fg);box-shadow:0 40px 120px -20px rgba(0,0,0,.9);overflow:auto;overscroll-behavior:contain}
+.wl-pop::backdrop{background:rgba(5,5,6,.74);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.wl-anim .wl-pop[open]{animation:wl-in .4s cubic-bezier(.2,.7,.2,1)}
+body:has(.wl-pop[open]){overflow:hidden}
+.wl-pop-in{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:16px;padding:clamp(26px,6vw,36px)}
+.wl-pop-in::after{content:"";position:absolute;right:-30%;top:-40%;width:80%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(227,38,44,.28),rgba(227,38,44,0) 65%);pointer-events:none}
+.wl-pop-in>*{position:relative;z-index:1}
+.wl-pop-x{position:absolute;right:14px;top:14px;z-index:2;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--bg2);color:var(--fg);font:400 20px/1 var(--mono);cursor:pointer;transition:background .25s,border-color .25s}
+.wl-pop-x:hover{background:var(--red);border-color:var(--red)}
+.wl-pop .wl-mono{color:var(--red-hi)}
+.wl-pop h2{margin:0;padding-right:40px;font-weight:900;font-stretch:112%;font-size:clamp(30px,7vw,40px);line-height:.98;letter-spacing:-.035em;text-wrap:balance}
+.wl-pop p{margin:0;font-size:16px;line-height:1.55;color:var(--muted);text-wrap:pretty}
+.wl-pop p strong{color:var(--fg)}
+.wl-pop-price{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.wl-pop-price b{font-weight:900;font-stretch:118%;font-size:clamp(38px,11vw,48px);line-height:.9;letter-spacing:-.04em;white-space:nowrap}
+.wl-pop-price s{white-space:nowrap}
+.wl-pop-price s{color:var(--dim);font-size:16px}
+.wl-pop .wl-lote{background:rgba(244,243,241,.05);border:1px solid var(--line)}
+.wl-pop .wl-lote-top .wl-mono{color:var(--red-hi)}
+.wl-pop .wl-lote i{background:var(--a-s3)}
+.wl-pop .wl-lote i b{background:var(--red)}
+.wl-pop .wl-btn{width:100%}
+.wl-pop-later{align-self:center;padding:6px 10px;border:0;background:none;color:var(--dim);font-size:14px;cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+.wl-pop-later:hover{color:var(--fg)}
+.wl-pop-fine{font-size:13px!important;line-height:1.5!important;color:var(--dim)!important;text-align:center}
+
 /* Aviso "mensagem copiada" */
 .wl-toast{position:fixed;left:50%;bottom:24px;z-index:80;max-width:calc(100% - 32px);transform:translate(-50%,20px);padding:14px 20px;border-radius:16px;background:var(--fg);color:var(--bg);font-weight:600;font-size:15px;line-height:1.4;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .3s,transform .3s}
 .wl-toast.is-on{opacity:1;transform:translate(-50%,0)}
@@ -453,7 +501,8 @@ button{font-family:inherit}
 .wl-anim .wl-bubble-voice{animation:wl-float 6s ease-in-out infinite}
 .wl-anim .wl-bubble-fluid{animation:wl-float 7s ease-in-out 1.5s infinite}
 @media (prefers-reduced-motion:reduce){
-  .wl-marquee-track,.wl-eyebrow::before,.ph-live::before{animation:none!important}
+  .wl-marquee-track,.wl-eyebrow::before,.ph-live::before,.wl-lote-top .wl-mono::before{animation:none!important}
+  .wl-lote i b{transition:none}
   .ph *{transition:none!important}
 }
 
@@ -545,15 +594,16 @@ button{font-family:inherit}
         <span data-only="live" hidden>Já disponível · App para Android</span>
       </div>
       <h1 class="wl-h1">O câmbio do seu Fluence está <span class="wl-red">esquentando?</span> Agora você vê.</h1>
-      <p class="wl-lead">O <strong>CVT Monitor</strong> mostra no celular a temperatura do óleo do câmbio CVT, ao vivo, e <strong>avisa por voz</strong> antes de virar problema. Basta um scanner OBD2 Bluetooth plugado embaixo do volante.</p>
+      <p class="wl-lead">O <strong>CVT Monitor WhiteLine</strong> mostra no celular a temperatura do óleo do câmbio CVT, ao vivo, e <strong>avisa por voz</strong> quando o óleo esquenta. Basta um scanner OBD2 Bluetooth plugado embaixo do volante.</p>
       <div class="wl-ctas">
         <a class="wl-btn wl-btn-red" href="#preco" data-cta>Me avise no lançamento <span class="wl-arrow" aria-hidden="true">→</span></a>
         <a class="wl-btn" href="#app">Ver o app por dentro <span class="wl-arrow" aria-hidden="true">↓</span></a>
       </div>
       <div class="wl-price-chip" data-show-price>
-        <span class="wl-mono" data-only="pre">No lançamento</span><span class="wl-mono" data-only="live" hidden>Preço de lançamento</span>
+        <span class="wl-mono" data-lote="aberto">Os <span data-lote-total>100</span> primeiros</span><span class="wl-mono" data-lote="esgotado" hidden>Pagamento único</span>
         <b>R$ <span data-preco>39,90</span></b>
         <s data-preco-depois-wrap>R$ <span data-preco-depois>49,90</span></s>
+        <span class="wl-chip-left" data-lote-count-wrap hidden>· restam <span data-lote-restam></span></span>
       </div>
       <ul class="wl-facts">
         <li>Pagamento único</li>
@@ -662,9 +712,9 @@ button{font-family:inherit}
     <div class="wl-sec-head">
       <div data-reveal>
         <span class="wl-num wl-mono">03 · Por dentro do app</span>
-        <h2 class="wl-h2" id="app-t">Mexe aí: é o app de verdade.</h2>
+        <h2 class="wl-h2" id="app-t">Mexe aí: são as telas do app.</h2>
       </div>
-      <p data-reveal>Toque nas abas para trocar de tela e use o simulador para ver o que acontece quando o câmbio esquenta. Os números são simulados, como no modo demonstração do app.</p>
+      <p data-reveal>Toque nas abas para trocar de tela e use o simulador para ver o que acontece quando o câmbio esquenta. As telas são as mesmas do app, e os números são simulados, como no modo demonstração.</p>
     </div>
     <div class="wl-demo">
       <div class="wl-feats" role="group" aria-label="Telas do app">
@@ -856,7 +906,7 @@ button{font-family:inherit}
   <section class="wl-sec" id="gratis" aria-labelledby="gratis-t">
     <div class="wl-free" data-reveal>
       <div style="position:relative;z-index:1">
-        <span class="wl-num wl-mono">Teste antes de pagar</span>
+        <span class="wl-num wl-mono">04 · Teste antes de pagar</span>
         <h2 class="wl-h2" id="gratis-t">Instale, teste no seu carro e só depois decida.</h2>
         <p>O app é o mesmo para todo mundo. Sem a chave, ele já funciona em modo de teste. Com a chave, libera tudo para sempre.</p>
         <div class="wl-ctas" data-apk-wrap hidden>
@@ -872,11 +922,11 @@ button{font-family:inherit}
     </div>
   </section>
 
-  <!-- 04 COMPATIBILIDADE -->
+  <!-- 05 COMPATIBILIDADE -->
   <section class="wl-sec" id="compat" aria-labelledby="compat-t">
     <div class="wl-sec-head">
       <div data-reveal>
-        <span class="wl-num wl-mono">04 · Compatibilidade</span>
+        <span class="wl-num wl-mono">05 · Compatibilidade</span>
         <h2 class="wl-h2" id="compat-t">O que você precisa.</h2>
       </div>
       <p data-reveal>Feito primeiro para o Fluence, porque é o carro do canal e onde cada leitura foi conferida. Outros carros com o mesmo tipo de câmbio entram depois.</p>
@@ -888,11 +938,11 @@ button{font-family:inherit}
     </div>
   </section>
 
-  <!-- 05 COMPARAÇÃO -->
+  <!-- 06 COMPARAÇÃO -->
   <section class="wl-sec" id="comparar" aria-labelledby="comparar-t">
     <div class="wl-sec-head">
       <div data-reveal>
-        <span class="wl-num wl-mono">05 · Comparação</span>
+        <span class="wl-num wl-mono">06 · Comparação</span>
         <h2 class="wl-h2" id="comparar-t">Feito para o Fluence. Não para a Murano.</h2>
       </div>
       <p data-reveal>Muita gente com Fluence usa o CVTz50, um app feito para a Nissan Murano, em que o Fluence nem aparece na lista de carros. O CVT Monitor nasceu no Fluence: fala português, explica o que cada código quer dizer e <strong style="color:var(--fg)">não mexe em nada no seu carro</strong>.</p>
@@ -927,14 +977,20 @@ button{font-family:inherit}
     </div>
   </section>
 
-  <!-- 06 PREÇO -->
+  <!-- 07 PREÇO -->
   <section class="wl-sec" id="preco" aria-labelledby="preco-t">
     <div class="wl-sec-head">
       <div data-reveal>
-        <span class="wl-num wl-mono">06 · Preço</span>
+        <span class="wl-num wl-mono">07 · Preço</span>
         <h2 class="wl-h2" id="preco-t">Paga uma vez, usa para sempre.</h2>
       </div>
-      <p data-reveal>Sem mensalidade e sem anúncio. Custa menos que um tanque de combustível e menos que uma única troca de fluido do câmbio.</p>
+      <p data-reveal>Sem mensalidade e sem anúncio. Compare com o que custa cuidar do câmbio depois que o calor já fez o estrago.</p>
+    </div>
+    <div class="wl-anchor" data-reveal>
+      <div><span class="wl-mono">Troca do fluido · CVT</span><b>R$ 1.200 a 1.800</b><p>Preço médio do serviço completo, com máquina e fluido certo, em carros com câmbio CVT.</p></div>
+      <div><span class="wl-mono">Câmbio danificado</span><b>+ de R$ 15 mil</b><p>O prejuízo de um câmbio automático que quebra pode passar fácil desse valor.</p></div>
+      <div class="is-us"><span class="wl-mono">CVT Monitor</span><b>R$ <span data-preco>39,90</span></b><p>Uma vez só, para ver a temperatura e o desgaste do fluido em todas as viagens.</p></div>
+      <p class="wl-anchor-src">Valores de referência do levantamento do VRUM de maio de 2026, “<a href="https://www.vrum.com.br/mercado/2026/05/7411647-quanto-custa-a-troca-do-oleo-do-cambio-automatico-veja-os-precos.html" target="_blank" rel="noopener">Quanto custa a troca do óleo do câmbio automático</a>”, feito com outros modelos de câmbio CVT e automático. No seu Fluence o preço pode variar conforme a região e a oficina.</p>
     </div>
     <div class="wl-plans" data-reveal>
       <h3 class="wl-plans-t">Grátis ou completa?</h3>
@@ -962,11 +1018,16 @@ button{font-family:inherit}
     </div>
     <div class="wl-buy">
       <div class="wl-buy-card" data-reveal>
-        <span class="wl-mono" data-only="pre">Preço previsto de lançamento</span>
-        <span class="wl-mono" data-only="live" hidden>Preço de lançamento</span>
+        <span class="wl-mono" data-lote="aberto">Lote de lançamento · <span data-lote-total>100</span> licenças</span>
+        <span class="wl-mono" data-lote="esgotado" hidden>Licença vitalícia</span>
         <div class="wl-buy-price">
           <b>R$ <span data-preco>39,90</span></b>
-          <span data-preco-depois-wrap>Pagamento único.<br>Depois passa para R$ <span data-preco-depois>49,90</span>.</span>
+          <span data-preco-depois-wrap>Preço só para as <span data-lote-total>100</span> primeiras.<br>Depois passa para R$ <span data-preco-depois>49,90</span>.</span>
+          <span data-lote="esgotado" hidden>Pagamento único.<br>Sem mensalidade.</span>
+        </div>
+        <div class="wl-lote" data-lote-count-wrap hidden>
+          <div class="wl-lote-top"><span>Restam <b data-lote-restam></b> de <span data-lote-total>100</span></span><span class="wl-mono">Ao vivo</span></div>
+          <i><b data-lote-bar></b></i>
         </div>
         <ul>
           <li>Licença vitalícia, com todas as atualizações</li>
@@ -995,7 +1056,7 @@ button{font-family:inherit}
         <span class="wl-mono">Luiz · @whitelinefluence</span>
       </div>
       <div data-reveal>
-        <span class="wl-num wl-mono">Quem fez</span>
+        <span class="wl-num wl-mono">08 · Quem fez</span>
         <blockquote id="quem-t" style="margin-top:14px">“Fiz o app que eu queria ter no meu Fluence. Cada leitura foi conferida no meu carro antes de chegar no seu.”</blockquote>
         <p>Sou o Luiz, do canal Whiteline Fluence. Ando de Fluence GT Line todo dia e a pergunta que mais recebo é sobre o câmbio CVT. O CVT Monitor é a resposta prática: em vez de adivinhar, você vê.</p>
         <div class="wl-who-nums">
@@ -1007,11 +1068,11 @@ button{font-family:inherit}
     </div>
   </section>
 
-  <!-- 06 FAQ -->
+  <!-- 09 FAQ -->
   <section class="wl-sec" id="faq" aria-labelledby="faq-t">
     <div class="wl-sec-head">
       <div data-reveal>
-        <span class="wl-num wl-mono">07 · Dúvidas</span>
+        <span class="wl-num wl-mono">09 · Dúvidas</span>
         <h2 class="wl-h2" id="faq-t">Perguntas frequentes.</h2>
       </div>
       <p data-reveal>Ficou alguma? Me chama no direct do <a href="https://ig.me/m/whitelinefluence" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:4px">Instagram</a>.</p>
@@ -1019,10 +1080,11 @@ button{font-family:inherit}
     <div class="wl-faq" data-reveal>
       <details><summary>Qual scanner eu preciso comprar?</summary><p>Um scanner OBD2 ELM327 versão 1.5 com Bluetooth. É aquele pequeno, vendido em qualquer loja de autopeças ou marketplace. Prefira o Bluetooth, não o Wi-Fi.</p><p>O app tem três jeitos diferentes de conectar justamente para aceitar os modelos genéricos mais comuns. Na dúvida, use os 5 minutos grátis por dia para confirmar antes de comprar a licença.</p></details>
       <details><summary>Funciona no iPhone?</summary><p>Não. Por enquanto o CVT Monitor é só para Android 8 ou mais novo.</p></details>
-      <details><summary>O app mexe em alguma coisa no carro?</summary><p>Não. Ele só lê os dados que o módulo do câmbio e o do motor já informam. Comandos que poderiam alterar alguma configuração ficam bloqueados dentro do app.</p></details>
+      <details><summary>O app mexe em alguma coisa no carro?</summary><p>Não. Ele só lê os dados que o módulo do câmbio e o do motor já informam. O app não tem nenhuma função que grave algo nas centrais: não dá para apagar, zerar ou ajustar nada, nem sem querer.</p></details>
       <details><summary>O app apaga os códigos de erro?</summary><p>Não. Ele lê os códigos do câmbio e do motor e explica cada um em português, mas não apaga. Apagar sem resolver a causa só esconde o problema: isso fica com a oficina, depois do conserto.</p></details>
       <details><summary>Qual a diferença para o CVTz50?</summary><p>O CVTz50 foi feito para a Nissan Murano, e o Fluence não aparece na lista de carros do site dele. O CVT Monitor é feito para o Fluence, em português, só lê dados e explica cada código de erro. Veja a <a href="#comparar" style="text-decoration:underline;text-underline-offset:4px">comparação completa</a>.</p></details>
       <details><summary>Precisa de internet?</summary><p>Só uma vez, para ativar a chave. Depois disso o app funciona totalmente offline, inclusive na estrada sem sinal.</p></details>
+      <details data-lote="aberto"><summary>Como funciona o preço dos <span data-lote-total>100</span> primeiros?</summary><p>As <span data-lote-total>100</span> primeiras licenças vendidas saem por R$ <span data-preco-lote>39,90</span>. Quando elas acabam, o preço passa para R$ <span data-preco-depois>49,90</span>. Depois do lançamento, a seção de preço mostra quantas ainda restam, contadas direto das vendas confirmadas.</p></details>
       <details><summary>Posso usar em mais de um celular?</summary><p>Sim, em até 2 celulares ao mesmo tempo. Se trocar de aparelho, você mesmo libera o antigo pelo app e ativa no novo.</p></details>
       <details><summary>Como instalo? Por que não está na Play Store?</summary><p>O app é instalado pelo arquivo (APK) baixado aqui no site, e o passo a passo aparece junto com o download. Vender direto, sem a loja no meio, é o que permite o pagamento único com licença vitalícia.</p></details>
       <details><summary>E se não funcionar no meu carro?</summary><p>Primeiro, teste de graça: o modo de teste mostra se o scanner conecta e se os dados chegam. Se mesmo assim você comprar e não der certo, você tem 7 dias para pedir o dinheiro de volta.</p></details>
@@ -1030,7 +1092,7 @@ button{font-family:inherit}
       <details><summary>Quando lança?</summary><p>Em breve. Os últimos testes estão sendo feitos no Fluence do canal, com scanner de verdade, para calibrar a leitura do câmbio. Toque em “Me avise” que eu te chamo no dia, e acompanhe os bastidores no <a href="https://www.tiktok.com/@whitelinefluence" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:4px">TikTok</a>.</p></details>
     </div>
 
-    <div class="wl-disclaimer">O CVT Monitor é um app independente, sem ligação com a Renault, a Nissan ou a Jatco. Ele só lê dados e não substitui a revisão nem o diagnóstico de um profissional. As faixas de temperatura são uma referência para dirigir com mais cuidado. Leia os <a href="cvt-monitor-termos.html" style="text-decoration:underline;text-underline-offset:4px">Termos de Uso</a> e a <a href="cvt-monitor-privacidade.html" style="text-decoration:underline;text-underline-offset:4px">Política de Privacidade</a>.</div>
+    <div class="wl-disclaimer">O CVT Monitor WhiteLine é um app independente, sem ligação com a Renault, a Nissan ou a Jatco. Ele só lê dados e não substitui a revisão nem o diagnóstico de um profissional. As faixas de temperatura são uma referência para dirigir com mais cuidado. Leia os <a href="cvt-monitor-termos.html" style="text-decoration:underline;text-underline-offset:4px">Termos de Uso</a> e a <a href="cvt-monitor-privacidade.html" style="text-decoration:underline;text-underline-offset:4px">Política de Privacidade</a>.</div>
   </section>
 
   <!-- CHAMADA FINAL -->
@@ -1059,6 +1121,28 @@ button{font-family:inherit}
       <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:rgba(244,243,241,.45)">© <span data-ano>2026</span> Whiteline Fluence · CVT Monitor</span>
     </div>    <div class="wl-foot-word" aria-hidden="true">WHITELINE</div>
   </footer>
+
+  <!-- POP-UP DO LOTE (abre pelo cvt-monitor.js: intenção de sair, fim da demo ou 50 s; 1x a cada 3 dias) -->
+  <dialog class="wl-pop" data-pop aria-labelledby="pop-t">
+    <div class="wl-pop-in">
+      <button type="button" class="wl-pop-x" data-pop-close aria-label="Fechar">×</button>
+      <span class="wl-mono" data-lote="aberto">Lote de lançamento</span>
+      <span class="wl-mono" data-lote="esgotado" hidden>CVT Monitor</span>
+      <h2 id="pop-t"><span data-lote="aberto">Os <span data-lote-total>100</span> primeiros pagam menos.</span><span data-lote="esgotado" hidden>Seu câmbio no celular, para sempre.</span></h2>
+      <div class="wl-pop-price">
+        <b>R$ <span data-preco>39,90</span></b>
+        <s data-preco-depois-wrap>R$ <span data-preco-depois>49,90</span></s>
+      </div>
+      <p><span data-lote="aberto">Quando as <span data-lote-total>100</span> licenças do lote acabarem, o preço sobe. </span><strong>Pagamento único, licença vitalícia</strong> e 7 dias de garantia.</p>
+      <div class="wl-lote" data-lote-count-wrap hidden>
+        <div class="wl-lote-top"><span>Restam <b data-lote-restam></b> de <span data-lote-total>100</span></span><span class="wl-mono">Ao vivo</span></div>
+        <i><b data-lote-bar></b></i>
+      </div>
+      <a class="wl-btn wl-btn-red" href="#preco" data-cta>Me avise no lançamento <span class="wl-arrow" aria-hidden="true">→</span></a>
+      <span class="wl-pop-fine" data-only="pre">Abre o direct do Instagram com a mensagem pronta. Eu te aviso no dia em que abrir.</span>
+      <button type="button" class="wl-pop-later" data-pop-close>Agora não</button>
+    </div>
+  </dialog>
 
   <div class="wl-toast" data-toast role="status" aria-live="polite"></div>
 </div>
