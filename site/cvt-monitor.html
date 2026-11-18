@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Barlow+Condensed:ital,wght@1,800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <!-- Ícones das telas do app: só os usados (a lista precisa ficar em ordem alfabética) -->
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0&icon_names=ac_unit,battery_5_bar,bluetooth,bolt,calendar_month,check_circle,chevron_right,device_thermostat,error,info,local_fire_department,local_gas_station,monitor_heart,navigation,restart_alt,settings,settings_input_component,show_chart,signal_cellular_alt,speed,thermostat,timer,touch_app,tune,warning,water_drop&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0&icon_names=ac_unit,battery_5_bar,bluetooth,bolt,calendar_month,check_circle,chevron_right,device_thermostat,error,info,local_fire_department,local_gas_station,monitor_heart,navigation,restart_alt,settings,settings_input_component,show_chart,signal_cellular_alt,speed,thermostat,timer,touch_app,tune,verified_user,warning,water_drop&display=block" rel="stylesheet">
 <style>
 :root{--bg:#0b0b0c;--bg2:#141416;--fg:#f4f3f1;--red:#e3262c;--red-hi:#ff3b3f;--red-dk:#c81e24;--line:rgba(244,243,241,.12);--muted:rgba(244,243,241,.75);--dim:rgba(244,243,241,.55);--mono:'JetBrains Mono',ui-monospace,monospace;
   /* cores do app (tema escuro do CVT Monitor) */
@@ -343,6 +343,13 @@ button{font-family:inherit}
 .wl-more-grid b{font-weight:800;font-stretch:110%;font-size:20px;letter-spacing:-.01em}
 .wl-more-grid p{margin:0;font-size:15px;line-height:1.55;color:var(--muted);text-wrap:pretty}
 /* Comparação com o CVTz50 */
+.wl-vs-why{display:flex;gap:16px;margin:0 0 16px;padding:clamp(20px,2.6vw,28px);border:1px solid rgba(79,213,127,.45);border-radius:22px;background:rgba(79,213,127,.06)}
+.wl-vs-why .ms{flex:none;width:44px;height:44px;border-radius:14px;background:var(--a-ok);color:#0b0b0c;display:flex;align-items:center;justify-content:center;font-variation-settings:'FILL' 1}
+.wl-vs-why b{display:block;font-weight:800;font-stretch:110%;font-size:clamp(19px,2vw,23px);letter-spacing:-.01em;margin-bottom:8px}
+.wl-vs-why p{margin:0 0 10px;font-size:15.5px;line-height:1.6;color:var(--muted);text-wrap:pretty}
+.wl-vs-why p:last-child{margin:0}
+.wl-vs-why strong{color:var(--fg)}
+@media (max-width:640px){.wl-vs-why{flex-direction:column;gap:12px}}
 .wl-plans.wl-vs table{min-width:0}
 .wl-plans.wl-vs col.c-feat{width:24%}
 .wl-plans.wl-vs td{text-align:left!important;font-size:14.5px}
@@ -885,9 +892,17 @@ button{font-family:inherit}
     <div class="wl-sec-head">
       <div data-reveal>
         <span class="wl-num wl-mono">05 · Comparação</span>
-        <h2 class="wl-h2" id="comparar-t">Já usa o CVTz50?</h2>
+        <h2 class="wl-h2" id="comparar-t">Feito para o Fluence. Não para a Murano.</h2>
       </div>
-      <p data-reveal>Muita gente com Fluence usa o CVTz50, um app conhecido e completo, feito para a Nissan Murano. Veja o que muda quando o app é feito para o seu carro.</p>
+      <p data-reveal>Muita gente com Fluence usa o CVTz50, um app feito para a Nissan Murano, em que o Fluence nem aparece na lista de carros. O CVT Monitor nasceu no Fluence: fala português, explica o que cada código quer dizer e <strong style="color:var(--fg)">não mexe em nada no seu carro</strong>.</p>
+    </div>
+    <div class="wl-vs-why" data-reveal>
+      <span class="ms" aria-hidden="true">verified_user</span>
+      <div>
+        <b>Por que "só leitura" faz diferença</b>
+        <p>Apagar códigos, zerar contadores e mudar ajustes do motor e do câmbio é trabalho de oficina. Feito na hora errada, ou por quem não sabe exatamente o que está mexendo, pode esconder um defeito sério, deixar o carro funcionando diferente do original ou terminar em visita à concessionária. O próprio site do CVTz50 avisa que a Nissan não recomenda alguns dos ajustes de freio motor que o app permite.</p>
+        <p><strong>No CVT Monitor essas funções simplesmente não existem.</strong> Ele só lê o que as centrais já informam: não tem como apagar, zerar ou ajustar nada, nem sem querer.</p>
+      </div>
     </div>
     <div class="wl-plans wl-vs" data-reveal>
       <table>
@@ -897,13 +912,14 @@ button{font-family:inherit}
           <tr><th scope="col"></th><th scope="col" class="c-full">CVT Monitor</th><th scope="col">CVTz50</th></tr>
         </thead>
         <tbody>
-          <tr><td>Carro</td><td class="c-full">Feito para o Renault Fluence 2.0 CVT</td><td>Feito para a Nissan Murano. O Fluence não aparece na lista de carros do site</td></tr>
-          <tr><td>Mexe nas centrais?</td><td class="c-full">Não. Só lê, não grava nada no carro</td><td>Tem funções que gravam: apagar códigos, zerar o contador do fluido e ajustes do motor</td></tr>
-          <tr><td>Códigos de erro</td><td class="c-full">Explicados em português, com gravidade e o que fazer</td><td>Mostra o código; o site indica o manual de serviço da Nissan para o significado</td></tr>
-          <tr><td>Alertas</td><td class="c-full">Voz em português, notificação com a tela apagada e temperaturas ajustáveis</td><td>Voz nas temperaturas de 20, 50 e 90 °C e em código novo</td></tr>
+          <tr><td>Carro</td><td class="c-full">Feito para o Renault Fluence 2.0 CVT, por quem anda de Fluence todo dia</td><td>Feito para a Nissan Murano. O Fluence não aparece na lista de carros do site</td></tr>
+          <tr><td>Segurança</td><td class="c-full">Só leitura: não tem nenhuma função que grava no carro</td><td>Grava nas centrais: apaga códigos, zera o contador do fluido e muda freio motor, marcha lenta e ponto de ignição</td></tr>
+          <tr><td>Códigos de erro</td><td class="c-full">Explica em português o que é, se é grave e o que fazer</td><td>Mostra o código; para saber o que significa, o site manda consultar o manual de serviço da Nissan</td></tr>
+          <tr><td>Alertas</td><td class="c-full">Voz em português, notificação com a tela apagada e você escolhe as temperaturas</td><td>Voz em 20, 50 e 90 °C e em código novo</td></tr>
+          <tr><td>Proteção do câmbio no 0 a 100</td><td class="c-full">Só deixa medir com o óleo na temperatura certa</td><td>Não citada no site</td></tr>
           <tr><td>Personalizar</td><td class="c-full">Blocos do Painel, temperaturas dos alertas, tema e °C ou °F</td><td>Tema claro ou escuro e tamanho da fonte</td></tr>
-          <tr><td>Site e suporte</td><td class="c-full">Em português, direto com quem fez o app</td><td>Site e instruções em inglês; suporte por e-mail</td></tr>
-          <tr><td>Atualização</td><td class="c-full">Em desenvolvimento ativo (2026)</td><td>Última versão informada no site: 1.57, de dezembro de 2023</td></tr>
+          <tr><td>Site e suporte</td><td class="c-full">Em português, direto com quem fez o app, pelo Instagram</td><td>Site e instruções em inglês; suporte por e-mail</td></tr>
+          <tr><td>Atualização</td><td class="c-full">Em desenvolvimento ativo, com novidades em 2026</td><td>Última versão informada no site: dezembro de 2023, quase 3 anos atrás</td></tr>
         </tbody>
       </table>
       <p class="wl-plans-note">Comparação feita com as informações públicas do site oficial do CVTz50 (cvtz50.info), consultado em 18/11/2026. CVTz50 é marca de seus respectivos donos e não tem nenhuma relação com o CVT Monitor ou com a WhiteLine Fluence. Viu alguma informação desatualizada? Me avise no Instagram que eu corrijo.</p>
@@ -1004,7 +1020,7 @@ button{font-family:inherit}
       <details><summary>Funciona no iPhone?</summary><p>Não. Por enquanto o CVT Monitor é só para Android 8 ou mais novo.</p></details>
       <details><summary>O app mexe em alguma coisa no carro?</summary><p>Não. Ele só lê os dados que o módulo do câmbio e o do motor já informam. Comandos que poderiam alterar alguma configuração ficam bloqueados dentro do app.</p></details>
       <details><summary>O app apaga os códigos de erro?</summary><p>Não. Ele lê os códigos do câmbio e do motor e explica cada um em português, mas não apaga. Apagar sem resolver a causa só esconde o problema: isso fica com a oficina, depois do conserto.</p></details>
-      <details><summary>Qual a diferença para o CVTz50?</summary><p>O CVTz50 é um bom app, feito para a Nissan Murano. O CVT Monitor é feito para o Fluence, em português, só lê dados e explica os códigos de erro. Veja a <a href="#comparar" style="text-decoration:underline;text-underline-offset:4px">comparação completa</a>.</p></details>
+      <details><summary>Qual a diferença para o CVTz50?</summary><p>O CVTz50 foi feito para a Nissan Murano, e o Fluence não aparece na lista de carros do site dele. O CVT Monitor é feito para o Fluence, em português, só lê dados e explica cada código de erro. Veja a <a href="#comparar" style="text-decoration:underline;text-underline-offset:4px">comparação completa</a>.</p></details>
       <details><summary>Precisa de internet?</summary><p>Só uma vez, para ativar a chave. Depois disso o app funciona totalmente offline, inclusive na estrada sem sinal.</p></details>
       <details><summary>Posso usar em mais de um celular?</summary><p>Sim, em até 2 celulares ao mesmo tempo. Se trocar de aparelho, você mesmo libera o antigo pelo app e ativa no novo.</p></details>
       <details><summary>Como instalo? Por que não está na Play Store?</summary><p>O app é instalado pelo arquivo (APK) baixado aqui no site, e o passo a passo aparece junto com o download. Vender direto, sem a loja no meio, é o que permite o pagamento único com licença vitalícia.</p></details>
