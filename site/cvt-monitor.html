@@ -247,6 +247,15 @@ button{font-family:inherit}
 .ph-banner .ph-sec{display:flex;justify-content:space-between;padding:0;letter-spacing:.04em}
 .ph-banner b{display:block;margin-top:3px;font:600 14.5px 'Archivo',sans-serif}
 .ph-banner small{display:block;margin-top:2px;font:400 12.5px/1.4 'Archivo',sans-serif;color:var(--a-mu2)}
+/* Celular com as prints reais (seção "Por dentro do app"). As imagens já trazem a faixa da barra
+   de status em cima; a barra de abas da print recebe botões invisíveis por cima. */
+.ph-real .ph-screen{background:#0b0b0c}
+.ph-shots{position:absolute;top:0;left:0;right:0;aspect-ratio:644/1325}
+.ph-shots img{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .25s ease}
+.ph-shots img.is-on{opacity:1}
+.ph-tabs{position:absolute;left:0;right:0;bottom:0;height:8.2%;display:grid;grid-template-columns:repeat(6,minmax(0,1fr))}
+.ph-tabs button{padding:0;border:0;border-radius:14px;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ph-tabs button:focus-visible{outline:2px solid var(--a-acc);outline-offset:-3px}
 .ph-demo-tag{position:absolute;left:50%;bottom:-14px;z-index:4;transform:translateX(-50%);padding:6px 12px;border-radius:999px;background:var(--bg2);border:1px solid var(--line);font:500 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
 
 /* ===== Faixa vermelha ===== */
@@ -343,6 +352,8 @@ button{font-family:inherit}
 .wl-more-grid .ms{width:44px;height:44px;border-radius:14px;background:rgba(227,38,44,.14);color:var(--red-hi);display:flex;align-items:center;justify-content:center}
 .wl-more-grid b{font-weight:800;font-stretch:110%;font-size:20px;letter-spacing:-.01em}
 .wl-more-grid p{margin:0;font-size:15px;line-height:1.55;color:var(--muted);text-wrap:pretty}
+/* Print da tela (recorte de cima) no pé do card */
+.wl-more-shot{display:block;width:100%;height:auto;margin-top:auto;border-radius:16px;border:1px solid var(--line);background:#0b0b0c}
 /* Comparação com o CVTz50 */
 .wl-vs-why{display:flex;gap:16px;margin:0 0 16px;padding:clamp(20px,2.6vw,28px);border:1px solid rgba(79,213,127,.45);border-radius:22px;background:rgba(79,213,127,.06)}
 .wl-vs-why .ms{flex:none;width:44px;height:44px;border-radius:14px;background:var(--a-ok);color:#0b0b0c;display:flex;align-items:center;justify-content:center;font-variation-settings:'FILL' 1}
@@ -714,7 +725,7 @@ body:has(.wl-pop[open]){overflow:hidden}
         <span class="wl-num wl-mono">03 · Por dentro do app</span>
         <h2 class="wl-h2" id="app-t">Mexe aí: são as telas do app.</h2>
       </div>
-      <p data-reveal>Toque nas abas para trocar de tela e use o simulador para ver o que acontece quando o câmbio esquenta. As telas são as mesmas do app, e os números são simulados, como no modo demonstração.</p>
+      <p data-reveal>Toque nas abas para trocar de tela e use o simulador para ver o que acontece quando o câmbio esquenta. São prints do próprio app no modo demonstração, então os números são simulados.</p>
     </div>
     <div class="wl-demo">
       <div class="wl-feats" role="group" aria-label="Telas do app">
@@ -730,10 +741,10 @@ body:has(.wl-pop[open]){overflow:hidden}
 
       <div class="wl-demo-art">
         <div class="ph-fit">
-          <!-- Celular interativo: as 5 abas -->
-          <div class="ph b0" id="demo-phone" data-ph data-demo data-tab="painel" data-chart="cvt">
+          <!-- Celular interativo: prints reais do app no modo demonstração (assets/cvt-app).
+               As abas da própria print são clicáveis; o simulador troca as telas de Painel e Gráficos. -->
+          <div class="ph ph-real" id="demo-phone" data-demo data-tab="painel" data-scen="normal">
             <div class="ph-screen">
-              <div class="ph-glow"></div>
               <div class="ph-status" aria-hidden="true"><span>9:41</span><span><span class="ms" style="font-size:15px">bluetooth</span><span class="ms" style="font-size:15px">signal_cellular_alt</span><span class="ms" style="font-size:15px">battery_5_bar</span></span></div>
 
               <div class="ph-banner" data-banner hidden role="status">
@@ -741,134 +752,24 @@ body:has(.wl-pop[open]){overflow:hidden}
                 <span><span class="ph-sec"><span>CVT MONITOR · AGORA</span><span>VOZ ATIVA</span></span><b data-banner-title></b><small data-banner-body></small></span>
               </div>
 
-              <div class="ph-body" data-ph-body>
-                <div class="ph-head"><div><div class="ph-title" data-ph-title>Renault Fluence</div><div class="ph-conn">OBDII · conectado</div></div><span class="ph-gear" aria-hidden="true"><span class="ms">settings</span></span></div>
-
-                <!-- Painel -->
-                <div class="ph-scr" data-screen="painel">
-                  <div class="ph-gauge" aria-hidden="true">
-                    <svg viewBox="0 0 300 300"><g transform="rotate(135 150 150)" fill="none"><circle class="g-band g-band0" cx="150" cy="150" r="138" stroke="var(--a-ok)" stroke-width="4" stroke-dasharray="404 900"/><circle class="g-band g-band1" cx="150" cy="150" r="138" stroke="var(--a-warn)" stroke-width="4" stroke-dasharray="113 900" stroke-dashoffset="-410"/><circle class="g-band g-band2" cx="150" cy="150" r="138" stroke="var(--a-hot)" stroke-width="4" stroke-dasharray="117 900" stroke-dashoffset="-527"/><circle cx="150" cy="150" r="118" stroke="var(--a-s3)" stroke-width="16" stroke-dasharray="556 742"/><circle class="g-arc" data-g-arc cx="150" cy="150" r="118" stroke-width="16" stroke-dasharray="273 742"/></g><g data-g-ticks></g><line class="g-needle" data-g-needle x1="150" y1="250" x2="150" y2="276" stroke="var(--a-tx)" stroke-width="3"/></svg>
-                    <div class="ph-gauge-mid"><div class="ph-sec">ÓLEO DO CÂMBIO</div><div class="ph-temp"><span class="ph-bc" data-v="cvt">78</span><small>°C</small></div><div class="ph-pill" data-v="sLabel">TRANQUILO</div></div>
-                    <div class="ph-gauge-min">20°</div><div class="ph-gauge-max">130°</div>
-                  </div>
-                  <div class="ph-card">
-                    <div class="ph-state"><span class="ms" data-v="sIcon" aria-hidden="true">check_circle</span><span data-v="sHead">Temperatura ideal</span></div>
-                    <p class="ph-state-txt" data-v="sBody">O câmbio está trabalhando na faixa certa. Pode dirigir normalmente.</p>
-                    <div class="ph-bands"><div><i style="background:var(--a-ok)"></i>&lt; 90°</div><div><i style="background:var(--a-warn)"></i>90–110°</div><div><i style="background:var(--a-hot)"></i>&gt; 110°</div></div>
-                  </div>
-                  <div class="ph-tiles">
-                    <div class="ph-tile"><span>Motor<span class="ms" aria-hidden="true">thermostat</span></span><span><span class="ph-bc" data-v="eng">89</span><small>°C</small></span></div>
-                    <div class="ph-tile"><span>Rotação<span class="ms" aria-hidden="true">speed</span></span><span><span class="ph-bc" data-v="rpm">1.650</span><small>rpm</small></span></div>
-                    <div class="ph-tile"><span>Velocidade<span class="ms" aria-hidden="true">navigation</span></span><span><span class="ph-bc" data-v="speed">48</span><small>km/h</small></span></div>
-                    <div class="ph-tile"><span>Marcha<span class="ms" aria-hidden="true">settings_input_component</span></span><span><span class="ph-bc" data-v="gear">D4</span><small>virtual</small></span></div>
-                  </div>
-                  <div class="ph-split"><div><div class="ph-lbl">Máxima na sessão</div><div class="ph-bc" data-v="max">78°C</div></div><div><div class="ph-lbl">Tempo acima de 90°C</div><div class="ph-bc" data-v="above">0 min 00 s</div></div></div>
+              <div class="ph-shots">
+                <img class="is-on" data-shot="painel-normal" src="assets/cvt-app/painel-normal.jpg" width="644" height="1325" decoding="async" loading="lazy" alt="Tela Painel do CVT Monitor: óleo do câmbio a 81 °C, faixa Tranquilo, com motor e rotação abaixo">
+                <img data-shot="painel-atencao" src="assets/cvt-app/painel-atencao.jpg" width="644" height="1325" decoding="async" loading="lazy" aria-hidden="true" alt="Tela Painel em Atenção: óleo do câmbio a 101 °C e o recado Câmbio esquentando">
+                <img data-shot="painel-quente" src="assets/cvt-app/painel-quente.jpg" width="644" height="1325" decoding="async" loading="lazy" aria-hidden="true" alt="Tela Painel em Muito quente: óleo do câmbio a 112 °C e o recado Reduza agora">
+                <img data-shot="monitor" src="assets/cvt-app/monitor.jpg" width="644" height="1325" decoding="async" loading="lazy" aria-hidden="true" alt="Tela Monitor ao vivo: temperaturas do óleo do câmbio, do motor e do ar, rotação, velocidade, pedal, carga e torque">
+                <img data-shot="graf-normal" src="assets/cvt-app/graficos-normal.jpg" width="644" height="1325" decoding="async" loading="lazy" aria-hidden="true" alt="Tela Gráficos: últimos 60 segundos do óleo do câmbio, estável perto de 79 °C, com a velocidade tracejada">
+                <img data-shot="graf-esquentando" src="assets/cvt-app/graficos-esquentando.jpg" width="644" height="1325" decoding="async" loading="lazy" aria-hidden="true" alt="Tela Gráficos: o óleo do câmbio subindo de 79 para 98 °C e entrando na faixa amarela">
+                <img data-shot="fluido" src="assets/cvt-app/fluido.jpg" width="644" height="1325" decoding="async" loading="lazy" aria-hidden="true" alt="Tela Fluido do câmbio: 76% da vida útil, contador de 160.105 pontos e quanto falta até a troca">
+                <img data-shot="consumo" src="assets/cvt-app/consumo.jpg" width="644" height="1325" decoding="async" loading="lazy" aria-hidden="true" alt="Tela Consumo: 14,5 km/l instantâneo, média da viagem, autonomia, tanque, distância, tempo e litros consumidos">
+                <img data-shot="mais" src="assets/cvt-app/mais.jpg" width="644" height="1325" decoding="async" loading="lazy" aria-hidden="true" alt="Aba Mais: Códigos de erro, Histórico e Desempenho">
+                <div class="ph-tabs" role="tablist" aria-label="Abas do app">
+                  <button type="button" role="tab" data-go="painel" aria-selected="true" aria-label="Painel"></button>
+                  <button type="button" role="tab" data-go="monitor" aria-selected="false" aria-label="Monitor"></button>
+                  <button type="button" role="tab" data-go="graf" aria-selected="false" aria-label="Gráficos"></button>
+                  <button type="button" role="tab" data-go="fluido" aria-selected="false" aria-label="Fluido"></button>
+                  <button type="button" role="tab" data-go="consumo" aria-selected="false" aria-label="Consumo"></button>
+                  <button type="button" role="tab" data-go="mais" aria-selected="false" aria-label="Mais"></button>
                 </div>
-
-                <!-- Monitor -->
-                <div class="ph-scr" data-screen="monitor">
-                  <div class="ph-hint"><span class="ms" aria-hidden="true">touch_app</span>Toque em um valor para ver o gráfico</div>
-                  <div>
-                    <div class="ph-sec">TEMPERATURAS</div>
-                    <div class="ph-group">
-                      <div class="ph-row"><span>Óleo do câmbio<small class="ph-lbl">ATF TEMP</small></span><span><span class="ph-bc ph-cvt" data-v="cvt">78</span> <small>°C</small></span></div>
-                      <div class="ph-row"><span>Motor<small class="ph-lbl">COOLANT TEMP</small></span><span><span class="ph-bc" data-v="eng">89</span> <small>°C</small></span></div>
-                      <div class="ph-row"><span>Ar de admissão<small class="ph-lbl">INTAKE AIR TEMP</small></span><span><span class="ph-bc" data-v="intake">31</span> <small>°C</small></span></div>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="ph-sec">CÂMBIO</div>
-                    <div class="ph-group">
-                      <div class="ph-row"><span>Marcha virtual<small class="ph-lbl">D · aprox.</small></span><span class="ph-bc" data-v="gearN">4ª</span></div>
-                      <div class="ph-row"><span>Relação<small class="ph-lbl">GEAR RATIO</small></span><span class="ph-bc" data-v="ratio">1,12</span></div>
-                      <div class="ph-row"><span>Lockup do conversor<small class="ph-lbl">LOCKUP</small></span><span class="ph-bc ph-ok" data-v="lu">Travado</span></div>
-                      <div class="ph-row"><span>Patinação<small class="ph-lbl">SLIP REV</small></span><span><span class="ph-bc" data-v="slip">8</span> <small>rpm</small></span></div>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="ph-sec">PRESSÕES</div>
-                    <div class="ph-group">
-                      <div class="ph-row"><span>Polia secundária<small class="ph-lbl">SEC PRESS</small></span><span><span class="ph-bc" data-v="sec">1,62</span> <small>MPa</small></span></div>
-                      <div class="ph-row"><span>Polia primária<small class="ph-lbl">PRI PRESS</small></span><span><span class="ph-bc" data-v="pri">0,98</span> <small>MPa</small></span></div>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="ph-sec">MOTOR E ELÉTRICA</div>
-                    <div class="ph-group">
-                      <div class="ph-row"><span>Rotação<small class="ph-lbl">ENG SPEED</small></span><span><span class="ph-bc" data-v="rpm">1.650</span> <small>rpm</small></span></div>
-                      <div class="ph-row"><span>Bateria<small class="ph-lbl">VOLTAGE</small></span><span><span class="ph-bc" data-v="bat">14,1</span> <small>V</small></span></div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Gráficos -->
-                <div class="ph-scr" data-screen="graf">
-                  <div class="ph-chips" role="group" aria-label="Valor do gráfico">
-                    <button type="button" data-chart-key="cvt" aria-pressed="true">Óleo do câmbio</button>
-                    <button type="button" data-chart-key="eng" aria-pressed="false">Motor</button>
-                    <button type="button" data-chart-key="rpm" aria-pressed="false">Rotação</button>
-                    <button type="button" data-chart-key="speed" aria-pressed="false">Velocidade</button>
-                  </div>
-                  <div class="ph-card">
-                    <div class="ph-chart-top">
-                      <div><div class="ph-lbl" data-v="chName">Óleo do câmbio</div><div style="display:flex;align-items:baseline;gap:5px;margin-top:4px"><span class="ph-bc" data-v="chCur" style="color:var(--a-tx)">78</span><small class="ph-lbl" data-v="chUnit">°C</small></div></div>
-                      <div class="ph-live">AO VIVO</div>
-                    </div>
-                    <svg class="ph-chart" viewBox="0 0 300 170" preserveAspectRatio="none" aria-hidden="true">
-                      <rect class="c-zone" data-c-hot x="0" y="0" width="300" height="38" fill="var(--a-hot)" opacity=".1"/>
-                      <rect class="c-zone" data-c-warn x="0" y="38" width="300" height="38" fill="var(--a-warn)" opacity=".1"/>
-                      <line x1="0" y1="42" x2="300" y2="42" stroke="var(--a-ln)"/><line x1="0" y1="85" x2="300" y2="85" stroke="var(--a-ln)"/><line x1="0" y1="128" x2="300" y2="128" stroke="var(--a-ln)"/>
-                      <polyline data-c-speed fill="none" stroke="var(--a-mu)" stroke-width="1.5" stroke-dasharray="3 4" opacity=".7" vector-effect="non-scaling-stroke" points=""/>
-                      <polyline class="c-line" data-c-line fill="none" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke" points=""/>
-                    </svg>
-                    <div class="ph-axis"><span>−60 s</span><span>agora</span></div>
-                    <div class="ph-legend"><span><i></i><span data-v="chName">Óleo do câmbio</span></span><span><i class="dash"></i>Velocidade</span></div>
-                  </div>
-                  <div class="ph-three"><div><div class="ph-lbl">Mínimo</div><div class="ph-bc" data-v="chMin">74</div></div><div><div class="ph-lbl">Média</div><div class="ph-bc" data-v="chAvg">77</div></div><div><div class="ph-lbl">Máximo</div><div class="ph-bc" data-v="chMax">80</div></div></div>
-                  <p class="ph-note" data-v="chNote">Faixas amarela e vermelha marcam 90°C e 110°C. A linha tracejada é a velocidade, para relacionar o aquecimento com o jeito de dirigir.</p>
-                </div>
-
-                <!-- Fluido -->
-                <div class="ph-scr" data-screen="fluido">
-                  <div class="ph-card" style="padding:20px 16px">
-                    <div class="ph-lbl" style="font-size:13px">Desgaste do fluido CVT</div>
-                    <div class="ph-big"><span class="ph-bc" data-v="detPct">71%</span><small>da vida útil</small></div>
-                    <div class="ph-meter"><i data-det-bar></i></div>
-                    <div class="ph-scale"><span>0</span><span>210.000 · troca</span></div>
-                    <div class="ph-quad">
-                      <div><div class="ph-lbl">Contador</div><b data-v="det">148.320</b></div>
-                      <div><div class="ph-lbl">Nesta sessão</div><b data-v="detSess">+0</b></div>
-                      <div><div class="ph-lbl">Faltam até a troca</div><b data-v="detLeft">61.680</b></div>
-                      <div><div class="ph-lbl">Zerado em</div><b>14/03/2025</b></div>
-                    </div>
-                  </div>
-                  <div class="ph-card ph-info"><span class="ms" aria-hidden="true">info</span><p>O contador só sobe quando o óleo passa de 90°C. A troca é recomendada acima de 210.000 pontos, mas óleo escuro ou com cheiro de queimado também pede troca.</p></div>
-                  <div class="ph-ghost"><span class="ms" aria-hidden="true">restart_alt</span>Troquei o fluido, zerar contador</div>
-                </div>
-
-                <!-- Consumo -->
-                <div class="ph-scr" data-screen="consumo">
-                  <div class="ph-card" style="padding:20px 16px">
-                    <div class="ph-lbl" style="font-size:13px">Consumo instantâneo</div>
-                    <div class="ph-big"><span class="ph-bc" data-v="kml" style="font-size:66px">12,4</span><small style="font-size:16px">km/l</small></div>
-                    <div class="ph-lbl" data-v="lph" style="margin-top:6px;font-family:var(--mono)">8,1 L/100 km</div>
-                    <div class="ph-bars" data-fuel-bars aria-hidden="true"></div>
-                  </div>
-                  <div class="ph-stats">
-                    <div class="ph-tile"><span>Média da viagem</span><span><span class="ph-bc" data-v="avg">11,8</span><small>km/l</small></span></div>
-                    <div class="ph-tile"><span>Autonomia</span><span><span class="ph-bc" data-v="range">281</span><small>km</small></span></div>
-                    <div class="ph-tile"><span>Distância</span><span><span class="ph-bc" data-v="dist">23,4</span><small>km</small></span></div>
-                    <div class="ph-tile"><span>Tempo</span><span><span class="ph-bc" data-v="time">32</span><small>min</small></span></div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="ph-nav" role="tablist" aria-label="Abas do app">
-                <button type="button" role="tab" data-go="painel" aria-selected="true"><i><span class="ms" aria-hidden="true">speed</span></i>Painel</button>
-                <button type="button" role="tab" data-go="monitor" aria-selected="false"><i><span class="ms" aria-hidden="true">monitor_heart</span></i>Monitor</button>
-                <button type="button" role="tab" data-go="graf" aria-selected="false"><i><span class="ms" aria-hidden="true">show_chart</span></i>Gráficos</button>
-                <button type="button" role="tab" data-go="fluido" aria-selected="false"><i><span class="ms" aria-hidden="true">water_drop</span></i>Fluido</button>
-                <button type="button" role="tab" data-go="consumo" aria-selected="false"><i><span class="ms" aria-hidden="true">local_gas_station</span></i>Consumo</button>
               </div>
               <div class="ph-home" aria-hidden="true"></div>
             </div>
@@ -894,10 +795,10 @@ body:has(.wl-pop[open]){overflow:hidden}
         <b>E tem mais coisa lá dentro.</b>
       </div>
       <div class="wl-more-grid">
-        <div data-reveal><span class="ms" aria-hidden="true">error</span><b>Códigos de erro em português</b><p>Lê os códigos do câmbio e do motor e explica cada um: o que significa, se é leve ou grave e o que fazer. Avisa por voz quando aparece um código novo. Só lê: apagar fica com a oficina.</p></div>
-        <div data-reveal><span class="ms" aria-hidden="true">calendar_month</span><b>Histórico mensal</b><p>Cada mês e cada viagem: km rodados, consumo, temperatura máxima do câmbio, tempo acima de 90 °C e a previsão de quando o fluido chega na troca.</p></div>
-        <div data-reveal><span class="ms" aria-hidden="true">timer</span><b>0 a 100 km/h e retomada</b><p>Mede o 0 a 100 e a retomada de 60 a 100 sozinho e fala o resultado, com aceleração e potência estimada. Só deixa medir com o óleo do câmbio na temperatura certa.</p></div>
-        <div data-reveal><span class="ms" aria-hidden="true">tune</span><b>Do seu jeito</b><p>Escolha os blocos que aparecem no Painel, ajuste as temperaturas dos alertas e ligue o aviso de câmbio aquecido para saber quando já pode acelerar.</p></div>
+        <div data-reveal><span class="ms" aria-hidden="true">error</span><b>Códigos de erro em português</b><p>Lê os códigos do câmbio e do motor e explica cada um: o que significa, se é leve ou grave e o que fazer. Avisa por voz quando aparece um código novo. Só lê: apagar fica com a oficina.</p><img class="wl-more-shot" src="assets/cvt-app/mais-codigos.jpg" width="600" height="758" loading="lazy" decoding="async" alt="Tela Códigos de erro do app: o código P0171, Mistura pobre, explicado em português, com a gravidade e o que fazer"></div>
+        <div data-reveal><span class="ms" aria-hidden="true">calendar_month</span><b>Histórico mensal</b><p>Cada mês e cada viagem: km rodados, consumo, temperatura máxima do câmbio, tempo acima de 90 °C e a previsão de quando o fluido chega na troca.</p><img class="wl-more-shot" src="assets/cvt-app/mais-historico.jpg" width="600" height="758" loading="lazy" decoding="async" alt="Tela Histórico do app: km rodados por mês e o resumo do mês com km, tempo de viagem, combustível e consumo médio"></div>
+        <div data-reveal><span class="ms" aria-hidden="true">timer</span><b>0 a 100 km/h e retomada</b><p>Mede o 0 a 100 e a retomada de 60 a 100 sozinho e fala o resultado, com aceleração e potência estimada. Só deixa medir com o óleo do câmbio na temperatura certa.</p><img class="wl-more-shot" src="assets/cvt-app/mais-desempenho.jpg" width="600" height="758" loading="lazy" decoding="async" alt="Tela Desempenho do app: resultados do 0 a 100 km/h em 10,9 e 11,3 segundos, com potência estimada e temperatura do câmbio"></div>
+        <div data-reveal><span class="ms" aria-hidden="true">tune</span><b>Do seu jeito</b><p>Escolha os blocos que aparecem no Painel, ajuste as temperaturas dos alertas e ligue o aviso de câmbio aquecido para saber quando já pode acelerar.</p><img class="wl-more-shot" src="assets/cvt-app/mais-painel.jpg" width="600" height="758" loading="lazy" decoding="async" alt="Painel do app no tema claro, com os blocos de motor, rotação, velocidade, marcha, máxima da sessão e tempo acima de 90 °C"></div>
       </div>
     </div>
   </section>
