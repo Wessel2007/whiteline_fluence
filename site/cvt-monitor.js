@@ -206,16 +206,17 @@
   }
 
   // ===================================================================
-  // Simulação do app (mesma lógica do modo demonstração do CVT Monitor)
+  // Simulação do app (mesma lógica do modo demonstração do CVT Monitor).
+  // Roda no celular do topo ([data-ph]). O celular de "Por dentro do app"
+  // ([data-demo]) mostra prints reais do app e só troca de imagem.
   // ===================================================================
   var phones = $('[data-ph]');
   var demo = document.querySelector('[data-demo]');
-  if (!phones.length) return;
+  if (!phones.length && !demo) return;
 
   var N = 80;
   var scen = 'normal';
   var tick = 0;
-  var lastBand = 0;
   var chartKey = 'cvt';
   var userActed = false; // voz só depois de um clique da pessoa
   var cl = function (x, a, b) { return Math.max(a, Math.min(b, x)); };
@@ -266,7 +267,6 @@
     { label: 'MUITO QUENTE', head: 'Reduza agora', body: 'Diminua a velocidade e, se puder, pare em local seguro com o motor em marcha lenta até a temperatura baixar.', icon: 'local_fire_department' },
   ];
   var COLORS = ['var(--a-ok)', 'var(--a-warn)', 'var(--a-hot)'];
-  var TITLES = { painel: 'Renault Fluence', monitor: 'Monitor ao vivo', graf: 'Gráficos', fluido: 'Fluido do câmbio', consumo: 'Consumo' };
   var CHARTS = {
     cvt: ['Óleo do câmbio', '°C', 0, 'Faixas amarela e vermelha marcam 90°C e 110°C. A linha tracejada é a velocidade, para relacionar o aquecimento com o jeito de dirigir.'],
     eng: ['Motor', '°C', 0, 'Últimos 60 segundos. A linha tracejada é a velocidade.'],
@@ -358,13 +358,6 @@
       // As faixas têm 70fr / 20fr / 20fr = 20–90 / 90–110 / 110–130 °C, então a escala é linear de 20 a 130
       el.style.left = ((cl(v.cvt, 20, 130) - 20) / 110 * 100).toFixed(1) + '%';
     });
-
-    // Alerta quando sobe de faixa (como no app)
-    if (bnd !== lastBand) {
-      var up = bnd > lastBand;
-      lastBand = bnd;
-      if (up && bnd > 0) alertBand(bnd);
-    }
   }
 
   // ===== Notificação e voz =====
@@ -374,10 +367,11 @@
   var voiceWrap = document.querySelector('[data-voice-wrap]');
   if (voiceWrap && 'speechSynthesis' in window) voiceWrap.hidden = false;
 
-  function alertBand(bnd) {
-    var t = Math.round(v.cvt) + '°C';
+  // temp: a mesma temperatura mostrada na print do Painel
+  function alertBand(bnd, temp) {
+    var t = temp + '°C';
     var msg = bnd === 1
-      ? { title: 'Câmbio em atenção · ' + t, body: 'Dirija com suavidade e evite acelerações fortes.', speak: 'Atenção. Temperatura do câmbio em ' + Math.round(v.cvt) + ' graus.' }
+      ? { title: 'Câmbio em atenção · ' + t, body: 'Dirija com suavidade e evite acelerações fortes.', speak: 'Atenção. Temperatura do câmbio em ' + temp + ' graus.' }
       : { title: 'Câmbio muito quente · ' + t, body: 'Reduza a velocidade. Se puder, pare em local seguro.', speak: 'Alerta. Câmbio muito quente. Reduza a velocidade.' };
     if (banner) {
       banner.querySelector('[data-banner-title]').textContent = msg.title;
@@ -398,14 +392,30 @@
   }
   if (banner) banner.addEventListener('click', function () { banner.hidden = true; });
 
+  // ===== Prints do celular de "Por dentro do app" =====
+  // Painel e Gráficos têm uma print por cenário do simulador; as outras abas, uma só.
+  var PRINT_TEMP = { atencao: 101, quente: 112 }; // temperatura que aparece em cada print do Painel
+  function shotKey() {
+    var tab = demo.getAttribute('data-tab');
+    if (tab === 'painel') return 'painel-' + scen;
+    if (tab === 'graf') return scen === 'normal' ? 'graf-normal' : 'graf-esquentando';
+    return tab;
+  }
+  function showShot() {
+    if (!demo) return;
+    var key = shotKey();
+    $('[data-shot]', demo).forEach(function (img) {
+      var on = img.getAttribute('data-shot') === key;
+      img.classList.toggle('is-on', on);
+      if (on) img.removeAttribute('aria-hidden'); else img.setAttribute('aria-hidden', 'true');
+    });
+  }
+
   // ===== Abas do celular e lista de recursos =====
   function goTab(tab) {
     if (!demo) return;
     demo.setAttribute('data-tab', tab);
-    var title = demo.querySelector('[data-ph-title]');
-    if (title) title.textContent = TITLES[tab];
-    var body = demo.querySelector('[data-ph-body]');
-    if (body) body.scrollTop = 0;
+    showShot();
     $('[data-go]').forEach(function (btn) {
       var on = btn.getAttribute('data-go') === tab;
       if (btn.getAttribute('role') === 'tab') btn.setAttribute('aria-selected', on);
@@ -434,9 +444,14 @@
   $('[data-scen]').forEach(function (btn) {
     btn.addEventListener('click', function () {
       userActed = true;
+      var antes = scen;
       scen = btn.getAttribute('data-scen');
       $('[data-scen]').forEach(function (o) { o.setAttribute('aria-pressed', o === btn); });
-      if (scen !== 'normal') goTab('painel');
+      if (demo) demo.setAttribute('data-scen', scen);
+      if (scen !== 'normal') goTab('painel'); else showShot();
+      // Alerta quando sobe de faixa (como no app)
+      var rank = { normal: 0, atencao: 1, quente: 2 };
+      if (rank[scen] > rank[antes]) alertBand(rank[scen], PRINT_TEMP[scen]);
     });
   });
   if (voiceBox) voiceBox.addEventListener('change', function () { userActed = true; });
