@@ -66,6 +66,7 @@ button{font-family:inherit}
 .wl-nav-pill{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;border:1px solid rgba(227,38,44,.55);color:var(--fg);font-weight:600;transition:background .25s,border-color .25s}
 .wl-nav-pill:hover{background:rgba(227,38,44,.14);border-color:var(--red);color:var(--fg)}
 .wl-nav-pill.is-active{text-decoration:none;background:rgba(227,38,44,.14);border-color:var(--red)}
+.wl-nav-cvt::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--red);animation:wl-pulse 1.6s ease-in-out infinite}
 .wl-nav-cta{display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:var(--red);color:#fff;font-weight:700;white-space:nowrap}
 .wl-nav-cta:hover{background:var(--fg);color:var(--bg)}
 .wl-nav-strip{display:none}
@@ -512,16 +513,22 @@ body:has(.wl-pop[open]){overflow:hidden}
 /* ===== Animações (só com JS e sem prefers-reduced-motion) ===== */
 .wl-anim [data-reveal]{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
 .wl-anim [data-reveal].is-in{opacity:1;transform:none}
-.wl-anim .wl-bubble-voice{animation:wl-float 6s ease-in-out infinite}
+.wl-anim .wl-bubble-voice{animation:wl-float 6s ease-in-out infinite;transform-origin:right center;transition:opacity .45s ease,scale .45s cubic-bezier(.2,.7,.2,1),visibility .45s}
+/* Balão de voz do topo: o JS mostra quando o celular passa de 90 °C */
+.wl-anim .wl-bubble-voice.is-off{opacity:0;scale:.9;visibility:hidden}
 .wl-anim .wl-bubble-fluid{animation:wl-float 7s ease-in-out 1.5s infinite}
 @media (prefers-reduced-motion:reduce){
-  .wl-marquee-track,.wl-eyebrow::before,.ph-live::before,.wl-lote-top .wl-mono::before{animation:none!important}
+  .wl-marquee-track,.wl-eyebrow::before,.ph-live::before,.wl-lote-top .wl-mono::before,.wl-nav-cvt::before{animation:none!important}
   .wl-lote i b{transition:none}
   .ph *{transition:none!important}
 }
 
 /* ===== Telas menores ===== */
+/* Menu não cabe inteiro: o Apoie sai primeiro, depois os outros extras (igual à página inicial) */
+@media (max-width:1440px){.wl-nav-apoie{display:none!important}}
 @media (max-width:1240px){.wl-nav-extra{display:none!important}}
+@media (max-width:1000px){.wl-nav-mid{display:none!important}}
+@media (max-width:800px){.wl-nav-narrow{display:none!important}}
 @media (max-width:1060px){
   .wl-nav-guia{display:none!important}
   .wl-hero{grid-template-columns:minmax(0,1fr)}
@@ -578,11 +585,15 @@ body:has(.wl-pop[open]){overflow:hidden}
     </a>
     <div class="wl-nav-links">
       <a class="wl-nav-sec wl-nav-extra" href="./#sobre">Sobre</a>
-      <a class="wl-nav-sec wl-nav-extra" href="./#ficha">Ficha</a>
+      <a class="wl-nav-sec wl-nav-narrow" href="./#ficha">Ficha</a>
       <a class="wl-nav-sec" href="./#videos">Vídeos</a>
-      <a class="wl-nav-sec wl-nav-extra" href="./#produtos">Produtos</a>
-      <a class="wl-nav-sec wl-nav-pill wl-nav-guia" href="guia-compra.html">Guia de compra</a>
-      <a class="wl-nav-sec wl-nav-pill is-active" href="cvt-monitor.html" aria-current="page">CVT Monitor</a>
+      <a class="wl-nav-sec wl-nav-mid" href="./#eventos">Eventos</a>
+      <a class="wl-nav-sec wl-nav-extra" href="./#garagem">Garagem</a>
+      <a class="wl-nav-sec wl-nav-mid" href="./#produtos">Produtos</a>
+      <a class="wl-nav-sec wl-nav-extra" href="./#faq">FAQ</a>
+      <a class="wl-nav-sec wl-nav-apoie" href="./#apoie">Apoie ☕</a>
+      <a class="wl-nav-sec wl-nav-pill wl-nav-guia" href="guia-compra.html">Guia de compra <span style="font-family:var(--mono)" aria-hidden="true">→</span></a>
+      <a class="wl-nav-sec wl-nav-pill wl-nav-cvt is-active" href="cvt-monitor.html" aria-current="page">CVT Monitor</a>
       <a class="wl-nav-cta" href="#preco" data-cta-short>Me avise</a>
     </div>
     <div class="wl-nav-strip">
@@ -629,9 +640,9 @@ body:has(.wl-pop[open]){overflow:hidden}
 
     <div class="wl-hero-art" aria-hidden="true">
       <div class="ph-fit wl-stage">
-        <div class="wl-bubble wl-bubble-voice">
+        <div class="wl-bubble wl-bubble-voice" data-hero-voice>
         <span class="wl-mono">Alerta por voz</span>
-        <strong>“Atenção. Temperatura do câmbio em 101 graus.”</strong>
+        <strong data-hero-voice-txt>“Atenção. Temperatura do câmbio em 101 graus.”</strong>
       </div>
         <div class="wl-bubble wl-bubble-fluid">
         <span class="wl-mono">Desgaste do fluido</span>

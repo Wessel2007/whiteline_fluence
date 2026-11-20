@@ -226,15 +226,32 @@
     det: 148320, detStart: 148320, kml: 12.4, avg: 11.8, fuel: 58, dist: 23.4, time: 1960, used: 1.98, max: 74, above: 0 };
   var h = { cvt: [], eng: [], rpm: [], speed: [], kml: [] };
 
+  // Ciclo do celular do topo (em passos de 700 ms, ~22 s no total): fica tranquilo,
+  // esquenta até ~101 °C (o balão de voz aparece ao passar de 90 °C), segura e esfria.
+  // Só roda no cenário Normal e com animações ligadas.
+  var HERO_CYCLE = 32, HERO_START = 5; // começa 5 passos antes da subida (~3,5 s)
+  var heroT = 0;
+  var heroCycling = function () { return motion && phones.length > 0 && scen === 'normal'; };
+  function heroTarget() {
+    var p = (heroT + HERO_START) % HERO_CYCLE;
+    if (p < 10) return 80 + Math.sin(p / 3) * 1.5;   // tranquilo
+    if (p < 16) return 80 + (p - 9) / 6 * 21;        // esquentando
+    if (p < 22) return 101 + Math.sin(p) * 0.8;      // atenção
+    if (p < 30) return 101 - (p - 21) / 8 * 21;      // esfriando
+    return 80;
+  }
+
   function target() {
     if (scen === 'atencao') return 99;
     if (scen === 'quente') return 116;
+    if (heroCycling()) return heroTarget();
     // Normal: passeia entre ~72 e ~86 °C, como um dia comum de trânsito
     return 79 + Math.sin(tick / 26) * 7;
   }
 
   function sim(warm) {
-    v.cvt = cl(v.cvt + (target() - v.cvt) * (warm ? 0.05 : 0.08) + rnd(0.5), 20, 135);
+    var follow = warm ? 0.05 : heroCycling() ? 0.6 : 0.08;
+    v.cvt = cl(v.cvt + (target() - v.cvt) * follow + rnd(0.5), 20, 135);
     v.speed = cl(v.speed + rnd(9) + (60 - v.speed) * 0.03, 0, 130);
     v.acc = cl(v.acc + rnd(0.8), 0, 8);
     v.ratio = cl(2.2 - v.speed / 55 + rnd(0.05), 0.45, 2.3);
@@ -301,6 +318,7 @@
     var gear = v.ratio > 2 ? 1 : v.ratio > 1.5 ? 2 : v.ratio > 1.15 ? 3 : v.ratio > 0.9 ? 4 : v.ratio > 0.72 ? 5 : v.ratio > 0.58 ? 6 : 7;
 
     phones.forEach(function (p) { p.classList.remove('b0', 'b1', 'b2'); p.classList.add('b' + bnd); });
+    heroVoice(bnd);
     $('[data-g-arc]').forEach(function (c) { c.setAttribute('stroke-dasharray', (556 * frac).toFixed(1) + ' 742'); });
     $('[data-g-needle]').forEach(function (l) {
       l.setAttribute('x1', (150 + 100 * Math.cos(ang)).toFixed(1)); l.setAttribute('y1', (150 + 100 * Math.sin(ang)).toFixed(1));
@@ -358,6 +376,26 @@
       // As faixas têm 70fr / 20fr / 20fr = 20–90 / 90–110 / 110–130 °C, então a escala é linear de 20 a 130
       el.style.left = ((cl(v.cvt, 20, 130) - 20) / 110 * 100).toFixed(1) + '%';
     });
+  }
+
+  // ===== Balão "Alerta por voz" do topo =====
+  // Aparece quando o celular do topo sobe de faixa, com a mesma frase que o app fala,
+  // e some quando volta para o verde. Sem animações, fica parado como no HTML.
+  var heroBubble = motion && phones.length ? document.querySelector('[data-hero-voice]') : null;
+  var heroBubbleTxt = heroBubble && heroBubble.querySelector('[data-hero-voice-txt]');
+  var heroBand = 0;
+  if (heroBubble) heroBubble.classList.add('is-off');
+  function heroVoice(bnd) {
+    if (!heroBubble || bnd === heroBand) return;
+    if (bnd > heroBand) {
+      heroBubbleTxt.textContent = bnd === 1
+        ? '“Atenção. Temperatura do câmbio em ' + Math.round(v.cvt) + ' graus.”'
+        : '“Alerta. Câmbio muito quente. Reduza a velocidade.”';
+      heroBubble.classList.remove('is-off');
+    } else if (bnd === 0) {
+      heroBubble.classList.add('is-off');
+    }
+    heroBand = bnd;
   }
 
   // ===== Notificação e voz =====
@@ -459,7 +497,7 @@
   // ===== Loop: só roda com a aba visível e algum celular na tela =====
   var visible = 0;
   var timer = null;
-  function step() { tick++; sim(false); render(); }
+  function step() { tick++; heroT++; sim(false); render(); }
   function sync() {
     var run = visible > 0 && !document.hidden;
     if (run && !timer) timer = setInterval(step, 700);
