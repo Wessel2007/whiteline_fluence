@@ -24,6 +24,15 @@
     // Ex.: 'downloads/cvt-monitor.apk' (arquivo dentro de site/downloads/).
     apkUrl: '',
 
+    // Impressão digital SHA-256 do APK publicado em apkUrl, mostrada embaixo do botão de
+    // download com o aviso "baixe só por aqui". Vazio = não mostra. Gere com:
+    //   Get-FileHash cvt-monitor.apk -Algorithm SHA256   (PowerShell)
+    // e cole em minúsculas. Atualize junto com o APK, a cada versão nova.
+    apkSha256: '',
+
+    // Versão do APK publicado (ex.: '1.0.0'), mostrada junto da impressão digital.
+    apkVersao: '',
+
     // Preço (texto, com vírgula). precoDepois = preço cheio depois do
     // lançamento; deixe '' para não mostrar.
     preco: '39,90',
@@ -190,6 +199,11 @@
   if (CONFIG.apkUrl) {
     $('[data-apk]').forEach(function (a) { a.href = CONFIG.apkUrl; });
     $('[data-apk-wrap]').forEach(function (el) { el.hidden = false; });
+    if (CONFIG.apkSha256) {
+      $('[data-apk-sha-val]').forEach(function (el) { el.textContent = CONFIG.apkSha256.toLowerCase(); });
+      if (CONFIG.apkVersao) $('[data-apk-ver]').forEach(function (el) { el.textContent = 'Versão ' + CONFIG.apkVersao + '. '; });
+      $('[data-apk-sha]').forEach(function (el) { el.hidden = false; });
+    }
   }
 
   // ===== Surgir ao rolar =====

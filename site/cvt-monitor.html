@@ -94,6 +94,8 @@ button{font-family:inherit}
 .wl-lead{margin:24px 0 0;max-width:600px;font-size:clamp(17px,1.6vw,20px);line-height:1.6;color:var(--muted);text-wrap:pretty}
 .wl-lead strong{color:var(--fg)}
 .wl-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.wl-apk-sha{margin:14px 0 0;font-size:13.5px;line-height:1.55;color:var(--dim);text-wrap:pretty}
+.wl-apk-sha code{display:block;margin-top:6px;font-family:var(--mono);font-size:12px;line-height:1.5;color:var(--muted);word-break:break-all}
 .wl-facts{display:flex;flex-wrap:wrap;gap:8px 18px;margin:22px 0 0;padding:0;list-style:none;font-size:14px;color:var(--muted)}
 .wl-facts li{display:flex;align-items:center;gap:8px}
 .wl-facts li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red)}
@@ -828,6 +830,7 @@ body:has(.wl-pop[open]){overflow:hidden}
         <div class="wl-ctas" data-apk-wrap hidden>
           <a class="wl-btn wl-btn-red" href="#" data-apk download>Baixar o app grátis <span class="wl-arrow" aria-hidden="true">↓</span></a>
         </div>
+        <p class="wl-apk-sha" data-apk-sha hidden>Baixe o app <strong>só por esta página</strong>: um APK de outro lugar pode ter sido alterado. <span data-apk-ver></span>Impressão digital (SHA-256) do arquivo oficial, para quem quiser conferir:<code data-apk-sha-val></code></p>
         <p data-only="pre" style="font-size:15px;color:var(--dim)">O download abre aqui no dia do lançamento.</p>
       </div>
       <ul>
