@@ -26,11 +26,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Barlow+Condensed:ital,wght@1,800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <!-- Ícones das telas do app: só os usados (a lista precisa ficar em ordem alfabética) -->
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0&icon_names=ac_unit,battery_5_bar,bluetooth,bolt,calendar_month,check_circle,chevron_right,device_thermostat,error,info,local_fire_department,local_gas_station,monitor_heart,navigation,restart_alt,settings,settings_input_component,show_chart,signal_cellular_alt,speed,thermostat,timer,touch_app,tune,verified_user,warning,water_drop&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0&icon_names=ac_unit,apps,battery_5_bar,bluetooth,bolt,calendar_month,check_circle,chevron_right,device_thermostat,error,info,local_fire_department,local_gas_station,monitor_heart,navigation,restart_alt,settings,settings_input_component,show_chart,signal_cellular_alt,speed,thermostat,timer,touch_app,tune,verified_user,warning,water_drop&display=block" rel="stylesheet">
 <style>
 :root{--bg:#0b0b0c;--bg2:#141416;--fg:#f4f3f1;--red:#e3262c;--red-hi:#ff3b3f;--red-dk:#c81e24;--line:rgba(244,243,241,.12);--muted:rgba(244,243,241,.75);--dim:rgba(244,243,241,.55);--mono:'JetBrains Mono',ui-monospace,monospace;
   /* cores do app (tema escuro do CVT Monitor) */
-  --a-bg:#060607;--a-s1:#16181a;--a-s3:#24272a;--a-tx:#f2f1ee;--a-mu:#868b90;--a-mu2:#aeb2b6;--a-ln:rgba(255,255,255,.07);--a-acc:#308dff;--a-ok:#4fd57f;--a-warn:#fac131;--a-hot:#ff534b}
+  --a-bg:#060607;--a-s1:#16181a;--a-s3:#24272a;--a-tx:#f2f1ee;--a-mu:#868b90;--a-mu2:#aeb2b6;--a-ln:rgba(255,255,255,.07);--a-acc:#ef3538;--a-ok:#4fd57f;--a-warn:#fac131;--a-hot:#ff534b}
 html{scroll-behavior:smooth;scroll-padding-top:88px}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:'Archivo',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
 *{box-sizing:border-box}
@@ -109,9 +109,9 @@ button{font-family:inherit}
 .wl-stage{position:relative}
 .wl-bubble-voice{left:-150px;bottom:150px;border-left:3px solid var(--a-warn)}
 .wl-bubble-voice .wl-mono::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--a-warn)}
-.wl-bubble-fluid{right:-84px;top:70px;max-width:220px;border-left:3px solid var(--a-acc)}
+.wl-bubble-fluid{right:-84px;top:70px;max-width:220px;border-left:3px solid var(--red)}
 .wl-bubble-fluid i{display:block;height:6px;margin-top:10px;border-radius:3px;background:var(--a-s3);overflow:hidden}
-.wl-bubble-fluid i::after{content:"";display:block;width:71%;height:100%;border-radius:3px;background:var(--a-acc)}
+.wl-bubble-fluid i::after{content:"";display:block;width:76%;height:100%;border-radius:3px;background:var(--a-warn)}
 
 /* ===== Celular com as telas do app ===== */
 .ph{--sc:var(--a-ok);position:relative;flex:none;width:340px;height:712px;padding:9px;border-radius:50px;background:#0a0a0a;box-shadow:0 40px 90px -20px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.08),inset 0 0 0 1px rgba(255,255,255,.04)}
@@ -129,9 +129,14 @@ button{font-family:inherit}
 .ph-body::-webkit-scrollbar{display:none}
 .ph-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 12px -4px;padding:4px 4px 10px 12px;border-left:4px solid var(--a-acc)}
 .ph-title{font:italic 800 20px/1.15 'Barlow Condensed',sans-serif;text-transform:uppercase}
-.ph-conn{display:flex;align-items:center;gap:6px;margin-top:3px;font:500 11px var(--mono);color:var(--a-mu)}
-.ph-conn::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--a-ok)}
-.ph-gear{flex:none;width:40px;height:40px;border-radius:50%;border:1px solid var(--a-ln);background:var(--a-s1);display:flex;align-items:center;justify-content:center}
+.ph-conn{display:flex;align-items:center;gap:6px;margin-top:3px;font:500 11.5px var(--mono);color:var(--a-mu)}
+.ph-conn::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--a-mu2)}
+/* Aviso de código de erro, logo abaixo do título */
+.ph-alert{display:flex;align-items:center;gap:9px;margin:0 0 6px;padding:10px 13px;border-radius:15px;background:var(--a-s1);border:1px solid var(--a-ln);font:600 13px 'Archivo',sans-serif}
+.ph-alert .ms{flex:none;font-size:18px;color:var(--a-warn)}
+.ph-alert span:nth-child(2){flex:1;min-width:0}
+.ph-alert b{color:var(--a-acc);font-weight:700}
+.ph-gear{flex:none;width:40px;height:40px;border-radius:50%;border:1px solid var(--a-ln);background:#141517;display:flex;align-items:center;justify-content:center}
 .ph-gear .ms{font-size:20px}
 .ph-bc{font:italic 800 1em/1 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
 .ph-card{padding:16px;border-radius:20px;background:var(--a-s1);border:1px solid var(--a-ln)}
@@ -148,11 +153,11 @@ button{font-family:inherit}
 .ph.b0 .g-band0,.ph.b1 .g-band1,.ph.b2 .g-band2{opacity:1}
 .ph-gauge .g-needle{transition:all .7s ease}
 .ph-gauge-mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:18px}
-.ph-gauge-mid>.ph-sec{padding:0;letter-spacing:.12em}
+.ph-gauge-mid>.ph-sec{padding:0;letter-spacing:.2em;color:var(--a-mu2)}
 .ph-temp{display:flex;align-items:flex-start;margin-top:2px}
 .ph-temp .ph-bc{font-size:86px}
 .ph-temp small{margin-top:8px;font:500 20px 'Archivo',sans-serif;color:var(--a-mu2)}
-.ph-pill{margin-top:6px;padding:5px 13px;border-radius:14px;background:var(--sc);color:#060607;font:italic 800 14px 'Barlow Condensed',sans-serif;letter-spacing:.06em;transform:skewX(-8deg);transition:background 1s ease}
+.ph-pill{margin-top:6px;padding:5px 15px;border-radius:999px;background:var(--sc);color:#060607;font:italic 800 15px 'Barlow Condensed',sans-serif;letter-spacing:.06em;transition:background 1s ease}
 .ph-gauge-min,.ph-gauge-max{position:absolute;bottom:4px;font:500 10.5px var(--mono);color:var(--a-mu)}
 .ph-gauge-min{left:40px}.ph-gauge-max{right:34px}
 .ph-state{display:flex;align-items:center;gap:9px;font:600 16px 'Archivo',sans-serif}
@@ -233,13 +238,13 @@ button{font-family:inherit}
 .ph-stats .ph-tile .ph-bc{font-size:27px}
 
 /* Barra de abas e notificação */
-.ph-nav{position:absolute;left:0;right:0;bottom:0;height:70px;padding:6px 4px 16px;background:var(--a-bg);border-top:1px solid var(--a-ln);display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
-.ph-nav>button,.ph-nav>span{display:flex;flex-direction:column;align-items:center;gap:3px;padding:0;border:0;background:none;color:var(--a-mu);font:600 10.5px 'Archivo',sans-serif;cursor:pointer}
-.ph-nav i{width:52px;height:28px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-style:normal;transition:background .25s}
+.ph-nav{position:absolute;left:0;right:0;bottom:0;height:70px;padding:6px 4px 16px;background:var(--a-bg);border-top:1px solid var(--a-ln);display:grid;grid-template-columns:repeat(6,minmax(0,1fr))}
+.ph-nav>button,.ph-nav>span{display:flex;flex-direction:column;align-items:center;gap:3px;padding:0;border:0;background:none;color:var(--a-mu);font:600 9.5px 'Archivo',sans-serif;cursor:pointer}
+.ph-nav i{width:44px;height:28px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-style:normal;transition:background .25s}
 .ph-nav .ms{font-size:21px;font-variation-settings:'FILL' 0}
 .ph-nav [aria-current="true"],.ph-nav [aria-selected="true"]{color:var(--a-acc)}
-.ph-nav [aria-current="true"] i,.ph-nav [aria-selected="true"] i{background:rgba(48,141,255,.22)}
-.ph-nav [aria-current="true"] .ms,.ph-nav [aria-selected="true"] .ms{font-variation-settings:'FILL' 1}
+.ph-nav [aria-current="true"] i,.ph-nav [aria-selected="true"] i{background:rgba(239,53,56,.2)}
+.ph-nav [aria-current="true"] .ms,.ph-nav [aria-selected="true"] .ms{font-variation-settings:'FILL' 0}
 .ph-home{position:absolute;bottom:5px;left:50%;z-index:11;width:100px;height:4px;margin-left:-50px;border-radius:2px;background:var(--a-tx);opacity:.5}
 .ph-banner{position:absolute;top:40px;left:9px;right:9px;z-index:10;display:flex;gap:11px;padding:13px 14px;border-radius:22px;background:var(--a-s1);border:1px solid var(--a-ln);box-shadow:0 12px 40px rgba(0,0,0,.45);cursor:pointer;animation:wl-in .4s cubic-bezier(.2,.7,.2,1)}
 .ph-banner>.ms{flex:none;width:34px;height:34px;max-width:none;border-radius:50%;background:var(--bc,var(--a-warn));color:#0c0d0e;display:flex;align-items:center;justify-content:center;font-size:19px}
@@ -352,8 +357,6 @@ button{font-family:inherit}
 .wl-more-grid .ms{width:44px;height:44px;border-radius:14px;background:rgba(227,38,44,.14);color:var(--red-hi);display:flex;align-items:center;justify-content:center}
 .wl-more-grid b{font-weight:800;font-stretch:110%;font-size:20px;letter-spacing:-.01em}
 .wl-more-grid p{margin:0;font-size:15px;line-height:1.55;color:var(--muted);text-wrap:pretty}
-/* Print da tela (recorte de cima) no pé do card */
-.wl-more-shot{display:block;width:100%;height:auto;margin-top:auto;border-radius:16px;border:1px solid var(--line);background:#0b0b0c}
 /* Comparação com o CVTz50 */
 .wl-vs-why{display:flex;gap:16px;margin:0 0 16px;padding:clamp(20px,2.6vw,28px);border:1px solid rgba(79,213,127,.45);border-radius:22px;background:rgba(79,213,127,.06)}
 .wl-vs-why .ms{flex:none;width:44px;height:44px;border-radius:14px;background:var(--a-ok);color:#0b0b0c;display:flex;align-items:center;justify-content:center;font-variation-settings:'FILL' 1}
@@ -628,21 +631,22 @@ body:has(.wl-pop[open]){overflow:hidden}
       <div class="ph-fit wl-stage">
         <div class="wl-bubble wl-bubble-voice">
         <span class="wl-mono">Alerta por voz</span>
-        <strong>“Atenção. Temperatura do câmbio em 98 graus.”</strong>
+        <strong>“Atenção. Temperatura do câmbio em 101 graus.”</strong>
       </div>
         <div class="wl-bubble wl-bubble-fluid">
         <span class="wl-mono">Desgaste do fluido</span>
-        <strong>71% da vida útil · troca em ~60 mil pontos</strong>
+        <strong>76% da vida útil · troca em ~50 mil pontos</strong>
         <i></i>
       </div>
-        <!-- Celular do topo: só a tela Painel, ao vivo -->
+        <!-- Celular do topo: a tela Painel do app atual, ao vivo (animada pelo cvt-monitor.js) -->
         <div class="ph b0" data-ph data-tab="painel">
           <div class="ph-screen">
             <div class="ph-glow"></div>
             <div class="ph-status"><span>9:41</span><span><span class="ms" style="font-size:15px">bluetooth</span><span class="ms" style="font-size:15px">signal_cellular_alt</span><span class="ms" style="font-size:15px">battery_5_bar</span></span></div>
             <div class="ph-body">
-              <div class="ph-head"><div><div class="ph-title">Renault Fluence</div><div class="ph-conn">OBDII · conectado</div></div><span class="ph-gear"><span class="ms">settings</span></span></div>
+              <div class="ph-head"><div><div class="ph-title">Renault Fluence 2.0</div><div class="ph-conn">Demonstração</div></div><span class="ph-gear"><span class="ms">settings</span></span></div>
               <div class="ph-scr" data-screen="painel">
+                <div class="ph-alert"><span class="ms">error</span><span>1 código de erro registrado</span><b>Ver</b></div>
                 <div class="ph-gauge">
                   <svg viewBox="0 0 300 300"><g transform="rotate(135 150 150)" fill="none"><circle class="g-band g-band0" cx="150" cy="150" r="138" stroke="var(--a-ok)" stroke-width="4" stroke-dasharray="404 900"/><circle class="g-band g-band1" cx="150" cy="150" r="138" stroke="var(--a-warn)" stroke-width="4" stroke-dasharray="113 900" stroke-dashoffset="-410"/><circle class="g-band g-band2" cx="150" cy="150" r="138" stroke="var(--a-hot)" stroke-width="4" stroke-dasharray="117 900" stroke-dashoffset="-527"/><circle cx="150" cy="150" r="118" stroke="var(--a-s3)" stroke-width="16" stroke-dasharray="556 742"/><circle class="g-arc" data-g-arc cx="150" cy="150" r="118" stroke-width="16" stroke-dasharray="273 742"/></g><g data-g-ticks></g><line class="g-needle" data-g-needle x1="150" y1="250" x2="150" y2="276" stroke="var(--a-tx)" stroke-width="3"/></svg>
                   <div class="ph-gauge-mid"><div class="ph-sec">ÓLEO DO CÂMBIO</div><div class="ph-temp"><span class="ph-bc" data-v="cvt">78</span><small>°C</small></div><div class="ph-pill" data-v="sLabel">TRANQUILO</div></div>
@@ -661,7 +665,7 @@ body:has(.wl-pop[open]){overflow:hidden}
                 </div>
               </div>
             </div>
-            <div class="ph-nav"><span aria-current="true"><i><span class="ms">speed</span></i>Painel</span><span><i><span class="ms">monitor_heart</span></i>Monitor</span><span><i><span class="ms">show_chart</span></i>Gráficos</span><span><i><span class="ms">water_drop</span></i>Fluido</span><span><i><span class="ms">local_gas_station</span></i>Consumo</span></div>
+            <div class="ph-nav"><span aria-current="true"><i><span class="ms">speed</span></i>Painel</span><span><i><span class="ms">monitor_heart</span></i>Monitor</span><span><i><span class="ms">show_chart</span></i>Gráficos</span><span><i><span class="ms">water_drop</span></i>Fluido</span><span><i><span class="ms">local_gas_station</span></i>Consumo</span><span><i><span class="ms">apps</span></i>Mais</span></div>
             <div class="ph-home"></div>
           </div>
         </div>
@@ -795,10 +799,10 @@ body:has(.wl-pop[open]){overflow:hidden}
         <b>E tem mais coisa lá dentro.</b>
       </div>
       <div class="wl-more-grid">
-        <div data-reveal><span class="ms" aria-hidden="true">error</span><b>Códigos de erro em português</b><p>Lê os códigos do câmbio e do motor e explica cada um: o que significa, se é leve ou grave e o que fazer. Avisa por voz quando aparece um código novo. Só lê: apagar fica com a oficina.</p><img class="wl-more-shot" src="assets/cvt-app/mais-codigos.jpg" width="600" height="758" loading="lazy" decoding="async" alt="Tela Códigos de erro do app: o código P0171, Mistura pobre, explicado em português, com a gravidade e o que fazer"></div>
-        <div data-reveal><span class="ms" aria-hidden="true">calendar_month</span><b>Histórico mensal</b><p>Cada mês e cada viagem: km rodados, consumo, temperatura máxima do câmbio, tempo acima de 90 °C e a previsão de quando o fluido chega na troca.</p><img class="wl-more-shot" src="assets/cvt-app/mais-historico.jpg" width="600" height="758" loading="lazy" decoding="async" alt="Tela Histórico do app: km rodados por mês e o resumo do mês com km, tempo de viagem, combustível e consumo médio"></div>
-        <div data-reveal><span class="ms" aria-hidden="true">timer</span><b>0 a 100 km/h e retomada</b><p>Mede o 0 a 100 e a retomada de 60 a 100 sozinho e fala o resultado, com aceleração e potência estimada. Só deixa medir com o óleo do câmbio na temperatura certa.</p><img class="wl-more-shot" src="assets/cvt-app/mais-desempenho.jpg" width="600" height="758" loading="lazy" decoding="async" alt="Tela Desempenho do app: resultados do 0 a 100 km/h em 10,9 e 11,3 segundos, com potência estimada e temperatura do câmbio"></div>
-        <div data-reveal><span class="ms" aria-hidden="true">tune</span><b>Do seu jeito</b><p>Escolha os blocos que aparecem no Painel, ajuste as temperaturas dos alertas e ligue o aviso de câmbio aquecido para saber quando já pode acelerar.</p><img class="wl-more-shot" src="assets/cvt-app/mais-painel.jpg" width="600" height="758" loading="lazy" decoding="async" alt="Painel do app no tema claro, com os blocos de motor, rotação, velocidade, marcha, máxima da sessão e tempo acima de 90 °C"></div>
+        <div data-reveal><span class="ms" aria-hidden="true">error</span><b>Códigos de erro em português</b><p>Lê os códigos do câmbio e do motor e explica cada um: o que significa, se é leve ou grave e o que fazer. Avisa por voz quando aparece um código novo. Só lê: apagar fica com a oficina.</p></div>
+        <div data-reveal><span class="ms" aria-hidden="true">calendar_month</span><b>Histórico mensal</b><p>Cada mês e cada viagem: km rodados, consumo, temperatura máxima do câmbio, tempo acima de 90 °C e a previsão de quando o fluido chega na troca.</p></div>
+        <div data-reveal><span class="ms" aria-hidden="true">timer</span><b>0 a 100 km/h e retomada</b><p>Mede o 0 a 100 e a retomada de 60 a 100 sozinho e fala o resultado, com aceleração e potência estimada. Só deixa medir com o óleo do câmbio na temperatura certa.</p></div>
+        <div data-reveal><span class="ms" aria-hidden="true">tune</span><b>Do seu jeito</b><p>Escolha os blocos que aparecem no Painel, ajuste as temperaturas dos alertas e ligue o aviso de câmbio aquecido para saber quando já pode acelerar.</p></div>
       </div>
     </div>
   </section>
@@ -985,7 +989,7 @@ body:has(.wl-pop[open]){overflow:hidden}
       <details><summary>O app apaga os códigos de erro?</summary><p>Não. Ele lê os códigos do câmbio e do motor e explica cada um em português, mas não apaga. Apagar sem resolver a causa só esconde o problema: isso fica com a oficina, depois do conserto.</p></details>
       <details><summary>Qual a diferença para o CVTz50?</summary><p>O CVTz50 foi feito para a Nissan Murano, e o Fluence não aparece na lista de carros do site dele. O CVT Monitor é feito para o Fluence, em português, só lê dados e explica cada código de erro. Veja a <a href="#comparar" style="text-decoration:underline;text-underline-offset:4px">comparação completa</a>.</p></details>
       <details><summary>Precisa de internet?</summary><p>Só uma vez, para ativar a chave. Depois disso o app funciona totalmente offline, inclusive na estrada sem sinal.</p></details>
-      <details data-lote="aberto"><summary>Como funciona o preço dos <span data-lote-total>100</span> primeiros?</summary><p>As <span data-lote-total>100</span> primeiras licenças vendidas saem por R$ <span data-preco-lote>39,90</span>. Quando elas acabam, o preço passa para R$ <span data-preco-depois>49,90</span>. Depois do lançamento, a seção de preço mostra quantas ainda restam, contadas direto das vendas confirmadas.</p></details>
+      <details data-lote="aberto"><summary><span>Como funciona o preço dos <span data-lote-total>100</span> primeiros?</span></summary><p>As <span data-lote-total>100</span> primeiras licenças vendidas saem por R$ <span data-preco-lote>39,90</span>. Quando elas acabam, o preço passa para R$ <span data-preco-depois>49,90</span>. Depois do lançamento, a seção de preço mostra quantas ainda restam, contadas direto das vendas confirmadas.</p></details>
       <details><summary>Posso usar em mais de um celular?</summary><p>Sim, em até 2 celulares ao mesmo tempo. Se trocar de aparelho, você mesmo libera o antigo pelo app e ativa no novo.</p></details>
       <details><summary>Como instalo? Por que não está na Play Store?</summary><p>O app é instalado pelo arquivo (APK) baixado aqui no site, e o passo a passo aparece junto com o download. Vender direto, sem a loja no meio, é o que permite o pagamento único com licença vitalícia.</p></details>
       <details><summary>E se não funcionar no meu carro?</summary><p>Primeiro, teste de graça: o modo de teste mostra se o scanner conecta e se os dados chegam. Se mesmo assim você comprar e não der certo, você tem 7 dias para pedir o dinheiro de volta.</p></details>
