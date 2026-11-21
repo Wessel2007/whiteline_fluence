@@ -9,11 +9,11 @@
   var CONFIG = {
     // Link do checkout da Cakto. Vazio = pré-lançamento (botões "Me avise").
     // Preenchido = vendas abertas (botões "Comprar" levam para a Cakto).
-    caktoUrl: '',
+    caktoUrl: 'https://pay.cakto.com.br/cdm58z2',
 
     // Link do checkout da oferta com o preço cheio (precoDepois), usado quando o
     // lote de lançamento esgota. Crie as duas ofertas no mesmo produto da Cakto.
-    caktoUrlDepois: '',
+    caktoUrlDepois: 'https://pay.cakto.com.br/7jkkqrz',
 
     // Lote de lançamento: as primeiras N licenças saem por "preco"; depois, "precoDepois".
     // O contador "restam X" vem de /api/vagas (vendas pagas na Cakto) e só aparece
@@ -22,16 +22,16 @@
 
     // Link do APK para o teste grátis. Vazio = botão de download escondido.
     // Ex.: 'downloads/cvt-monitor.apk' (arquivo dentro de site/downloads/).
-    apkUrl: '',
+    apkUrl: 'downloads/cvt-monitor.apk',
 
     // Impressão digital SHA-256 do APK publicado em apkUrl, mostrada embaixo do botão de
     // download com o aviso "baixe só por aqui". Vazio = não mostra. Gere com:
     //   Get-FileHash cvt-monitor.apk -Algorithm SHA256   (PowerShell)
     // e cole em minúsculas. Atualize junto com o APK, a cada versão nova.
-    apkSha256: '',
+    apkSha256: '597e41d15344e3190772fab755353cb0d9adeadd3d5c864d91281f6e7e17c2c9',
 
     // Versão do APK publicado (ex.: '1.0.0'), mostrada junto da impressão digital.
-    apkVersao: '',
+    apkVersao: '1.0.0',
 
     // Preço (texto, com vírgula). precoDepois = preço cheio depois do
     // lançamento; deixe '' para não mostrar.
