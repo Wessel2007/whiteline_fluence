@@ -93,6 +93,14 @@ Página estática à parte (não usa o runtime x-dc). Tem link no menu da págin
 
 Página estática à parte, no mesmo esquema do Guia de compra, para o app Android CVT Monitor. Tem link no menu (pílula "CVT Monitor" com bolinha piscando), na faixa do celular, no rodapé e um card logo depois do Guia de compra.
 
+**Vendas abertas desde 21/11/2026** (PR #12): `caktoUrl` = lote de R$ 39,90 (`https://pay.cakto.com.br/cdm58z2`), `caktoUrlDepois` = R$ 49,90 (`https://pay.cakto.com.br/7jkkqrz`), APK 1.0.0 em `site/downloads/cvt-monitor.apk`.
+
+- **Versão nova do app** (passo a passo completo no `docs/RELEASE.md` do repositório do app):
+  1. troque `site/downloads/cvt-monitor.apk`;
+  2. no `CONFIG`, atualize `apkSha256` e `apkVersao`;
+  3. em `site/cvt-monitor-versao.json`, atualize `versionCode`, `versionName` e `notas`. O app confere esse arquivo ao abrir (no máximo a cada 12 h) e, se o `versionCode` for maior que o instalado, mostra no Painel "Versão X disponível". O `url` precisa começar com `https://whitelinefluence.com/`, senão o app ignora.
+- **Cabeçalhos** (`site/vercel.json`): `/downloads/*` sai como `application/vnd.android.package-archive` e, junto com `/cvt-monitor-versao.json`, sem cache, para a versão nova aparecer na hora.
+
 - **Tudo que muda fica no `CONFIG`**, no topo do `cvt-monitor.js`:
   - `caktoUrl`: vazio = **pré-lançamento** (botões "Me avise", que copiam uma mensagem pronta e abrem o direct do Instagram). Colou o link do checkout da Cakto = **vendas abertas**: os botões viram "Comprar · R$ …", o selo vira "Já disponível" e aparecem os textos de pagamento e garantia (os elementos `data-only="pre"`/`"live"` trocam sozinhos).
   - `apkUrl`: vazio = botão de download do teste grátis escondido. Para hospedar o APK no próprio site, ponha o arquivo em `site/downloads/` e use `'downloads/cvt-monitor.apk'`.
