@@ -28,10 +28,10 @@
     // download com o aviso "baixe só por aqui". Vazio = não mostra. Gere com:
     //   Get-FileHash cvt-monitor.apk -Algorithm SHA256   (PowerShell)
     // e cole em minúsculas. Atualize junto com o APK, a cada versão nova.
-    apkSha256: '597e41d15344e3190772fab755353cb0d9adeadd3d5c864d91281f6e7e17c2c9',
+    apkSha256: 'effd699bbbdb6833ff2abeb1e4ca7488081fb3727756959598df9d022e21cfb8',
 
     // Versão do APK publicado (ex.: '1.0.0'), mostrada junto da impressão digital.
-    apkVersao: '1.0.0',
+    apkVersao: '1.0.1',
 
     // Preço (texto, com vírgula). precoDepois = preço cheio depois do
     // lançamento; deixe '' para não mostrar.
