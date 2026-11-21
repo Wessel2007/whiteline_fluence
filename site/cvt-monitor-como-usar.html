@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Como usar · CVT Monitor</title>
+<meta name="description" content="Passo a passo do CVT Monitor WhiteLine: qual scanner usar, como instalar o app, ativar a chave, conectar no Fluence e resolver os problemas mais comuns.">
+<meta name="theme-color" content="#0b0b0c">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://whitelinefluence.com/cvt-monitor-como-usar.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0b0c;--bg2:#141416;--bg3:#1c1c1f;--fg:#f4f3f1;--red:#e3262c;--red-hi:#ff3b3f;--ok:#4fd57f;--warn:#f5b43c;--line:rgba(244,243,241,.12);--muted:rgba(244,243,241,.8);--dim:rgba(244,243,241,.55);--mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Archivo',system-ui,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:var(--fg);text-decoration:underline;text-decoration-color:rgba(227,38,44,.7);text-underline-offset:3px}
+a:hover{color:var(--red-hi)}
+::selection{background:var(--red);color:#fff}
+:focus-visible{outline:2px solid var(--red-hi);outline-offset:3px}
+.nav{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px clamp(16px,4vw,48px);background:rgba(11,11,12,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(244,243,241,.08)}
+.nav a{text-decoration:none;font-weight:600;font-size:15px}
+.brand{font-weight:900;font-stretch:125%;letter-spacing:.02em}
+.brand span{color:var(--red)}
+main{max-width:760px;margin:0 auto;padding:clamp(28px,6vw,64px) 16px 40px}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+h1{font-size:clamp(34px,7vw,56px);line-height:1.05;font-weight:900;font-stretch:110%;margin:10px 0 14px;letter-spacing:-.01em}
+.lead{font-size:18px;color:var(--muted);margin:0 0 22px}
+p,li{color:var(--muted);font-size:16.5px}
+strong{color:var(--fg)}
+ul,ol{padding-left:22px}
+li{margin:7px 0}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 8px;padding:0;list-style:none}
+.toc a{display:inline-block;padding:8px 13px;border:1px solid var(--line);border-radius:999px;text-decoration:none;font-size:14px;font-weight:600;color:var(--muted)}
+.toc a:hover{border-color:var(--red);color:var(--fg)}
+.need{margin:26px 0 6px;padding:20px 22px;border:1px solid var(--line);border-radius:18px;background:var(--bg2)}
+.need h2{margin:0 0 10px;font-size:19px}
+.need ul{margin:0}
+.step{position:relative;margin:28px 0;padding:24px 22px 18px;border:1px solid var(--line);border-radius:22px;background:var(--bg2);scroll-margin-top:80px}
+.step-n{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:12px;background:var(--red);color:#fff;font-weight:900;font-size:19px}
+.step h2{display:flex;align-items:center;gap:12px;margin:0 0 6px;font-size:clamp(21px,4.4vw,26px);line-height:1.2;font-weight:850;font-stretch:105%}
+.step .sub{margin:0 0 12px;color:var(--dim);font-size:15px}
+.step ol{margin:10px 0 6px}
+.step ol li::marker{color:var(--red);font-weight:800}
+.ui{display:inline-block;padding:1px 8px;border-radius:8px;background:var(--bg3);border:1px solid var(--line);color:var(--fg);font-weight:600;font-size:.95em;white-space:nowrap}
+.key{font-family:var(--mono);font-weight:700;color:var(--fg);letter-spacing:.04em}
+.tip{margin:14px 0 4px;padding:13px 15px;border-radius:14px;background:rgba(79,213,127,.07);border:1px solid rgba(79,213,127,.3);font-size:15px;color:var(--muted)}
+.tip b{color:var(--ok)}
+.warn{margin:14px 0 4px;padding:13px 15px;border-radius:14px;background:rgba(245,180,60,.07);border:1px solid rgba(245,180,60,.32);font-size:15px;color:var(--muted)}
+.warn b{color:var(--warn)}
+.tip p,.warn p{margin:0;font-size:15px}
+.btn{display:inline-flex;align-items:center;gap:8px;margin:8px 0 4px;padding:13px 20px;border-radius:999px;background:var(--red);color:#fff;text-decoration:none;font-weight:800}
+.btn:hover{background:var(--red-hi);color:#fff}
+.bands{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:12px 0 4px}
+.band{padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--bg3);font-size:14.5px;color:var(--muted)}
+.band b{display:block;font-size:16px;color:var(--fg)}
+.band.ok{border-color:rgba(79,213,127,.4)}.band.ok b{color:var(--ok)}
+.band.at{border-color:rgba(245,180,60,.45)}.band.at b{color:var(--warn)}
+.band.hot{border-color:rgba(227,38,44,.55)}.band.hot b{color:var(--red-hi)}
+h2.sec{font-size:24px;margin:48px 0 12px;font-weight:850;font-stretch:105%;scroll-margin-top:80px}
+details{margin:10px 0;border:1px solid var(--line);border-radius:16px;background:var(--bg2)}
+summary{cursor:pointer;padding:15px 18px;font-weight:700;font-size:16.5px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--red);font-weight:900;font-size:20px;line-height:1}
+details[open] summary::after{content:"–"}
+details>div{padding:0 18px 14px}
+details p{margin:6px 0;font-size:15.5px}
+.help{margin:40px 0 0;padding:22px;border-radius:20px;border:1px solid rgba(227,38,44,.45);background:rgba(227,38,44,.06)}
+.help h2{margin:0 0 8px;font-size:21px}
+.help p{margin:0 0 6px}
+footer{max-width:760px;margin:0 auto;padding:32px 16px 48px;border-top:1px solid rgba(244,243,241,.08);display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;font-size:14px}
+footer a{text-decoration:none;font-weight:600}
+.meta{font-family:var(--mono);font-size:12px;color:var(--dim)}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="brand" href="cvt-monitor.html">CVT <span>MONITOR</span></a>
+  <a href="cvt-monitor.html">← Voltar para o app</a>
+</nav>
+
+<main>
+  <div class="kicker">CVT Monitor WhiteLine · Passo a passo</div>
+  <h1>Como usar o CVT Monitor</h1>
+  <p class="lead">Do scanner na mão até a temperatura do câmbio na tela, em 5 passos. Leva uns 5 minutos na primeira vez. Depois, o app conecta sozinho.</p>
+
+  <ul class="toc" aria-label="Passos">
+    <li><a href="#instalar">1 · Instalar</a></li>
+    <li><a href="#chave">2 · Ativar a chave</a></li>
+    <li><a href="#scanner">3 · Plugar o scanner</a></li>
+    <li><a href="#conectar">4 · Conectar</a></li>
+    <li><a href="#usar">5 · Usar</a></li>
+    <li><a href="#problemas">Problemas comuns</a></li>
+  </ul>
+
+  <div class="need">
+    <h2>O que você precisa</h2>
+    <ul>
+      <li>Um <strong>celular Android</strong> 8 ou mais novo. iPhone não funciona.</li>
+      <li>Um <strong>scanner OBD2 ELM327 Bluetooth</strong> (v1.5), comprado à parte. É aquele aparelhinho que encaixa embaixo do volante. Prefira o <strong>Bluetooth</strong>: o modelo Wi-Fi não funciona com o app.</li>
+      <li>Se você comprou: a <strong>chave de acesso</strong> que chegou no seu e-mail (<span class="key">CVT-XXXX-XXXX-XXXX</span>). Confira também a caixa de spam.</li>
+    </ul>
+  </div>
+
+  <section class="step" id="instalar">
+    <h2><span class="step-n">1</span>Baixe e instale o app</h2>
+    <p class="sub">O app não está na Play Store, então o Android pede uma confirmação a mais. É normal.</p>
+    <ol>
+      <li>Abra esta página <strong>no celular</strong> e toque em <span class="ui">Baixar o app grátis</span>:<br><a class="btn" href="cvt-monitor.html#gratis">Ir para o download ↓</a></li>
+      <li>Quando o download terminar, toque no arquivo <span class="ui">cvt-monitor.apk</span> (na notificação ou na pasta <strong>Downloads</strong>).</li>
+      <li>Se aparecer <strong>"Por segurança, seu celular não pode instalar apps desta fonte"</strong>: toque em <span class="ui">Configurações</span>, ligue <span class="ui">Permitir desta fonte</span> e volte.</li>
+      <li>Toque em <span class="ui">Instalar</span>.</li>
+      <li>Se o <strong>Play Protect</strong> avisar que é um app desconhecido: toque em <span class="ui">Mais detalhes</span> e depois em <span class="ui">Instalar assim mesmo</span>.</li>
+      <li>Abra o app e aceite os termos de uso.</li>
+    </ol>
+    <div class="tip"><p><b>Segurança:</b> baixe o app só pela nossa página. Ela mostra a impressão digital do arquivo oficial, para quem quiser conferir.</p></div>
+  </section>
+
+  <section class="step" id="chave">
+    <h2><span class="step-n">2</span>Ative a sua chave</h2>
+    <p class="sub">Só para quem comprou. Ainda não comprou? Pule para o passo 3: o app funciona grátis 5 minutos por dia com o carro, para você testar.</p>
+    <ol>
+      <li>Ligue a <strong>internet</strong> do celular (Wi-Fi ou dados). Ela só é usada agora: depois o app funciona sem internet.</li>
+      <li>Na tela inicial do app, toque em <span class="ui">Tenho uma chave de acesso</span>.</li>
+      <li>Digite a chave do e-mail, ou copie e cole: <span class="key">CVT-XXXX-XXXX-XXXX</span>.</li>
+      <li>Toque em <span class="ui">Ativar</span>. Pronto quando aparecer <strong>"Versão completa"</strong>.</li>
+    </ol>
+    <div class="warn"><p><b>Não aparece o botão "Tenho uma chave de acesso"?</b> Você está com a primeira versão do app. Toque em <span class="ui">Explorar em modo demonstração</span> → <span class="ui">engrenagem ⚙️</span> no topo → <span class="ui">Licença</span>, ative a chave e, nas Configurações, toque em <span class="ui">Sair</span> para voltar à tela inicial.</p></div>
+    <div class="tip"><p><b>A chave vale em 2 celulares.</b> Trocou de celular? Ative no novo: o app mostra os aparelhos e você toca em <span class="ui">Liberar</span> no antigo.</p></div>
+  </section>
+
+  <section class="step" id="scanner">
+    <h2><span class="step-n">3</span>Plugue o scanner e ligue a ignição</h2>
+    <p class="sub">Não precisa ferramenta nem desmontar nada.</p>
+    <ol>
+      <li>Ache a <strong>porta OBD</strong>: no Fluence ela fica <strong>embaixo do painel, do lado do motorista</strong>, perto dos pedais. É um encaixe trapezoidal de 16 pinos.</li>
+      <li>Encaixe o scanner até o fim. Em geral uma luz acende nele.</li>
+      <li>Ligue a <strong>ignição sem dar partida</strong>. No Fluence: com o cartão dentro do carro, aperte o botão <span class="ui">Start</span> <strong>sem o pé no freio</strong>. O painel acende e o motor fica desligado.</li>
+    </ol>
+    <div class="tip"><p><b>Por que sem partida?</b> Na primeira conexão é mais fácil assim. Nas próximas vezes pode dar a partida normal: o app conecta com o motor ligado também.</p></div>
+  </section>
+
+  <section class="step" id="conectar">
+    <h2><span class="step-n">4</span>Conecte o app ao scanner</h2>
+    <p class="sub">Só na primeira vez. Depois o app conecta sozinho quando você abre.</p>
+    <ol>
+      <li>Deixe o <strong>Bluetooth</strong> do celular ligado.</li>
+      <li>No app, toque em <span class="ui">Buscar scanner</span>. Se o Android pedir permissão de <strong>Dispositivos próximos</strong> (ou de localização), toque em <span class="ui">Permitir</span>.</li>
+      <li>Toque no scanner na lista. O nome quase sempre é <strong>OBDII</strong> (às vezes V-LINK, OBD2 ou ELM327).</li>
+      <li>Se o celular pedir uma <strong>senha (PIN)</strong>, digite <span class="key">1234</span>. Se não aceitar, tente <span class="key">0000</span>.</li>
+      <li>Espere a tela <strong>"Tudo pronto"</strong>. Ela deve mostrar <strong>Módulo do câmbio: Respondendo</strong>. Toque em <span class="ui">Abrir painel</span>.</li>
+    </ol>
+  </section>
+
+  <section class="step" id="usar">
+    <h2><span class="step-n">5</span>Dê a partida e acompanhe</h2>
+    <p class="sub">A partir daqui é só dirigir. O app avisa por voz, sem você precisar olhar a tela.</p>
+    <ol>
+      <li>Dê a partida normalmente (com o pé no freio). Não precisa desconectar nada.</li>
+      <li>O <strong>Painel</strong> mostra a temperatura do óleo do câmbio num medidor grande, com cores:</li>
+    </ol>
+    <div class="bands">
+      <div class="band ok"><b>Normal · até 90 °C</b>Pode rodar tranquilo.</div>
+      <div class="band at"><b>Atenção · 90 a 110 °C</b>Câmbio esquentando: alivie o pé.</div>
+      <div class="band hot"><b>Muito quente · acima de 110 °C</b>Reduza agora e, se puder, pare.</div>
+    </div>
+    <ul>
+      <li>Com o carro frio, o óleo do câmbio esquenta bem devagar. Quando passa de 50 °C, o app avisa por voz: <strong>"câmbio aquecido"</strong>.</li>
+      <li>Os alertas funcionam com a <strong>tela apagada</strong>. Deixe o celular num suporte e <strong>não mexa nele dirigindo</strong>.</li>
+      <li>Na aba <span class="ui">Mais</span> ficam os <strong>códigos de erro</strong> do motor e do câmbio, o histórico e o desempenho.</li>
+      <li>Saiu versão nova? O próprio app avisa no Painel: <span class="ui">Versão X disponível</span>. Baixe por aqui e instale por cima: a chave e o histórico continuam.</li>
+    </ul>
+    <div class="warn"><p><b>Celular Xiaomi, Redmi, Poco ou Samsung?</b> A economia de bateria pode fechar o app com a tela apagada. Em <strong>Configurações → Apps → CVT Monitor → Bateria</strong>, escolha <span class="ui">Sem restrições</span>.</p></div>
+  </section>
+
+  <h2 class="sec" id="problemas">Problemas comuns</h2>
+
+  <details>
+    <summary>O scanner não aparece na lista</summary>
+    <div>
+      <p>Confira se o scanner está bem encaixado e se a <strong>ignição está ligada</strong> (painel aceso). Sem ignição, a porta OBD fica sem energia.</p>
+      <p>Confira se o Bluetooth do celular está ligado e se você permitiu <strong>Dispositivos próximos</strong> ao app. Toque em <span class="ui">Buscar scanner</span> de novo.</p>
+      <p>Se o seu scanner é <strong>Wi-Fi</strong>, ele não aparece: o app só funciona com o modelo Bluetooth.</p>
+    </div>
+  </details>
+  <details>
+    <summary>Aparece "O carro não respondeu"</summary>
+    <div>
+      <p>Quase sempre é a ignição desligada. No Fluence, aperte o <span class="ui">Start</span> sem o pé no freio até o painel acender e tente de novo.</p>
+    </div>
+  </details>
+  <details>
+    <summary>Conecta e cai, ou demora muito para conectar</summary>
+    <div>
+      <p>Tente de novo uma vez. Alguns scanners mais baratos são instáveis. Se continuar, tire o scanner, encaixe de novo e reconecte.</p>
+    </div>
+  </details>
+  <details>
+    <summary>"Módulo do câmbio: Sem resposta" ou a temperatura do câmbio não aparece</summary>
+    <div>
+      <p>Alguns scanners não conseguem conversar com o módulo do câmbio. Fale com a gente pelo direct e mande um print da tela "Tudo pronto": a gente vê o que dá para fazer, e a garantia de 7 dias vale nesse caso.</p>
+    </div>
+  </details>
+  <details>
+    <summary>A chave dá "Chave não encontrada"</summary>
+    <div>
+      <p>Confira se digitou igual ao e-mail: letras e números, com os tracinhos. O mais fácil é <strong>copiar e colar</strong> a chave do e-mail.</p>
+    </div>
+  </details>
+  <details>
+    <summary>A chave dá "limite de aparelhos"</summary>
+    <div>
+      <p>A chave já está em 2 celulares. Na própria tela aparecem os aparelhos: toque em <span class="ui">Liberar</span> no que você não usa mais. São até 3 trocas por mês.</p>
+    </div>
+  </details>
+  <details>
+    <summary>Não recebi o e-mail com a chave</summary>
+    <div>
+      <p>Ele chega em poucos minutos depois do pagamento aprovado, do remetente <strong>chave@whitelinefluence.com</strong>. Procure também no <strong>spam</strong> e nas abas Promoções ou Atualizações. Não achou? Chame no direct com o e-mail usado na compra.</p>
+    </div>
+  </details>
+  <details>
+    <summary>O app parou de avisar com a tela apagada</summary>
+    <div>
+      <p>É a economia de bateria do celular. Em <strong>Configurações → Apps → CVT Monitor → Bateria</strong>, escolha <span class="ui">Sem restrições</span>.</p>
+    </div>
+  </details>
+
+  <div class="help">
+    <h2>Ainda com dúvida?</h2>
+    <p>Chame no direct do Instagram <a href="https://www.instagram.com/whitelinefluence/" target="_blank" rel="noopener">@whitelinefluence</a>. Mande um <strong>print da tela</strong> onde travou: assim a gente resolve mais rápido.</p>
+  </div>
+</main>
+
+<footer>
+  <span class="meta">© 2026 Whiteline Fluence · CVT Monitor</span>
+  <span><a href="cvt-monitor.html">CVT Monitor</a> &nbsp;·&nbsp; <a href="cvt-monitor-termos.html">Termos</a> &nbsp;·&nbsp; <a href="cvt-monitor-privacidade.html">Privacidade</a></span>
+</footer>
+</body>
+</html>
