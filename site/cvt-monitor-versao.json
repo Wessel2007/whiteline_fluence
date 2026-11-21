@@ -1,6 +1,6 @@
 {
-  "versionCode": 4,
-  "versionName": "1.0.2",
-  "notas": "Corrige onde fica a porta OBD no Fluence: console central, abaixo do rádio.",
+  "versionCode": 5,
+  "versionName": "1.0.3",
+  "notas": "Corrige o app fechando ao abrir. Instale por cima: a chave continua.",
   "url": "https://whitelinefluence.com/cvt-monitor.html#gratis"
 }
