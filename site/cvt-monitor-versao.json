@@ -1,6 +1,6 @@
 {
-  "versionCode": 6,
-  "versionName": "1.0.4",
-  "notas": "Novo: enviar relatório ao suporte (Configurações › Ajuda). E o câmbio volta a ser lido sozinho se não responder ao conectar. Instale por cima: a chave continua.",
+  "versionCode": 7,
+  "versionName": "1.0.5",
+  "notas": "Corrige o câmbio que não aparecia com alguns scanners (o app se ajusta sozinho ao seu). Instale por cima: a chave continua.",
   "url": "https://whitelinefluence.com/cvt-monitor.html#gratis"
 }
