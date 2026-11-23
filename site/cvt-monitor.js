@@ -147,8 +147,9 @@
 
   // ===== Pop-up do lote de lançamento =====
   // Aparece uma vez a cada 3 dias: na intenção de sair (mouse indo para a barra do
-  // navegador, no computador), depois de rolar até o fim de "Por dentro do app" ou após 50 s
-  // na página. Não aparece se a pessoa já está na seção de preço ou já clicou em comprar.
+  // navegador, no computador), depois de rolar até o fim das telas do app (#telas) ou após 50 s
+  // na página. Não aparece se a pessoa já está na seção de preço, já clicou em comprar ou
+  // acabou de baixar o app (nessa visita ela vai testar primeiro).
   var pop = document.querySelector('[data-pop]');
   var POP_KEY = 'cvtm-pop';
   var POP_PAUSA = 3 * 24 * 60 * 60 * 1000;
@@ -176,6 +177,7 @@
     $('[data-cta],[data-cta-short]').forEach(function (a) {
       if (!pop.contains(a)) a.addEventListener('click', function () { popVisto = true; });
     });
+    $('[data-apk]').forEach(function (a) { a.addEventListener('click', function () { popVisto = true; }); });
     $('[data-pop-close]').forEach(function (b) { b.addEventListener('click', fecharPop); });
     $('[data-cta]', pop).forEach(function (a) { a.addEventListener('click', function () { setTimeout(fecharPop, 300); }); });
     // Clique no fundo escuro fecha
@@ -184,10 +186,10 @@
     document.addEventListener('mouseout', function (e) {
       if (!e.relatedTarget && e.clientY <= 0) abrirPop();
     });
-    var gatilho = document.getElementById('app');
+    var gatilho = document.getElementById('telas');
     if (gatilho && 'IntersectionObserver' in window) {
       var go = new IntersectionObserver(function (es) {
-        // Só quando a pessoa terminou de ver o app (a seção saiu por cima da tela)
+        // Só quando a pessoa terminou de ver as telas do app (a seção saiu por cima da tela)
         // Espera a rolagem assentar: quem clicou em "Preço" no menu só passa pela seção no caminho
         if (!es[0].isIntersecting && es[0].boundingClientRect.top < 0) { go.disconnect(); setTimeout(abrirPop, 1500); }
       });
@@ -221,31 +223,25 @@
 
   // ===================================================================
   // Simulação do app (mesma lógica do modo demonstração do CVT Monitor).
-  // Roda no celular do topo ([data-ph]). O celular de "Por dentro do app"
-  // ([data-demo]) mostra prints reais do app e só troca de imagem.
+  // Anima o celular do topo ([data-ph], tela Painel) e a marquinha da
+  // escala de "Por que monitorar" ([data-scale-mark]).
   // ===================================================================
   var phones = $('[data-ph]');
-  var demo = document.querySelector('[data-demo]');
-  if (!phones.length && !demo) return;
+  var marks = $('[data-scale-mark]');
+  if (!phones.length && !marks.length) return;
 
-  var N = 80;
-  var scen = 'normal';
   var tick = 0;
-  var chartKey = 'cvt';
-  var userActed = false; // voz só depois de um clique da pessoa
   var cl = function (x, a, b) { return Math.max(a, Math.min(b, x)); };
   var rnd = function (a) { return (Math.random() - 0.5) * a; };
 
-  var v = { cvt: 74, rpm: 1650, speed: 48, eng: 88, intake: 31, sec: 1.6, pri: 0.9, lu: 0.6, ratio: 1.12, acc: 1.4, slip: 8, bat: 14.1,
-    det: 148320, detStart: 148320, kml: 12.4, avg: 11.8, fuel: 58, dist: 23.4, time: 1960, used: 1.98, max: 74, above: 0 };
-  var h = { cvt: [], eng: [], rpm: [], speed: [], kml: [] };
+  var v = { cvt: 74, rpm: 1650, speed: 48, eng: 88, ratio: 1.12, acc: 1.4 };
 
   // Ciclo do celular do topo (em passos de 700 ms, ~22 s no total): fica tranquilo,
   // esquenta até ~101 °C (o balão de voz aparece ao passar de 90 °C), segura e esfria.
-  // Só roda no cenário Normal e com animações ligadas.
+  // Só roda com animações ligadas.
   var HERO_CYCLE = 32, HERO_START = 5; // começa 5 passos antes da subida (~3,5 s)
   var heroT = 0;
-  var heroCycling = function () { return motion && phones.length > 0 && scen === 'normal'; };
+  var heroCycling = function () { return motion && phones.length > 0; };
   function heroTarget() {
     var p = (heroT + HERO_START) % HERO_CYCLE;
     if (p < 10) return 80 + Math.sin(p / 3) * 1.5;   // tranquilo
@@ -256,10 +252,8 @@
   }
 
   function target() {
-    if (scen === 'atencao') return 99;
-    if (scen === 'quente') return 116;
     if (heroCycling()) return heroTarget();
-    // Normal: passeia entre ~72 e ~86 °C, como um dia comum de trânsito
+    // Sem o ciclo: passeia entre ~72 e ~86 °C, como um dia comum de trânsito
     return 79 + Math.sin(tick / 26) * 7;
   }
 
@@ -270,26 +264,9 @@
     v.acc = cl(v.acc + rnd(0.8), 0, 8);
     v.ratio = cl(2.2 - v.speed / 55 + rnd(0.05), 0.45, 2.3);
     v.rpm = cl(800 + v.speed * 20 + v.acc * 120 + rnd(80), 700, 6000);
-    v.sec = cl(1.2 + v.acc * 0.35 + rnd(0.1), 0.6, 6);
-    v.pri = cl(v.sec * 0.62 + rnd(0.05), 0.3, 5);
-    v.lu = v.speed > 20 ? 1 : 0;
-    v.slip = v.speed > 20 ? Math.round(cl(4 + rnd(8), 0, 20)) : Math.round(80 + rnd(40));
     v.eng = cl(v.eng + (91 - v.eng) * 0.05 + rnd(0.4), 70, 110);
-    v.intake = cl(v.intake + rnd(0.4), 22, 45);
-    v.bat = cl(14.1 + rnd(0.12), 12, 14.6);
-    v.kml = v.speed < 3 ? 0 : cl(26 - v.rpm / 180 - v.acc * 0.8 + rnd(1.2), 3, 30);
-    if (!warm) {
-      if (v.cvt > 90) { v.det += Math.round((v.cvt - 90) * 0.8); v.above += 0.7; }
-      v.max = Math.max(v.max, Math.round(v.cvt));
-      v.dist += v.speed * 0.7 / 3600; v.time += 0.7;
-      v.used += v.kml ? (v.speed * 0.7 / 3600) / v.kml : 0.0002;
-      v.avg = v.dist / Math.max(v.used, 0.01);
-      v.fuel = cl(v.fuel - 0.002, 0, 100);
-    }
-    for (var k in h) { h[k].push(v[k]); if (h[k].length > N) h[k].shift(); }
   }
-  for (var i = 0; i < N; i++) { tick = i; sim(true); }
-  v.max = Math.round(v.cvt);
+  for (var i = 0; i < 80; i++) { tick = i; sim(true); }
 
   var band = function (t) { return t < 90 ? 0 : t < 110 ? 1 : 2; };
   var STATES = [
@@ -297,13 +274,6 @@
     { label: 'ATENÇÃO', head: 'Câmbio esquentando', body: 'Dirija com suavidade. Evite acelerações fortes, subidas longas e trânsito pesado por enquanto.', icon: 'warning' },
     { label: 'MUITO QUENTE', head: 'Reduza agora', body: 'Diminua a velocidade e, se puder, pare em local seguro com o motor em marcha lenta até a temperatura baixar.', icon: 'local_fire_department' },
   ];
-  var COLORS = ['var(--a-ok)', 'var(--a-warn)', 'var(--a-hot)'];
-  var CHARTS = {
-    cvt: ['Óleo do câmbio', '°C', 0, 'Faixas amarela e vermelha marcam 90°C e 110°C. A linha tracejada é a velocidade, para relacionar o aquecimento com o jeito de dirigir.'],
-    eng: ['Motor', '°C', 0, 'Últimos 60 segundos. A linha tracejada é a velocidade.'],
-    rpm: ['Rotação', 'rpm', 0, 'Últimos 60 segundos. A linha tracejada é a velocidade.'],
-    speed: ['Velocidade', 'km/h', 0, 'Últimos 60 segundos.'],
-  };
 
   // Marcas do medidor (geradas uma vez)
   $('[data-g-ticks]').forEach(function (g) {
@@ -316,10 +286,6 @@
     }
     g.innerHTML = out;
   });
-
-  // Barras do consumo
-  var fuelBars = document.querySelector('[data-fuel-bars]');
-  if (fuelBars) for (var b = 0; b < 30; b++) fuelBars.appendChild(document.createElement('i'));
 
   function set(key, val) {
     $('[data-v="' + key + '"]').forEach(function (el) { if (el.textContent !== String(val)) el.textContent = val; });
@@ -342,51 +308,9 @@
     set('cvt', Math.round(v.cvt));
     set('sLabel', st.label); set('sHead', st.head); set('sBody', st.body); set('sIcon', st.icon);
     set('eng', Math.round(v.eng)); set('rpm', fmt(v.rpm)); set('speed', fmt(v.speed)); set('gear', 'D' + gear);
-    set('max', v.max + '°C');
-    set('above', Math.floor(v.above / 60) + ' min ' + String(Math.floor(v.above % 60)).padStart(2, '0') + ' s');
-    set('intake', Math.round(v.intake)); set('gearN', gear + 'ª'); set('ratio', fmt(v.ratio, 2));
-    set('lu', v.lu ? 'Travado' : 'Livre'); set('slip', fmt(v.slip));
-    set('sec', fmt(v.sec, 2)); set('pri', fmt(v.pri, 2)); set('bat', fmt(v.bat, 1));
-
-    // Gráfico
-    var cd = CHARTS[chartKey], ser = h[chartKey], lo, hi;
-    if (chartKey === 'cvt') { lo = 40; hi = 130; }
-    else { lo = Math.min.apply(null, ser); hi = Math.max.apply(null, ser); var pad = (hi - lo) * 0.2 || 1; lo -= pad; hi += pad; }
-    var W = 300, H = 170, yOf = function (x) { return H - (x - lo) / (hi - lo) * H; };
-    var pts = ser.map(function (x, j) { return (j * W / (N - 1)).toFixed(1) + ',' + yOf(x).toFixed(1); }).join(' ');
-    var spPts = h.speed.map(function (x, j) { return (j * W / (N - 1)).toFixed(1) + ',' + (H - x / 140 * H).toFixed(1); }).join(' ');
-    $('[data-c-line]').forEach(function (el) { el.setAttribute('points', pts); });
-    $('[data-c-speed]').forEach(function (el) { el.setAttribute('points', spPts); });
-    $('[data-c-hot]').forEach(function (el) { el.setAttribute('height', yOf(110).toFixed(1)); });
-    $('[data-c-warn]').forEach(function (el) { el.setAttribute('y', yOf(110).toFixed(1)); el.setAttribute('height', (yOf(90) - yOf(110)).toFixed(1)); });
-    var avg = ser.reduce(function (a, c) { return a + c; }, 0) / ser.length;
-    var disp = function (x) { return fmt(x); };
-    set('chName', cd[0]); set('chUnit', cd[1]); set('chNote', cd[3]);
-    set('chCur', disp(ser[ser.length - 1]));
-    set('chMin', disp(Math.min.apply(null, ser))); set('chAvg', disp(avg)); set('chMax', disp(Math.max.apply(null, ser)));
-    $('[data-v="chCur"]').forEach(function (el) { el.style.color = chartKey === 'cvt' ? COLORS[bnd] : 'var(--a-tx)'; });
-
-    // Fluido
-    var pct = v.det / 210000;
-    set('detPct', fmt(pct * 100) + '%'); set('det', fmt(v.det));
-    set('detSess', '+' + fmt(v.det - v.detStart)); set('detLeft', fmt(Math.max(0, 210000 - v.det)));
-    $('[data-det-bar]').forEach(function (el) {
-      el.style.width = Math.min(100, pct * 100).toFixed(1) + '%';
-      el.style.background = pct > 0.9 ? 'var(--a-hot)' : pct > 0.7 ? 'var(--a-warn)' : 'var(--a-acc)';
-    });
-
-    // Consumo
-    set('kml', v.kml ? fmt(v.kml, 1) : '—');
-    set('lph', v.speed < 3 ? 'parado · 0,8 L/h' : fmt(100 / Math.max(v.kml, 0.1), 1) + ' L/100 km');
-    set('avg', fmt(v.avg, 1)); set('range', fmt(v.fuel / 100 * 60 * v.avg));
-    set('dist', fmt(v.dist, 1)); set('time', Math.floor(v.time / 60));
-    if (fuelBars) {
-      var fb = h.kml.slice(-30), bars = fuelBars.children;
-      for (var q = 0; q < bars.length; q++) bars[q].style.height = Math.max(4, (fb[q] || 0) / 30 * 52).toFixed(0) + 'px';
-    }
 
     // Faixas da seção "Por que monitorar": a marquinha acompanha a temperatura
-    $('[data-scale-mark]').forEach(function (el) {
+    marks.forEach(function (el) {
       // As faixas têm 70fr / 20fr / 20fr = 20–90 / 90–110 / 110–130 °C, então a escala é linear de 20 a 130
       el.style.left = ((cl(v.cvt, 20, 130) - 20) / 110 * 100).toFixed(1) + '%';
     });
@@ -412,103 +336,7 @@
     heroBand = bnd;
   }
 
-  // ===== Notificação e voz =====
-  var banner = demo && demo.querySelector('[data-banner]');
-  var bannerT;
-  var voiceBox = document.querySelector('[data-voice]');
-  var voiceWrap = document.querySelector('[data-voice-wrap]');
-  if (voiceWrap && 'speechSynthesis' in window) voiceWrap.hidden = false;
-
-  // temp: a mesma temperatura mostrada na print do Painel
-  function alertBand(bnd, temp) {
-    var t = temp + '°C';
-    var msg = bnd === 1
-      ? { title: 'Câmbio em atenção · ' + t, body: 'Dirija com suavidade e evite acelerações fortes.', speak: 'Atenção. Temperatura do câmbio em ' + temp + ' graus.' }
-      : { title: 'Câmbio muito quente · ' + t, body: 'Reduza a velocidade. Se puder, pare em local seguro.', speak: 'Alerta. Câmbio muito quente. Reduza a velocidade.' };
-    if (banner) {
-      banner.querySelector('[data-banner-title]').textContent = msg.title;
-      banner.querySelector('[data-banner-body]').textContent = msg.body;
-      banner.style.setProperty('--bc', COLORS[bnd]);
-      banner.hidden = false;
-      clearTimeout(bannerT);
-      bannerT = setTimeout(function () { banner.hidden = true; }, 5500);
-    }
-    if (userActed && voiceBox && voiceBox.checked && 'speechSynthesis' in window) {
-      try {
-        var u = new SpeechSynthesisUtterance(msg.speak);
-        u.lang = 'pt-BR';
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(u);
-      } catch (e) {}
-    }
-  }
-  if (banner) banner.addEventListener('click', function () { banner.hidden = true; });
-
-  // ===== Prints do celular de "Por dentro do app" =====
-  // Painel e Gráficos têm uma print por cenário do simulador; as outras abas, uma só.
-  var PRINT_TEMP = { atencao: 101, quente: 112 }; // temperatura que aparece em cada print do Painel
-  function shotKey() {
-    var tab = demo.getAttribute('data-tab');
-    if (tab === 'painel') return 'painel-' + scen;
-    if (tab === 'graf') return scen === 'normal' ? 'graf-normal' : 'graf-esquentando';
-    return tab;
-  }
-  function showShot() {
-    if (!demo) return;
-    var key = shotKey();
-    $('[data-shot]', demo).forEach(function (img) {
-      var on = img.getAttribute('data-shot') === key;
-      img.classList.toggle('is-on', on);
-      if (on) img.removeAttribute('aria-hidden'); else img.setAttribute('aria-hidden', 'true');
-    });
-  }
-
-  // ===== Abas do celular e lista de recursos =====
-  function goTab(tab) {
-    if (!demo) return;
-    demo.setAttribute('data-tab', tab);
-    showShot();
-    $('[data-go]').forEach(function (btn) {
-      var on = btn.getAttribute('data-go') === tab;
-      if (btn.getAttribute('role') === 'tab') btn.setAttribute('aria-selected', on);
-      else btn.setAttribute('aria-pressed', on);
-    });
-  }
-  $('[data-go]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      goTab(btn.getAttribute('data-go'));
-      // No celular o aparelho fica acima da lista: rola até ele para mostrar a troca
-      if (btn.classList.contains('wl-feat') && window.matchMedia('(max-width:1060px)').matches && demo) {
-        demo.scrollIntoView({ behavior: motion ? 'smooth' : 'auto', block: 'center' });
-      }
-    });
-  });
-
-  $('[data-chart-key]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      chartKey = btn.getAttribute('data-chart-key');
-      if (demo) demo.setAttribute('data-chart', chartKey);
-      $('[data-chart-key]').forEach(function (o) { o.setAttribute('aria-pressed', o === btn); });
-      render();
-    });
-  });
-
-  $('[data-scen]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      userActed = true;
-      var antes = scen;
-      scen = btn.getAttribute('data-scen');
-      $('[data-scen]').forEach(function (o) { o.setAttribute('aria-pressed', o === btn); });
-      if (demo) demo.setAttribute('data-scen', scen);
-      if (scen !== 'normal') goTab('painel'); else showShot();
-      // Alerta quando sobe de faixa (como no app)
-      var rank = { normal: 0, atencao: 1, quente: 2 };
-      if (rank[scen] > rank[antes]) alertBand(rank[scen], PRINT_TEMP[scen]);
-    });
-  });
-  if (voiceBox) voiceBox.addEventListener('change', function () { userActed = true; });
-
-  // ===== Loop: só roda com a aba visível e algum celular na tela =====
+  // ===== Loop: só roda com a aba visível e o celular ou a escala na tela =====
   var visible = 0;
   var timer = null;
   function step() { tick++; heroT++; sim(false); render(); }
@@ -525,7 +353,7 @@
       visible = seen.size;
       sync();
     });
-    phones.concat($('[data-scale-mark]')).forEach(function (p) { po.observe(p); });
+    phones.concat(marks).forEach(function (p) { po.observe(p); });
   } else {
     visible = 1;
   }

@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Barlow+Condensed:ital,wght@1,800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <!-- Ícones das telas do app: só os usados (a lista precisa ficar em ordem alfabética) -->
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0&icon_names=ac_unit,apps,battery_5_bar,bluetooth,bolt,calendar_month,check_circle,chevron_right,device_thermostat,error,info,local_fire_department,local_gas_station,monitor_heart,navigation,restart_alt,settings,settings_input_component,show_chart,signal_cellular_alt,speed,thermostat,timer,touch_app,tune,verified_user,warning,water_drop&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0&icon_names=apps,battery_5_bar,bluetooth,bolt,check_circle,error,info,local_fire_department,local_gas_station,monitor_heart,navigation,settings,settings_input_component,show_chart,signal_cellular_alt,speed,thermostat,verified_user,warning,water_drop&display=block" rel="stylesheet">
 <style>
 :root{--bg:#0b0b0c;--bg2:#141416;--fg:#f4f3f1;--red:#e3262c;--red-hi:#ff3b3f;--red-dk:#c81e24;--line:rgba(244,243,241,.12);--muted:rgba(244,243,241,.75);--dim:rgba(244,243,241,.55);--mono:'JetBrains Mono',ui-monospace,monospace;
   /* cores do app (tema escuro do CVT Monitor) */
@@ -249,22 +249,6 @@ button{font-family:inherit}
 .ph-nav [aria-current="true"] i,.ph-nav [aria-selected="true"] i{background:rgba(239,53,56,.2)}
 .ph-nav [aria-current="true"] .ms,.ph-nav [aria-selected="true"] .ms{font-variation-settings:'FILL' 0}
 .ph-home{position:absolute;bottom:5px;left:50%;z-index:11;width:100px;height:4px;margin-left:-50px;border-radius:2px;background:var(--a-tx);opacity:.5}
-.ph-banner{position:absolute;top:40px;left:9px;right:9px;z-index:10;display:flex;gap:11px;padding:13px 14px;border-radius:22px;background:var(--a-s1);border:1px solid var(--a-ln);box-shadow:0 12px 40px rgba(0,0,0,.45);cursor:pointer;animation:wl-in .4s cubic-bezier(.2,.7,.2,1)}
-.ph-banner>.ms{flex:none;width:34px;height:34px;max-width:none;border-radius:50%;background:var(--bc,var(--a-warn));color:#0c0d0e;display:flex;align-items:center;justify-content:center;font-size:19px}
-.ph-banner>span:last-child{flex:1;min-width:0}
-.ph-banner .ph-sec{display:flex;justify-content:space-between;padding:0;letter-spacing:.04em}
-.ph-banner b{display:block;margin-top:3px;font:600 14.5px 'Archivo',sans-serif}
-.ph-banner small{display:block;margin-top:2px;font:400 12.5px/1.4 'Archivo',sans-serif;color:var(--a-mu2)}
-/* Celular com as prints reais (seção "Por dentro do app"). As imagens já trazem a faixa da barra
-   de status em cima; a barra de abas da print recebe botões invisíveis por cima. */
-.ph-real .ph-screen{background:#0b0b0c}
-.ph-shots{position:absolute;top:0;left:0;right:0;aspect-ratio:644/1325}
-.ph-shots img{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .25s ease}
-.ph-shots img.is-on{opacity:1}
-.ph-tabs{position:absolute;left:0;right:0;bottom:0;height:8.2%;display:grid;grid-template-columns:repeat(6,minmax(0,1fr))}
-.ph-tabs button{padding:0;border:0;border-radius:14px;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.ph-tabs button:focus-visible{outline:2px solid var(--a-acc);outline-offset:-3px}
-.ph-demo-tag{position:absolute;left:50%;bottom:-14px;z-index:4;transform:translateX(-50%);padding:6px 12px;border-radius:999px;background:var(--bg2);border:1px solid var(--line);font:500 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
 
 /* ===== Faixa vermelha ===== */
 .wl-marquee{margin-top:clamp(56px,7vw,96px);background:var(--red);color:#fff;overflow:hidden;transform:rotate(-1.5deg) scale(1.03);padding:16px 0}
@@ -295,47 +279,30 @@ button{font-family:inherit}
 .wl-scale-mark{position:absolute;top:-8px;width:3px;height:28px;margin-left:-1.5px;border-radius:2px;background:var(--fg);box-shadow:0 0 0 3px var(--bg);transition:left 1.6s cubic-bezier(.3,.7,.2,1)}
 .wl-scale-ends{display:flex;justify-content:space-between;margin-top:14px;color:var(--dim)}
 
-/* Como funciona */
-.wl-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;counter-reset:passo}
+/* Como começar: 4 passos, o primeiro (download) em destaque */
+.wl-steps{display:grid;grid-template-columns:minmax(0,1.3fr) repeat(3,minmax(0,1fr));gap:12px;margin:0;padding:0;list-style:none;counter-reset:passo}
 .wl-step{position:relative;display:flex;flex-direction:column;gap:12px;padding:clamp(22px,2.6vw,32px);border-radius:22px;background:var(--bg2);border:1px solid var(--line);overflow:hidden}
 .wl-step::before{counter-increment:passo;content:"0" counter(passo);font-weight:900;font-stretch:125%;font-size:64px;line-height:.9;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1px rgba(227,38,44,.7)}
 .wl-step b{font-weight:800;font-stretch:112%;font-size:22px;line-height:1.15;letter-spacing:-.02em}
 .wl-step p{margin:0;font-size:16px;line-height:1.6;color:var(--muted);text-wrap:pretty}
-.wl-step:last-child{background:var(--red);border-color:var(--red)}
-.wl-step:last-child::before{-webkit-text-stroke:1px rgba(255,255,255,.75)}
-.wl-step:last-child p{color:rgba(255,255,255,.88)}
+.wl-step-link{margin-top:auto;padding-top:4px;font-weight:700;font-size:15px;color:var(--fg);text-decoration:underline;text-decoration-color:var(--red);text-underline-offset:5px}
+.wl-step-key{background:var(--red);border-color:var(--red);color:#fff}
+.wl-step-key::before{-webkit-text-stroke:1px rgba(255,255,255,.75)}
+.wl-step-key p{color:rgba(255,255,255,.88)}
+.wl-step-ctas{display:flex;flex-direction:column;align-items:flex-start;gap:14px;margin-top:auto;padding-top:6px}
+.wl-step-key .wl-btn{background:#fff;border-color:#fff;color:var(--red);white-space:normal;text-align:center}
+.wl-step-key .wl-btn:hover{background:var(--bg);border-color:var(--bg);color:#fff}
+.wl-step-key .wl-step-link{color:#fff;text-decoration-color:rgba(255,255,255,.6)}
+.wl-step-key .wl-step-link:hover{color:#fff;text-decoration-color:#fff}
+.wl-step-key .wl-step-soon{margin-top:auto;font-size:14.5px;color:#fff}
+#gratis .wl-apk-sha{max-width:760px;margin-top:18px}
 
-/* Por dentro do app */
-.wl-demo{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:clamp(32px,5vw,80px);align-items:start}
-.wl-demo-art{position:sticky;top:96px;display:flex;flex-direction:column;align-items:center;gap:30px}
-.wl-feats{display:flex;flex-direction:column;gap:10px}
-.wl-feat{display:grid;grid-template-columns:44px minmax(0,1fr);gap:4px 16px;width:100%;padding:20px 22px;border:1px solid var(--line);border-radius:20px;background:transparent;color:var(--fg);text-align:left;cursor:pointer;transition:background .3s,border-color .3s}
-.wl-feat:hover{border-color:rgba(227,38,44,.55)}
-.wl-feat[aria-pressed="true"]{background:#141416;border-color:var(--red)}
-.wl-feat .ms{grid-row:span 2;width:44px;height:44px;max-width:none;border-radius:14px;background:rgba(244,243,241,.06);display:flex;align-items:center;justify-content:center;transition:background .3s,color .3s}
-.wl-feat[aria-pressed="true"] .ms{background:var(--red);color:#fff;font-variation-settings:'FILL' 1}
-.wl-feat b{font-weight:800;font-stretch:110%;font-size:20px;letter-spacing:-.01em}
-.wl-feat span:last-child{font-size:15.5px;line-height:1.55;color:var(--muted);text-wrap:pretty}
-.wl-feat-more{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.wl-feat-more span{padding:8px 14px;border-radius:999px;border:1px solid var(--line);font-size:13px;color:var(--muted)}
-.wl-sim{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;max-width:340px}
-.wl-sim-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;padding:5px;border:1px solid var(--line);border-radius:16px}
-.wl-sim-btns button{height:38px;border:0;border-radius:11px;background:transparent;color:var(--muted);font:600 13px 'Archivo',sans-serif;cursor:pointer;transition:background .25s,color .25s}
-.wl-sim-btns button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
-.wl-sim-btns button[data-scen="atencao"][aria-pressed="true"]{background:var(--a-warn)}
-.wl-sim-btns button[data-scen="quente"][aria-pressed="true"]{background:var(--a-hot);color:#fff}
-.wl-voice{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--muted);cursor:pointer}
-.wl-voice input{width:18px;height:18px;accent-color:var(--red)}
-
-/* Teste grátis */
-.wl-free{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:center;padding:clamp(28px,4.5vw,64px);border:1px solid var(--line);border-radius:28px;background:#0f0f11}
-.wl-free::after{content:"";position:absolute;right:-12%;top:-70%;width:60%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(79,213,127,.18),rgba(79,213,127,0) 65%);pointer-events:none}
-.wl-free p{margin:18px 0 0;font-size:clamp(16px,1.5vw,18px);line-height:1.6;color:var(--muted);text-wrap:pretty}
-.wl-free ul{position:relative;z-index:1;margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
-.wl-free li{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;border-radius:16px;background:rgba(244,243,241,.04);border:1px solid var(--line);font-size:15.5px;line-height:1.5;color:var(--muted)}
-.wl-free li strong{display:block;color:var(--fg);font-size:16.5px}
-.wl-free li::before{content:"✓";flex:none;width:26px;height:26px;border-radius:50%;background:var(--a-ok);color:#0b0b0c;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px}
-.wl-free li.is-lock::before{content:"🔒";background:rgba(244,243,241,.1);font-size:12px}
+/* O app: três prints paradas (no celular, viram um carrossel de arrastar) */
+.wl-shots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,3vw,40px)}
+.wl-shots figure{display:flex;flex-direction:column;align-items:center;gap:18px;margin:0}
+.wl-shots img{display:block;width:100%;max-width:290px;height:auto;border-radius:30px;border:1px solid rgba(255,255,255,.1);background:#0b0b0c;box-shadow:0 30px 70px -24px rgba(0,0,0,.85)}
+.wl-shots figcaption{max-width:290px;font-size:15.5px;line-height:1.55;color:var(--muted);text-wrap:pretty}
+.wl-shots figcaption b{display:block;margin-bottom:4px;font-weight:800;font-stretch:110%;font-size:20px;letter-spacing:-.01em;color:var(--fg)}
 
 /* Compatibilidade */
 .wl-compat{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px}
@@ -351,15 +318,6 @@ button{font-family:inherit}
 .wl-compat li{display:flex;gap:10px}
 .wl-compat li::before{content:"—";color:var(--dim)}
 
-/* Na aba Mais (funções novas) */
-.wl-more{margin-top:clamp(40px,5vw,72px)}
-.wl-more-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 16px;margin-bottom:18px}
-.wl-more-head b{font-weight:800;font-stretch:112%;font-size:clamp(24px,2.8vw,34px);letter-spacing:-.02em}
-.wl-more-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px}
-.wl-more-grid>div{display:flex;flex-direction:column;gap:10px;padding:clamp(20px,2.4vw,26px);border:1px solid var(--line);border-radius:22px;background:var(--bg2)}
-.wl-more-grid .ms{width:44px;height:44px;border-radius:14px;background:rgba(227,38,44,.14);color:var(--red-hi);display:flex;align-items:center;justify-content:center}
-.wl-more-grid b{font-weight:800;font-stretch:110%;font-size:20px;letter-spacing:-.01em}
-.wl-more-grid p{margin:0;font-size:15px;line-height:1.55;color:var(--muted);text-wrap:pretty}
 /* Comparação com o CVTz50 */
 .wl-vs-why{display:flex;gap:16px;margin:0 0 16px;padding:clamp(20px,2.6vw,28px);border:1px solid rgba(79,213,127,.45);border-radius:22px;background:rgba(79,213,127,.06)}
 .wl-vs-why .ms{flex:none;width:44px;height:44px;border-radius:14px;background:var(--a-ok);color:#0b0b0c;display:flex;align-items:center;justify-content:center;font-variation-settings:'FILL' 1}
@@ -535,15 +493,13 @@ body:has(.wl-pop[open]){overflow:hidden}
   .wl-nav-guia{display:none!important}
   .wl-hero{grid-template-columns:minmax(0,1fr)}
   .wl-hero-art{padding-top:8px}
-  .wl-demo{grid-template-columns:minmax(0,1fr)}
-  .wl-demo-art{position:static;order:-1}
-  .wl-feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
-  .wl-buy,.wl-free,.wl-who{grid-template-columns:minmax(0,1fr)}
+  .wl-steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .wl-buy,.wl-who{grid-template-columns:minmax(0,1fr)}
   .wl-who-photo{max-width:440px;aspect-ratio:1}
 }
 @media (max-width:860px){
   .wl-sec-head{grid-template-columns:minmax(0,1fr)}
-  .wl-why,.wl-steps{grid-template-columns:minmax(0,1fr)}
+  .wl-why{grid-template-columns:minmax(0,1fr)}
 }
 @media (max-width:640px){
   html{scroll-padding-top:112px}
@@ -556,6 +512,11 @@ body:has(.wl-pop[open]){overflow:hidden}
   .wl-crumbs{font-size:10px}
   .wl-h1{font-size:clamp(36px,10.6vw,54px)}
   .wl-ctas>.wl-btn{flex:1 1 100%}
+  .wl-steps{grid-template-columns:minmax(0,1fr)}
+  .wl-step-ctas,.wl-step-ctas .wl-btn{align-self:stretch}
+  .wl-shots{display:flex;gap:14px;margin:0 -16px;padding:0 16px 8px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .wl-shots::-webkit-scrollbar{display:none}
+  .wl-shots figure{flex:0 0 72%;scroll-snap-align:center}
   .wl-bubble{display:none}
   .wl-scale-bar span{font-size:12.5px}
   .wl-scale-bar span strong{font-size:13px}
@@ -600,8 +561,8 @@ body:has(.wl-pop[open]){overflow:hidden}
     </div>
     <div class="wl-nav-strip">
       <a href="./">← Início</a>
-      <a href="#como">Como funciona</a>
-      <a href="#app">O app</a>
+      <a href="#gratis">Baixar grátis</a>
+      <a href="#telas">O app</a>
       <a href="#compat">Compatível</a>
       <a href="#comparar">Comparar</a>
       <a href="#preco">Preço</a>
@@ -624,7 +585,7 @@ body:has(.wl-pop[open]){overflow:hidden}
       <p class="wl-lead">O <strong>CVT Monitor WhiteLine</strong> mostra no celular a temperatura do óleo do câmbio CVT, ao vivo, e <strong>avisa por voz</strong> quando o óleo esquenta. Basta um scanner OBD2 Bluetooth plugado na porta de diagnóstico do carro.</p>
       <div class="wl-ctas">
         <a class="wl-btn wl-btn-red" href="#preco" data-cta>Me avise no lançamento <span class="wl-arrow" aria-hidden="true">→</span></a>
-        <a class="wl-btn" href="#app">Ver o app por dentro <span class="wl-arrow" aria-hidden="true">↓</span></a>
+        <a class="wl-btn" href="#gratis">Baixar o app grátis <span class="wl-arrow" aria-hidden="true">↓</span></a>
       </div>
       <div class="wl-price-chip" data-show-price>
         <span class="wl-mono" data-lote="aberto">Os <span data-lote-total>100</span> primeiros</span><span class="wl-mono" data-lote="esgotado" hidden>Pagamento único</span>
@@ -719,134 +680,73 @@ body:has(.wl-pop[open]){overflow:hidden}
     </div>
   </section>
 
-  <!-- 02 COMO FUNCIONA -->
-  <section class="wl-sec" id="como" aria-labelledby="como-t">
-    <div class="wl-sec-head">
-      <div data-reveal>
-        <span class="wl-num wl-mono">02 · Como funciona</span>
-        <h2 class="wl-h2" id="como-t">Plugou, conectou, pode rodar.</h2>
-      </div>
-      <p data-reveal>Leva menos de um minuto na primeira vez. Depois o app conecta sozinho toda vez que você liga o carro.</p>
-    </div>
-    <div class="wl-steps">
-      <div class="wl-step" data-reveal><b>Plugue o scanner na porta OBD2</b><p>No Fluence ela fica no console central, abaixo do rádio, atrás de uma tampinha. Serve qualquer scanner ELM327 v1.5 Bluetooth, aquele pequeno e barato.</p></div>
-      <div class="wl-step" data-reveal><b>Conecte pelo app</b><p>Ligue a ignição, abra o CVT Monitor e escolha o scanner. O app encontra o câmbio e o motor e começa a ler os dados.</p></div>
-      <div class="wl-step" data-reveal><b>Dirija tranquilo</b><p>Se o óleo passar de 90 °C ou de 110 °C, o app avisa por voz e por notificação, mesmo com a tela apagada ou com outro app aberto.</p></div>
-    </div>
-  </section>
-
-  <!-- 03 POR DENTRO DO APP -->
-  <section class="wl-sec" id="app" aria-labelledby="app-t">
-    <div class="wl-sec-head">
-      <div data-reveal>
-        <span class="wl-num wl-mono">03 · Por dentro do app</span>
-        <h2 class="wl-h2" id="app-t">Mexe aí: são as telas do app.</h2>
-      </div>
-      <p data-reveal>Toque nas abas para trocar de tela e use o simulador para ver o que acontece quando o câmbio esquenta. São prints do próprio app no modo demonstração, então os números são simulados.</p>
-    </div>
-    <div class="wl-demo">
-      <div class="wl-feats" role="group" aria-label="Telas do app">
-        <button type="button" class="wl-feat" data-go="painel" aria-pressed="true"><span class="ms" aria-hidden="true">speed</span><b>Painel</b><span>A temperatura do óleo do câmbio em um medidor grande, com cor e recado do que fazer. Mais motor, rotação, velocidade e marcha virtual.</span></button>
-        <button type="button" class="wl-feat" data-go="monitor" aria-pressed="false"><span class="ms" aria-hidden="true">monitor_heart</span><b>Monitor ao vivo</b><span>Tudo que o módulo do câmbio e do motor informa, organizado: temperaturas, relação da polia, lockup, patinação, rotação das polias, torque estimado e bateria.</span></button>
-        <button type="button" class="wl-feat" data-go="graf" aria-pressed="false"><span class="ms" aria-hidden="true">show_chart</span><b>Gráficos</b><span>Os últimos 60 segundos de cada valor, com a velocidade junto. Dá para ver exatamente que tipo de trecho esquenta o câmbio.</span></button>
-        <button type="button" class="wl-feat" data-go="fluido" aria-pressed="false"><span class="ms" aria-hidden="true">water_drop</span><b>Desgaste do fluido</b><span>Um contador que sobe só quando o óleo passa de 90 °C e mostra quanto da vida útil já foi. Trocou o fluido? Zera e começa de novo.</span></button>
-        <button type="button" class="wl-feat" data-go="consumo" aria-pressed="false"><span class="ms" aria-hidden="true">local_gas_station</span><b>Consumo e viagem</b><span>Consumo instantâneo e médio, autonomia, distância e tempo de viagem, para gasolina ou etanol.</span></button>
-        <div class="wl-feat-more" data-reveal>
-          <span>Alerta por voz em português</span><span>Funciona com a tela apagada</span><span>Reconecta sozinho</span><span>Tema escuro e claro</span><span>Painel do seu jeito</span><span>°C ou °F</span><span>Só leitura: não altera nada no carro</span>
-        </div>
-      </div>
-
-      <div class="wl-demo-art">
-        <div class="ph-fit">
-          <!-- Celular interativo: prints reais do app no modo demonstração (assets/cvt-app).
-               As abas da própria print são clicáveis; o simulador troca as telas de Painel e Gráficos. -->
-          <div class="ph ph-real" id="demo-phone" data-demo data-tab="painel" data-scen="normal">
-            <div class="ph-screen">
-              <div class="ph-status" aria-hidden="true"><span>9:41</span><span><span class="ms" style="font-size:15px">bluetooth</span><span class="ms" style="font-size:15px">signal_cellular_alt</span><span class="ms" style="font-size:15px">battery_5_bar</span></span></div>
-
-              <div class="ph-banner" data-banner hidden role="status">
-                <span class="ms" aria-hidden="true">device_thermostat</span>
-                <span><span class="ph-sec"><span>CVT MONITOR · AGORA</span><span>VOZ ATIVA</span></span><b data-banner-title></b><small data-banner-body></small></span>
-              </div>
-
-              <div class="ph-shots">
-                <img class="is-on" data-shot="painel-normal" src="assets/cvt-app/painel-normal.jpg" width="644" height="1325" decoding="async" loading="lazy" alt="Tela Painel do CVT Monitor: óleo do câmbio a 81 °C, faixa Tranquilo, com motor e rotação abaixo">
-                <img data-shot="painel-atencao" src="assets/cvt-app/painel-atencao.jpg" width="644" height="1325" decoding="async" loading="lazy" aria-hidden="true" alt="Tela Painel em Atenção: óleo do câmbio a 101 °C e o recado Câmbio esquentando">
-                <img data-shot="painel-quente" src="assets/cvt-app/painel-quente.jpg" width="644" height="1325" decoding="async" loading="lazy" aria-hidden="true" alt="Tela Painel em Muito quente: óleo do câmbio a 112 °C e o recado Reduza agora">
-                <img data-shot="monitor" src="assets/cvt-app/monitor.jpg" width="644" height="1325" decoding="async" loading="lazy" aria-hidden="true" alt="Tela Monitor ao vivo: temperaturas do óleo do câmbio, do motor e do ar, rotação, velocidade, pedal, carga e torque">
-                <img data-shot="graf-normal" src="assets/cvt-app/graficos-normal.jpg" width="644" height="1325" decoding="async" loading="lazy" aria-hidden="true" alt="Tela Gráficos: últimos 60 segundos do óleo do câmbio, estável perto de 79 °C, com a velocidade tracejada">
-                <img data-shot="graf-esquentando" src="assets/cvt-app/graficos-esquentando.jpg" width="644" height="1325" decoding="async" loading="lazy" aria-hidden="true" alt="Tela Gráficos: o óleo do câmbio subindo de 79 para 98 °C e entrando na faixa amarela">
-                <img data-shot="fluido" src="assets/cvt-app/fluido.jpg" width="644" height="1325" decoding="async" loading="lazy" aria-hidden="true" alt="Tela Fluido do câmbio: 76% da vida útil, contador de 160.105 pontos e quanto falta até a troca">
-                <img data-shot="consumo" src="assets/cvt-app/consumo.jpg" width="644" height="1325" decoding="async" loading="lazy" aria-hidden="true" alt="Tela Consumo: 14,5 km/l instantâneo, média da viagem, autonomia, tanque, distância, tempo e litros consumidos">
-                <img data-shot="mais" src="assets/cvt-app/mais.jpg" width="644" height="1325" decoding="async" loading="lazy" aria-hidden="true" alt="Aba Mais: Códigos de erro, Histórico e Desempenho">
-                <div class="ph-tabs" role="tablist" aria-label="Abas do app">
-                  <button type="button" role="tab" data-go="painel" aria-selected="true" aria-label="Painel"></button>
-                  <button type="button" role="tab" data-go="monitor" aria-selected="false" aria-label="Monitor"></button>
-                  <button type="button" role="tab" data-go="graf" aria-selected="false" aria-label="Gráficos"></button>
-                  <button type="button" role="tab" data-go="fluido" aria-selected="false" aria-label="Fluido"></button>
-                  <button type="button" role="tab" data-go="consumo" aria-selected="false" aria-label="Consumo"></button>
-                  <button type="button" role="tab" data-go="mais" aria-selected="false" aria-label="Mais"></button>
-                </div>
-              </div>
-              <div class="ph-home" aria-hidden="true"></div>
-            </div>
-            <span class="ph-demo-tag">Dados simulados</span>
-          </div>
-        </div>
-
-        <div class="wl-sim">
-          <span class="wl-mono" style="color:var(--dim)">Simule a temperatura do câmbio</span>
-          <div class="wl-sim-btns" role="group" aria-label="Simular temperatura">
-            <button type="button" data-scen="normal" aria-pressed="true">Normal</button>
-            <button type="button" data-scen="atencao" aria-pressed="false">Atenção</button>
-            <button type="button" data-scen="quente" aria-pressed="false">Quente</button>
-          </div>
-          <label class="wl-voice" data-voice-wrap hidden><input type="checkbox" data-voice> Ouvir o alerta por voz</label>
-        </div>
-      </div>
-    </div>
-
-    <div class="wl-more">
-      <div class="wl-more-head" data-reveal>
-        <span class="wl-mono wl-red">Na aba Mais · versão completa</span>
-        <b>E tem mais coisa lá dentro.</b>
-      </div>
-      <div class="wl-more-grid">
-        <div data-reveal><span class="ms" aria-hidden="true">error</span><b>Códigos de erro em português</b><p>Lê os códigos do câmbio e do motor e explica cada um: o que significa, se é leve ou grave e o que fazer. Avisa por voz quando aparece um código novo. Só lê: apagar fica com a oficina.</p></div>
-        <div data-reveal><span class="ms" aria-hidden="true">calendar_month</span><b>Histórico mensal</b><p>Cada mês e cada viagem: km rodados, consumo, temperatura máxima do câmbio, tempo acima de 90 °C e a previsão de quando o fluido chega na troca.</p></div>
-        <div data-reveal><span class="ms" aria-hidden="true">timer</span><b>0 a 100 km/h e retomada</b><p>Mede o 0 a 100 e a retomada de 60 a 100 sozinho e fala o resultado, com aceleração e potência estimada. Só deixa medir com o óleo do câmbio na temperatura certa.</p></div>
-        <div data-reveal><span class="ms" aria-hidden="true">tune</span><b>Do seu jeito</b><p>Escolha os blocos que aparecem no Painel, ajuste as temperaturas dos alertas e ligue o aviso de câmbio aquecido para saber quando já pode acelerar.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TESTE GRÁTIS -->
+  <!-- 02 COMO COMEÇAR: baixar, plugar, testar e comprar.
+       O id "gratis" não pode mudar: o app abre cvt-monitor.html#gratis quando sai versão nova (cvt-monitor-versao.json). -->
   <section class="wl-sec" id="gratis" aria-labelledby="gratis-t">
-    <div class="wl-free" data-reveal>
-      <div style="position:relative;z-index:1">
-        <span class="wl-num wl-mono">04 · Teste antes de pagar</span>
-        <h2 class="wl-h2" id="gratis-t">Instale, teste no seu carro e só depois decida.</h2>
-        <p>O app é o mesmo para todo mundo. Sem a chave, ele já funciona em modo de teste. Com a chave, libera tudo para sempre.</p>
-        <div class="wl-ctas" data-apk-wrap hidden>
-          <a class="wl-btn wl-btn-red" href="#" data-apk download>Baixar o app grátis <span class="wl-arrow" aria-hidden="true">↓</span></a>
-          <a class="wl-btn" href="cvt-monitor-como-usar.html">Passo a passo de como usar</a>
-        </div>
-        <p class="wl-apk-sha" data-apk-sha hidden>Baixe o app <strong>só por esta página</strong>: um APK de outro lugar pode ter sido alterado. <span data-apk-ver></span>Impressão digital (SHA-256) do arquivo oficial, para quem quiser conferir:<code data-apk-sha-val></code></p>
-        <p data-only="pre" style="font-size:15px;color:var(--dim)">O download abre aqui no dia do lançamento.</p>
+    <div class="wl-sec-head">
+      <div data-reveal>
+        <span class="wl-num wl-mono">02 · Como começar</span>
+        <h2 class="wl-h2" id="gratis-t">Baixe grátis, teste no seu carro e só depois pague.</h2>
       </div>
-      <ul>
-        <li><span><strong>Modo demonstração completo</strong>Todas as telas, com dados simulados, sem precisar de scanner.</span></li>
-        <li><span><strong>5 minutos por dia com o carro real</strong>Para conferir se o seu scanner conecta e ver os seus dados de verdade.</span></li>
-        <li class="is-lock"><span><strong>Com a chave: sem limite de tempo</strong>Monitoramento o tempo todo, em todas as viagens, para sempre.</span></li>
-      </ul>
+      <p data-reveal>Leva poucos minutos. O app é o mesmo para todo mundo: sem a chave ele funciona em modo de teste, e com a chave libera tudo para sempre.</p>
+    </div>
+    <ol class="wl-steps">
+      <li class="wl-step wl-step-key" data-reveal>
+        <b>Baixe o app grátis</b>
+        <p>Abra esta página no celular Android e toque no botão. Como o app não vem da Play Store, o Android pede para permitir a instalação: é só aceitar.</p>
+        <div class="wl-step-ctas" data-apk-wrap hidden>
+          <a class="wl-btn" href="#" data-apk download>Baixar o app grátis <span class="wl-arrow" aria-hidden="true">↓</span></a>
+          <a class="wl-step-link" href="cvt-monitor-como-usar.html">Passo a passo de como usar →</a>
+        </div>
+        <p class="wl-step-soon" data-only="pre">O download abre aqui no dia do lançamento.</p>
+      </li>
+      <li class="wl-step" data-reveal>
+        <b>Plugue o scanner na porta OBD2</b>
+        <p>No Fluence ela fica no console central, abaixo do rádio, atrás de uma tampinha. Serve qualquer scanner ELM327 v1.5 Bluetooth, aquele pequeno e barato.</p>
+      </li>
+      <li class="wl-step" data-reveal>
+        <b>Conecte e teste no seu carro</b>
+        <p>Ligue a ignição, abra o app e escolha o scanner. Sem a chave você tem 5 minutos por dia com o carro de verdade, para ver se conecta e se os dados chegam, e todas as telas no modo demonstração.</p>
+      </li>
+      <li class="wl-step" data-reveal>
+        <b>Gostou? Compre a chave</b>
+        <p>Com a chave o app monitora o câmbio a viagem inteira e avisa por voz quando o óleo passa de 90&nbsp;°C ou de 110&nbsp;°C, mesmo com a tela apagada. Pagamento único.</p>
+        <a class="wl-step-link" href="#preco">Ver o preço →</a>
+      </li>
+    </ol>
+    <p class="wl-apk-sha" data-apk-sha hidden>Baixe o app <strong>só por esta página</strong>: um APK de outro lugar pode ter sido alterado. <span data-apk-ver></span>Impressão digital (SHA-256) do arquivo oficial, para quem quiser conferir:<code data-apk-sha-val></code></p>
+  </section>
+
+  <!-- 03 AS TELAS DO APP (prints reais do modo demonstração, em assets/cvt-app) -->
+  <section class="wl-sec" id="telas" aria-labelledby="telas-t">
+    <div class="wl-sec-head">
+      <div data-reveal>
+        <span class="wl-num wl-mono">03 · O app</span>
+        <h2 class="wl-h2" id="telas-t">É isso que aparece no seu celular.</h2>
+      </div>
+      <p data-reveal>Prints do próprio app no modo demonstração, com números simulados. Todas essas telas já abrem de graça, antes de pagar.</p>
+    </div>
+    <div class="wl-shots">
+      <figure data-reveal>
+        <img src="assets/cvt-app/painel-atencao.jpg" width="644" height="1325" decoding="async" loading="lazy" alt="Tela Painel do CVT Monitor em Atenção: óleo do câmbio a 101 °C e o recado Câmbio esquentando">
+        <figcaption><b>Painel</b>A temperatura do óleo do câmbio num medidor grande, com a cor da faixa e o recado do que fazer.</figcaption>
+      </figure>
+      <figure data-reveal>
+        <img src="assets/cvt-app/graficos-esquentando.jpg" width="644" height="1325" decoding="async" loading="lazy" alt="Tela Gráficos: o óleo do câmbio subindo de 79 para 98 °C e entrando na faixa amarela, com a velocidade tracejada">
+        <figcaption><b>Gráficos</b>Os últimos 60 segundos, com a velocidade junto. Dá para ver que tipo de trecho esquenta o câmbio.</figcaption>
+      </figure>
+      <figure data-reveal>
+        <img src="assets/cvt-app/fluido.jpg" width="644" height="1325" decoding="async" loading="lazy" alt="Tela Fluido do câmbio: 76% da vida útil, contador de pontos e quanto falta até a troca">
+        <figcaption><b>Desgaste do fluido</b>Um contador que só sobe com o óleo acima de 90&nbsp;°C mostra quanto da vida útil já foi e quanto falta até a troca.</figcaption>
+      </figure>
     </div>
   </section>
 
-  <!-- 05 COMPATIBILIDADE -->
+  <!-- 04 COMPATIBILIDADE -->
   <section class="wl-sec" id="compat" aria-labelledby="compat-t">
     <div class="wl-sec-head">
       <div data-reveal>
-        <span class="wl-num wl-mono">05 · Compatibilidade</span>
+        <span class="wl-num wl-mono">04 · Compatibilidade</span>
         <h2 class="wl-h2" id="compat-t">O que você precisa.</h2>
       </div>
       <p data-reveal>Feito primeiro para o Fluence, porque é o carro do canal e onde cada leitura foi conferida. Outros carros com o mesmo tipo de câmbio entram depois.</p>
@@ -858,11 +758,11 @@ body:has(.wl-pop[open]){overflow:hidden}
     </div>
   </section>
 
-  <!-- 06 COMPARAÇÃO -->
+  <!-- 05 COMPARAÇÃO -->
   <section class="wl-sec" id="comparar" aria-labelledby="comparar-t">
     <div class="wl-sec-head">
       <div data-reveal>
-        <span class="wl-num wl-mono">06 · Comparação</span>
+        <span class="wl-num wl-mono">05 · Comparação</span>
         <h2 class="wl-h2" id="comparar-t">Feito para o Fluence. Não para a Murano.</h2>
       </div>
       <p data-reveal>Muita gente com Fluence usa o CVTz50, um app feito para a Nissan Murano, em que o Fluence nem aparece na lista de carros. O CVT Monitor nasceu no Fluence: fala português, explica o que cada código quer dizer e <strong style="color:var(--fg)">não mexe em nada no seu carro</strong>.</p>
@@ -897,11 +797,11 @@ body:has(.wl-pop[open]){overflow:hidden}
     </div>
   </section>
 
-  <!-- 07 PREÇO -->
+  <!-- 06 PREÇO -->
   <section class="wl-sec" id="preco" aria-labelledby="preco-t">
     <div class="wl-sec-head">
       <div data-reveal>
-        <span class="wl-num wl-mono">07 · Preço</span>
+        <span class="wl-num wl-mono">06 · Preço</span>
         <h2 class="wl-h2" id="preco-t">Paga uma vez, usa para sempre.</h2>
       </div>
       <p data-reveal>Sem mensalidade e sem anúncio. Compare com o que custa cuidar do câmbio depois que o calor já fez o estrago.</p>
@@ -976,7 +876,7 @@ body:has(.wl-pop[open]){overflow:hidden}
         <span class="wl-mono">Luiz · @whitelinefluence</span>
       </div>
       <div data-reveal>
-        <span class="wl-num wl-mono">08 · Quem fez</span>
+        <span class="wl-num wl-mono">07 · Quem fez</span>
         <blockquote id="quem-t" style="margin-top:14px">“Fiz o app que eu queria ter no meu Fluence. Cada leitura foi conferida no meu carro antes de chegar no seu.”</blockquote>
         <p>Sou o Luiz, do canal Whiteline Fluence. Ando de Fluence GT Line todo dia e a pergunta que mais recebo é sobre o câmbio CVT. O CVT Monitor é a resposta prática: em vez de adivinhar, você vê.</p>
         <div class="wl-who-nums">
@@ -988,11 +888,11 @@ body:has(.wl-pop[open]){overflow:hidden}
     </div>
   </section>
 
-  <!-- 09 FAQ -->
+  <!-- 08 FAQ -->
   <section class="wl-sec" id="faq" aria-labelledby="faq-t">
     <div class="wl-sec-head">
       <div data-reveal>
-        <span class="wl-num wl-mono">09 · Dúvidas</span>
+        <span class="wl-num wl-mono">08 · Dúvidas</span>
         <h2 class="wl-h2" id="faq-t">Perguntas frequentes.</h2>
       </div>
       <p data-reveal>Ficou alguma? Me chama no direct do <a href="https://ig.me/m/whitelinefluence" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:4px">Instagram</a>.</p>
@@ -1021,7 +921,7 @@ body:has(.wl-pop[open]){overflow:hidden}
     <h2 class="wl-h2" id="fim-t" data-reveal>Pare de adivinhar o que o seu câmbio está sentindo.</h2>
     <div class="wl-ctas" data-reveal>
       <a class="wl-btn wl-btn-red" href="#preco" data-cta>Me avise no lançamento <span class="wl-arrow" aria-hidden="true">→</span></a>
-      <a class="wl-btn" href="https://www.instagram.com/whitelinefluence" target="_blank" rel="noopener">Seguir no Instagram ↗</a>
+      <a class="wl-btn" href="#gratis">Baixar o app grátis <span class="wl-arrow" aria-hidden="true">↓</span></a>
     </div>
   </section>
 
@@ -1043,7 +943,7 @@ body:has(.wl-pop[open]){overflow:hidden}
     </div>    <div class="wl-foot-word" aria-hidden="true">WHITELINE</div>
   </footer>
 
-  <!-- POP-UP DO LOTE (abre pelo cvt-monitor.js: intenção de sair, fim da demo ou 50 s; 1x a cada 3 dias) -->
+  <!-- POP-UP DO LOTE (abre pelo cvt-monitor.js: intenção de sair, fim das telas do app ou 50 s; 1x a cada 3 dias) -->
   <dialog class="wl-pop" data-pop aria-labelledby="pop-t">
     <div class="wl-pop-in">
       <button type="button" class="wl-pop-x" data-pop-close aria-label="Fechar">×</button>
