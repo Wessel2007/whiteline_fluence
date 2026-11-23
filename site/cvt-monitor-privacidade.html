@@ -53,16 +53,16 @@ footer a{text-decoration:none;font-weight:600}
 </nav>
 
 <main>
-  <div class="kicker">CVT Monitor WhiteLine · Versão 1</div>
+  <div class="kicker">CVT Monitor WhiteLine · Versão 2</div>
   <h1>Política de Privacidade</h1>
-  <p class="meta">Última atualização: 18 de novembro de 2026</p>
+  <p class="meta">Última atualização: 23 de novembro de 2026</p>
 
   <div class="summary">
     <p><strong>Resumo</strong></p>
     <ul>
-      <li>Os dados do seu carro <strong>ficam no seu celular</strong>. O app não envia para ninguém.</li>
+      <li>Os dados do seu carro <strong>ficam no seu celular</strong>. Eles só saem dele se <strong>você</strong> enviar um relatório ao suporte.</li>
       <li>O app <strong>não tem anúncios nem rastreamento</strong> e não vende dados.</li>
-      <li>Só a <strong>chave de acesso</strong> usa o nosso servidor: e-mail da compra, número do pedido, um código do aparelho e o modelo do celular.</li>
+      <li>O nosso servidor guarda só o necessário para a <strong>chave de acesso</strong> (e-mail da compra, número do pedido, um código do aparelho e o modelo do celular) e os <strong>relatórios de suporte</strong> que você decidir enviar, por 30 dias.</li>
       <li>Você pode pedir para ver ou apagar os seus dados quando quiser.</li>
     </ul>
   </div>
@@ -73,11 +73,12 @@ footer a{text-decoration:none;font-weight:600}
   <p>Esta política vale para o app CVT Monitor e para o serviço de licenças dele.</p>
 
   <h2><span class="n">02</span>O que fica só no seu celular</h2>
-  <p>Estes dados são guardados <strong>apenas no seu aparelho</strong> e nunca são enviados para nós:</p>
+  <p>Estes dados são guardados <strong>apenas no seu aparelho</strong> e só chegam até nós se você enviar um relatório ao suporte (veja a seção 04):</p>
   <ul>
     <li>os dados lidos do carro (temperaturas, rotação, velocidade, consumo etc.);</li>
     <li>as suas configurações, o contador de desgaste do fluido e os dados de viagem;</li>
     <li>o nome e o endereço Bluetooth do scanner, para reconectar sozinho;</li>
+    <li>um registro técnico das conexões com o scanner (quando conectou, quando caiu, erros e as últimas respostas do carro), para ajudar o suporte;</li>
     <li>os arquivos da ferramenta de diagnóstico. Eles só saem do celular se <strong>você</strong> decidir compartilhar, por exemplo para o suporte. Nesses arquivos, o número de série do chassi sai oculto.</li>
   </ul>
   <p>Se você desinstalar o app, esses dados são apagados junto. O app não faz backup deles na nuvem.</p>
@@ -87,10 +88,10 @@ footer a{text-decoration:none;font-weight:600}
     <li><strong>Bluetooth:</strong> para encontrar e conversar com o scanner.</li>
     <li><strong>Localização</strong> (só no Android 11 ou mais antigo): o próprio Android exige essa permissão para buscar aparelhos Bluetooth. O app não usa nem guarda a sua localização. No Android 12 em diante ela não é pedida.</li>
     <li><strong>Notificações:</strong> para os alertas de temperatura com a tela apagada.</li>
-    <li><strong>Internet:</strong> para ativar e conferir a chave de acesso e para ver se existe versão nova do app. Para isso o app baixa um arquivo pequeno do nosso site (whitelinefluence.com), no máximo duas vezes por dia, sem enviar nenhum dado seu.</li>
+    <li><strong>Internet:</strong> para ativar e conferir a chave de acesso e para ver se existe versão nova do app. Para isso o app baixa um arquivo pequeno do nosso site (whitelinefluence.com), no máximo duas vezes por dia, sem enviar nenhum dado seu. Também usa a internet para enviar o relatório de suporte, só quando você toca em <strong>Enviar relatório</strong>.</li>
   </ul>
 
-  <h2><span class="n">04</span>O que o servidor de licenças guarda</h2>
+  <h2><span class="n">04</span>O que o nosso servidor guarda</h2>
   <div class="table-wrap">
     <table>
       <thead><tr><th>Dado</th><th>De onde vem</th><th>Para quê</th><th>Por quanto tempo</th></tr></thead>
@@ -99,24 +100,27 @@ footer a{text-decoration:none;font-weight:600}
         <tr><td>Número do pedido</td><td>Cakto</td><td>Não gerar duas chaves para a mesma compra e cancelar a chave em caso de reembolso</td><td>Enquanto a chave existir</td></tr>
         <tr><td>Código do aparelho</td><td>App, na ativação</td><td>Limitar a chave a 2 celulares e permitir a troca de aparelho</td><td>Enquanto a chave existir</td></tr>
         <tr><td>Modelo do celular (ex.: "Samsung Galaxy A54")</td><td>App, na ativação</td><td>Mostrar quais celulares estão usando a chave, na hora de trocar</td><td>Enquanto a chave existir</td></tr>
-        <tr><td>Endereço IP</td><td>Só quando há tentativa com erro (chave errada, por exemplo)</td><td>Bloquear tentativas em massa de adivinhar chaves</td><td>Apagado automaticamente em até 1 dia</td></tr>
+        <tr><td>Endereço IP</td><td>Só quando há tentativa com erro (chave errada, por exemplo) ou envio de relatório de suporte</td><td>Bloquear tentativas em massa de adivinhar chaves e envios em massa de relatórios</td><td>Apagado automaticamente em até 1 dia</td></tr>
+        <tr><td>Relatório de suporte</td><td>App, só quando você toca em <strong>Enviar relatório</strong></td><td>Entender e resolver o problema que você relatou</td><td>Apagado automaticamente em até 30 dias</td></tr>
       </tbody>
     </table>
   </div>
   <p>O <strong>código do aparelho</strong> é gerado a partir do identificador do Android com uma função de hash. Ele não é o número do celular, não é o IMEI e não permite descobrir quem é você.</p>
+  <p>O <strong>relatório de suporte</strong> tem o que você escreveu, a versão do app e do Android, o modelo do celular, a sua chave de acesso, o código do aparelho, o nome e o endereço Bluetooth do scanner, os dados técnicos da conexão com o carro (respostas das centrais, temperaturas, rotação, velocidade, códigos de erro) e o registro técnico dos últimos dias. O chassi vai sem o número de série. Ele <strong>não tem</strong> o seu nome, a sua localização, contatos ou fotos. Antes de enviar, o app mostra o que vai no relatório.</p>
   <p>O seu nome chega com a compra só para personalizar o e-mail da chave e <strong>não é guardado</strong> no servidor. Os dados de pagamento (cartão, Pix, CPF, endereço) ficam com a Cakto e <strong>nunca chegam até nós</strong>.</p>
 
   <h2><span class="n">05</span>Base legal</h2>
   <ul>
     <li>E-mail, pedido, código e modelo do aparelho: <strong>execução do contrato</strong> de compra da licença (art. 7º, V, da LGPD).</li>
-    <li>Endereço IP de tentativas com erro: <strong>legítimo interesse</strong> em proteger o serviço contra fraude (art. 7º, IX), pelo menor tempo possível.</li>
+    <li>Endereço IP de tentativas com erro e de envios de relatório: <strong>legítimo interesse</strong> em proteger o serviço contra fraude e abuso (art. 7º, IX), pelo menor tempo possível.</li>
+    <li>Relatório de suporte: <strong>execução do contrato</strong>, para prestar o suporte que você pediu (art. 7º, V).</li>
   </ul>
 
   <h2><span class="n">06</span>Com quem os dados são compartilhados</h2>
   <p>Não vendemos nem alugamos dados. Usamos estes fornecedores, cada um só para a sua função:</p>
   <ul>
     <li><strong>Cakto:</strong> processa o pagamento e nos avisa da compra, do reembolso ou do chargeback. Ela tem a própria política de privacidade.</li>
-    <li><strong>Cloudflare:</strong> hospeda o servidor e o banco de dados das licenças.</li>
+    <li><strong>Cloudflare:</strong> hospeda o servidor e o banco de dados das licenças e dos relatórios de suporte.</li>
     <li><strong>Resend:</strong> envia o e-mail com a chave.</li>
   </ul>
   <p>A Cloudflare e a Resend podem processar dados fora do Brasil, inclusive nos Estados Unidos. Essa transferência é feita para cumprir o contrato com você e segue as garantias que esses fornecedores oferecem (art. 33 da LGPD).</p>
