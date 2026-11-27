@@ -1,6 +1,6 @@
 {
-  "versionCode": 9,
-  "versionName": "1.0.7",
-  "notas": "Corrige a temperatura do câmbio que não aparecia com alguns scanners genéricos (o app se ajusta sozinho ao seu). Instale por cima: a chave continua.",
+  "versionCode": 10,
+  "versionName": "1.0.8",
+  "notas": "Corrige o consumo instantâneo, que não aparecia no Fluence: agora é calculado pela carga do motor. Instale por cima: a chave continua.",
   "url": "https://whitelinefluence.com/cvt-monitor.html#gratis"
 }
