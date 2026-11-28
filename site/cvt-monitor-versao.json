@@ -1,6 +1,6 @@
 {
-  "versionCode": 10,
-  "versionName": "1.0.8",
-  "notas": "Corrige o consumo instantâneo, que não aparecia no Fluence: agora é calculado pela carga do motor. Instale por cima: a chave continua.",
+  "versionCode": 11,
+  "versionName": "1.0.9",
+  "notas": "Novo: compartilhe a temperatura do câmbio da viagem e o seu 0 a 100 nos stories. E já dá para comprar a chave direto pelo app. Instale por cima: a chave continua.",
   "url": "https://whitelinefluence.com/cvt-monitor.html?utm_source=app-atualizacao#gratis"
 }
