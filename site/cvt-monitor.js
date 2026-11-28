@@ -76,7 +76,21 @@
   var lote = { total: CONFIG.loteTotal, restantes: null };
   var esgotado = function () { return live && lote.restantes === 0; };
   var precoAtual = function () { return esgotado() && CONFIG.precoDepois ? CONFIG.precoDepois : CONFIG.preco; };
-  var urlCompra = function () { return esgotado() && CONFIG.caktoUrlDepois ? CONFIG.caktoUrlDepois : CONFIG.caktoUrl; };
+  // As UTMs de quem chegou na página (ex.: ?utm_source=app, do botão "Comprar a chave" do app)
+  // seguem para o checkout, para a Cakto mostrar de onde veio cada venda.
+  var utms = (function () {
+    var out = [];
+    try {
+      var q = new URLSearchParams(window.location.search);
+      ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach(function (k) {
+        var v = q.get(k);
+        if (v && /^[\w.\-]{1,60}$/.test(v)) out.push(k + '=' + encodeURIComponent(v));
+      });
+    } catch (e) { /* navegador sem URLSearchParams: segue sem UTM */ }
+    return out.join('&');
+  })();
+  var comUtm = function (url) { return utms ? url + (url.indexOf('?') < 0 ? '?' : '&') + utms : url; };
+  var urlCompra = function () { return comUtm(esgotado() && CONFIG.caktoUrlDepois ? CONFIG.caktoUrlDepois : CONFIG.caktoUrl); };
   var arrow = '<span class="wl-arrow" aria-hidden="true">→</span>';
 
   function aplicarPreco() {
