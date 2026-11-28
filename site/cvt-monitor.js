@@ -24,6 +24,11 @@
     // Ex.: 'downloads/cvt-monitor.apk' (arquivo dentro de site/downloads/).
     apkUrl: 'downloads/cvt-monitor.apk',
 
+    // Contador de downloads: o botão passa por /api/download, que conta e entrega o apkUrl
+    // acima. A origem é o utm_source de quem chegou na página (ex.: ?utm_source=tiktok) ou
+    // "site". Os números ficam em cvt-monitor-downloads.html. false = link direto, sem contar.
+    contarDownloads: true,
+
     // Impressão digital SHA-256 do APK publicado em apkUrl, mostrada embaixo do botão de
     // download com o aviso "baixe só por aqui". Vazio = não mostra. Gere com:
     //   Get-FileHash cvt-monitor.apk -Algorithm SHA256   (PowerShell)
@@ -199,7 +204,16 @@
   }
 
   if (CONFIG.apkUrl) {
-    $('[data-apk]').forEach(function (a) { a.href = CONFIG.apkUrl; });
+    var apkHref = CONFIG.apkUrl;
+    if (CONFIG.contarDownloads) {
+      var origem = 'site';
+      try {
+        var src = (new URLSearchParams(window.location.search).get('utm_source') || '').toLowerCase();
+        if (/^[a-z0-9._-]{1,40}$/.test(src)) origem = src;
+      } catch (e) { /* sem URLSearchParams: conta como "site" */ }
+      apkHref = 'api/download?o=' + encodeURIComponent(origem);
+    }
+    $('[data-apk]').forEach(function (a) { a.href = apkHref; });
     $('[data-apk-wrap]').forEach(function (el) { el.hidden = false; });
     if (CONFIG.apkSha256) {
       $('[data-apk-sha-val]').forEach(function (el) { el.textContent = CONFIG.apkSha256.toLowerCase(); });

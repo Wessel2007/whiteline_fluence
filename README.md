@@ -46,7 +46,10 @@ whiteline_fluence/
     ├── support.js         ← runtime "dc" gerado (carrega React/Babel da unpkg e renderiza o <x-dc>)
     ├── image-slot.js      ← ferramenta do editor de design (não vai para produção)
     ├── api/
-    │   └── stats.js       ← função serverless GET /api/stats
+    │   ├── stats.js       ← função serverless GET /api/stats
+    │   ├── vagas.js       ← GET /api/vagas (contador do lote)
+    │   ├── download.js    ← GET /api/download (conta o download e entrega o APK)
+    │   └── downloads.js   ← GET /api/downloads (números para a página de downloads)
     ├── assets/            ← fotos (hero, perfil, galeria g*, vídeos v*, eventos/, garagem/)
     ├── vendor/
     │   └── qrcode.js      ← qrcode-generator 1.4.4 (MIT), gera o QR do Pix sem depender de CDN
@@ -114,6 +117,9 @@ Página estática à parte, no mesmo esquema do Guia de compra, para o app Andro
 - **Pop-up do lote** (`<dialog data-pop>`): abre uma vez a cada 3 dias (`localStorage` `cvtm-pop`) na intenção de sair (mouse indo para a barra do navegador), 1,5 s depois de a pessoa terminar a seção das telas do app (`#telas`) ou após 50 s. Nunca abre com a seção de preço na tela nem depois de um clique em comprar/me avise ou em baixar o app (quem baixou vai testar primeiro). Fecha com Esc, ×, "Agora não" ou clique no fundo.
 - **Celular do topo**: recriado em HTML/CSS a partir do protótipo do app (cores do tema escuro, fontes Barlow Condensed e Material Symbols só com os ícones usados; a lista `icon_names` no `<link>` precisa ficar em ordem alfabética). O do topo mostra só o Painel. Os números vêm de uma simulação igual à do modo demonstração, que só roda com a aba visível e o celular (ou a escala de "Por que monitorar") na tela.
 - Sem JS a página aparece inteira no estado de pré-lançamento, com os números parados.
+
+- **Contador de downloads** (`api/download.js`): o botão "Baixar o app grátis" aponta para `api/download?o=<origem>`, que avisa o servidor de licenças do CVT Monitor (`POST /v1/download`, no repositório `cvt_app`) e responde 302 para `downloads/cvt-monitor.apk`. A origem é o `utm_source` de quem chegou na landing (sem UTM, `site`); o aviso de versão nova do app chega com `utm_source=app-atualizacao` e o passo a passo com `como-usar`. Prévias de link (WhatsApp, Instagram...) e robôs não contam. Se o servidor não responder em 1,5 s, o download sai igual. Variáveis na Vercel: `CVT_SERVER` (endereço do Worker) e `CVT_DOWNLOAD_TOKEN` (o `DOWNLOAD_TOKEN` do servidor). Desligar: `contarDownloads: false` no `CONFIG`.
+- **Página de downloads** (`cvt-monitor-downloads.html`, sem link no site e com `noindex`): pede o `DOWNLOAD_TOKEN` como senha e mostra os downloads por dia e por origem, pelo `api/downloads.js`. Como configurar o servidor: `server/README.md` do `cvt_app`, "Contador de downloads do APK".
 
 ### Contadores ao vivo (`api/stats.js`)
 
